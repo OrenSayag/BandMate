@@ -103,6 +103,11 @@ o888bood8P'   `Y8bod8P' o888o o888o `Y8bod8P'
             - PUT /follow/:id => 200
                 follow a user to see his public content on your feed. Toggler based on current situation
             - POST *validateUser /feed { id(req.userInfo), ?filter } => { userFeed }
+            - GET *validateUser /personalInfo { id(req.userInfo), ?bandId } => { associatedUsers(calculated by user and his bands), myContent{logs, recordings, posts} } //for the join users to new content feature (eg multiple usrs per recording)
+               // also it runds every band/user change or content crud, displaying all relevant content to the certain user
+        - genres
+            - GET / => {allGenres}
+            **** OPTIONAL FOR THE FUTURE(requires admins)   - POST / { name, img_src } => {allGenres}
 
 
 ooooooooooooo                 .o8            
@@ -113,12 +118,6 @@ ooooooooooooo                 .o8
      888      888   888 888   888  888   888 
     o888o     `Y8bod8P' `Y8bod88P" `Y8bod8P' 
 
-
-            - GET *validateUser /personalInfo { id(req.userInfo), ?bandId } => { associatedUsers(calculated by user and his bands), myContent{logs, recordings, posts} } //for the join users to new content feature (eg multiple usrs per recording)
-               // also it runds every band/user change or content crud, displaying all relevant content to the certain user
-
-        - genres
-            - GET / => {allGenres}
 
         - explore
             - GET /:filter { req.params } => { topData }
@@ -251,3 +250,11 @@ ooooooooooooo                 .o8
         design mobile first
 
     Test, host, update CV, move forwarD: Project4/yourStats/militaryShabzak
+
+
+
+
+    FOR THE FUTURE:
+        API:
+            Explroe:Add genre tagging to content, so you can filter it out in explore
+            Explore: Add lots of likes and comments randomly so can build and test the top data features. 

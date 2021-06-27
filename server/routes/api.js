@@ -38,6 +38,8 @@ const verifyAdmin = (req,res,next) => {
 router.use("/auth", require("../routes/auth"))
 router.use("/logs", verifyUser ,require("../routes/logs"))
 router.use("/user" ,require("../routes/user"))
+router.use("/genres" ,require("../routes/genres"))
+router.use("/explore" ,require("../routes/explore"))
 
 
 

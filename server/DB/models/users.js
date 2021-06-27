@@ -35,6 +35,7 @@ const users = new Schema({
     likedRecordings: [String],
     likedPosts: [String],
     logCategories: [LogCategory],
+    isAdmin: Boolean,
 })
 
 const UsersModel = mongoose.model("users", users, "users")

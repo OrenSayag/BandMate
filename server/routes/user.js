@@ -176,57 +176,19 @@ router.post("/personalInfo", verifyUser, async (req, res) => {
             myBandMates.push(p)
         }
     }
+    console.log(user.logs)
     const associatedUsers = [...user.participants, ...myBandMates]
     const myContent = {
         logs: 
-        await LogsModel.find({parentUser:{$in: user.logs}})
+        await LogsModel.find({_id:{$in: user.logs}})
         ,
         recordings: 
-        await RecordingsModel.find({parentUser:{$in: user.recordings}})
+        await RecordingsModel.find({_id:{$in: user.recordings}})
         ,
         posts: 
-        await PostsModel.find({parentUser:{$in: user.posts}})
+        await PostsModel.find({_id:{$in: user.posts}})
         ,
     }
-
-
-
-    // // here I need to implement functions that get:
-    // // content is: posts, logs, recordings
-    // // - all user's content
-    // const userContent = {
-    //   logs: await LogsModel.find({ _id: { $in: user.logs } }),
-    //   posts: await PostsModel.find({ _id: { $in: user.logs } }),
-    //   recordings: await RecordingsModel.find({ _id: { $in: user.logs } }),
-    // };
-    // // - all the people who the user is follwing's content that is not private
-    // const followingContent = {
-    //   logs: await LogsModel.find({ parentUser: { $in: user.following } }),
-    //   posts: await PostsModel.find({ parentUser: { $in: user.following } }),
-    //   recordings: await RecordingsModel.find({
-    //     parentUser: { $in: user.following },
-    //   }),
-    // };
-    // // everything should be ordered by date desc.
-    // let hugeFeed = [].concat(
-    //   userContent.logs,
-    //   userContent.posts,
-    //   userContent.recordings,
-    //   followingContent.logs,
-    //   followingContent.posts,
-    //   followingContent.recordings
-    // );
-    // hugeFeed.sort((a, b) => a.date - b.date);
-
-    // let organizedFeed = {
-    //     logs: [...userContent.logs.sort((a,b)=>a.date-b.date),followingContent.logs.sort((a,b)=>a.date-b.date),],
-    //     posts: [...userContent.posts.sort((a,b)=>a.date-b.date),followingContent.posts.sort((a,b)=>a.date-b.date),],
-    //     recordings: [...userContent.recordings.sort((a,b)=>a.date-b.date),followingContent.recordings.sort((a,b)=>a.date-b.date),]
-    // }
-
-    // // filter option: filters the content based on content type.
-    //     // not doing this now.
-
 
     return res.status(200).send({associatedUsers, myContent})
   } catch (error) {
