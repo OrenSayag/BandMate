@@ -21,7 +21,9 @@ const logs = new Schema({
     date: Date,
     comments: [Comment],
     likes: [String],
-    isPrivate: Boolean
+    isPrivate: Boolean,
+    type:String
+
 })
 
 const LogsModel = mongoose.model("logs", logs)

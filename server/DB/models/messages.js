@@ -15,6 +15,8 @@ const messages = new Schema({
     from: String,
     to: String,
     isJoinReq: Boolean,
+    type:String
+
 })
 
 const MessagesModel = mongoose.model("messages", messages)

@@ -48,4 +48,45 @@ router.get("/", async (req, res)=>{
 
 })
 
+// gets an individual content data
+router.get("/:id", async (req, res)=>{
+    const { id } = req.params
+
+    try {
+        const log = await LogsModel.findById(id)
+        const post = await PostsModel.findById(id)
+        const recording = await RecordingsModel.findById(id)
+        if(log){
+            return res.status(200).send(log)
+        } else if(post) {
+            return res.status(200).send(post)
+        } else if(recording) {
+            return res.status(200).send(recording)
+        } 
+
+        return res.status(200).send({fail:"No such content"})
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send("send normal mongo id")
+    }
+
+})
+
+// gets an list of matches based on search value
+router.get("/search/:value", async (req, res)=>{
+    const { value } = req.params
+console.log(value)
+    try {
+    const logs = await LogsModel.find({"title": {"$regex":value}})
+        const posts = await PostsModel.find({"title":{"$regex":value}, "content":{"$regex":value}})
+        const recordings = await RecordingsModel.find({"title":{"$regex":value}})
+ 
+        return res.status(200).send({logs, posts, recordings})
+    } catch (error) {
+        console.log(error)
+        return res.status(500)
+    }
+
+})
+
 module.exports = router

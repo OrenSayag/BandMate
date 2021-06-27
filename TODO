@@ -108,6 +108,12 @@ o888bood8P'   `Y8bod8P' o888o o888o `Y8bod8P'
         - genres
             - GET / => {allGenres}
             **** OPTIONAL FOR THE FUTURE(requires admins)   - POST / { name, img_src } => {allGenres}
+        - explore
+            - GET /:filter { req.params } => { topData }
+            - GET /:id { req.params } => { item } 
+            - GET /search/:value { req.params } { results }
+        - posts *verifyUser
+            - POST / { id{req.userInfo}, title, content, isPrivate } => 201
 
 
 ooooooooooooo                 .o8            
@@ -119,14 +125,12 @@ ooooooooooooo                 .o8
     o888o     `Y8bod8P' `Y8bod88P" `Y8bod8P' 
 
 
-        - explore
-            - GET /:filter { req.params } => { topData }
-            - GET /:id { req.params } => { item } 
-            - GET /search/:value { req.params } { results }
-
-        - posts *verifyUser
-            - POST / { id{req.userInfo}, title, content } => 201
             - DELETE /:id { {userId{req.userInfo}} } => 200
+
+
+
+
+
             - PUT /like/:id { {userId{req.userInfo}} } => 200
             - POST /comment/:id { {userId{req.userInfo}} } => 201
             - DELETE /comment/:id { {userId{req.userInfo}} } => 200
@@ -258,3 +262,5 @@ ooooooooooooo                 .o8
         API:
             Explroe:Add genre tagging to content, so you can filter it out in explore
             Explore: Add lots of likes and comments randomly so can build and test the top data features. 
+
+            

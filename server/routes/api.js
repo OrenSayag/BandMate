@@ -40,6 +40,7 @@ router.use("/logs", verifyUser ,require("../routes/logs"))
 router.use("/user" ,require("../routes/user"))
 router.use("/genres" ,require("../routes/genres"))
 router.use("/explore" ,require("../routes/explore"))
+router.use("/posts" , verifyUser ,require("../routes/posts"))
 
 
 

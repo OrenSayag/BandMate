@@ -16,7 +16,8 @@ const posts = new Schema({
     date: Date,
     comments: [Comment],
     likes: [String],
-    isPrivate: Boolean
+    isPrivate: Boolean,
+    type:String
 })
 
 const PostsModel = mongoose.model("posts", posts)

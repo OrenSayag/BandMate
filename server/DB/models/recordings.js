@@ -19,7 +19,8 @@ const recordings = new Schema({
     date: Date,
     comments: [Comment],
     likes: [String],
-    isPrivate: Boolean
+    isPrivate: Boolean,
+    type: String
 })
 
 const RecordingsModel = mongoose.model("recordings", recordings)
