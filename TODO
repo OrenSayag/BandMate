@@ -1,0 +1,253 @@
+oooooooooo.                                   
+`888'   `Y8b                                  
+ 888      888  .ooooo.  ooo. .oo.    .ooooo.  
+ 888      888 d88' `88b `888P"Y88b  d88' `88b 
+ 888      888 888   888  888   888  888ooo888 
+ 888     d88' 888   888  888   888  888    .o 
+o888bood8P'   `Y8bod8P' o888o o888o `Y8bod8P' 
+1. Download MongoDB.
+    Create Schemas and Models:
+        - users
+            - username:String,
+            fname: String,
+            lname: String,
+            mail: String,
+            hashedPass: String,
+            profile_img_src: String,
+            cover_img_src: String,
+            instruments: [String],
+            followers: [String],
+            following: [String],
+            bio: String,
+            recordings: [String],
+            logs: [String],
+            bands: [String],
+            genres: [String],
+            isBand: Boolean,
+            participants: [Schemas.types.Participant],
+            likedLogs: [String],
+            likedRecordings: [String],
+            likedPosts: [String],
+            logCategories: [String],
+        - genres
+            name:String,
+            img_src:String,
+        - instruments
+            name:String,
+            img_src:String,
+        - recordings
+            fileSrc: String,
+            mediaType: String,
+            ratingStars: Number,
+            users: [String],
+            title: String,
+            parentUser: String,
+            date: Date,
+            comments: [Schema.types.Comment],
+            likes: [String],
+            isPrivate: Boolean
+        - logs
+            timeInMins: Number,
+            instruments: [String],
+            categories: [String],
+            title: String,
+            ratingStars: Number,
+            users: [String],
+            parentUser: String,
+            date: Date,
+            comments: [Schema.types.Comment],
+            likes: [String],
+            isPrivate: Boolean
+
+        - posts
+            title: String,
+            content: String,
+            parentUser: String,
+            date: Date,
+            comments: [Schema.types.Comment],
+            likes: [String],
+            isPrivate: Boolean
+        - messages
+            content: String,
+            date: Date, 
+            from: String,
+            to: String,
+            isJoinReq: Boolean,
+        - groupCoversations
+            userIds:[String],
+            name:String,
+            creationDate:Date,
+            admins:[String],
+
+2. API:
+    npm i express jsonwebtoken bcrypt dotenv
+    setup express, and routes: api, auth, logs, user, genres, explore, posts, bank, bands
+    every route goes through the api route
+    create user verification middleware
+    create endpoints:
+        - auth
+            - POST register { isBand, ?fname, ?lname, userName, mail, password} => 200
+            - POST login { mailOrUsername, password } => 200
+        - logs *validateUser
+            - GET / { id(from req.userInfo) } => {userLogs}
+            - POST / { userId(req.userInfo), timeInMins, instruments[], categories[], title, ratingStars, users[], parentUser, ?date, isPrivate} => 200
+            - PUT /:id { id(req.params) } => 200
+            - POST /comment/:id { id(req.params), userId(req.userInfo), text } => 201
+            - DELETE /comment/:id { logId(req.params), userId(req.userInfo) } => 200
+            - DELETE /:id { id(req.params) } => 200
+            - PUT /rate/:id { id(req.params) } => 200
+        - user 
+            - GET *validateUser /logCategories { id(req.userInfo) } => {logCategories}  
+            - GET /info/:id { id(req.userInfo) } => {userInfo{imgSrc, username, bandsOfUser, isBand, followers, following, publicContent{posts,logs,recordings}}} 
+            - PUT|POST|DELETE *validateUser /logCategories { id(req.userInfo), logCategories[] } => 200
+            - PUT /follow/:id => 200
+                follow a user to see his public content on your feed. Toggler based on current situation
+            - POST *validateUser /feed { id(req.userInfo), ?filter } => { userFeed }
+
+
+ooooooooooooo                 .o8            
+8'   888   `8                "888            
+     888       .ooooo.   .oooo888   .ooooo.  
+     888      d88' `88b d88' `888  d88' `88b 
+     888      888   888 888   888  888   888 
+     888      888   888 888   888  888   888 
+    o888o     `Y8bod8P' `Y8bod88P" `Y8bod8P' 
+
+
+            - GET *validateUser /personalInfo { id(req.userInfo), ?bandId } => { associatedUsers(calculated by user and his bands), myContent{logs, recordings, posts} } //for the join users to new content feature (eg multiple usrs per recording)
+               // also it runds every band/user change or content crud, displaying all relevant content to the certain user
+
+        - genres
+            - GET / => {allGenres}
+
+        - explore
+            - GET /:filter { req.params } => { topData }
+            - GET /:id { req.params } => { item } 
+            - GET /search/:value { req.params } { results }
+
+        - posts *verifyUser
+            - POST / { id{req.userInfo}, title, content } => 201
+            - DELETE /:id { {userId{req.userInfo}} } => 200
+            - PUT /like/:id { {userId{req.userInfo}} } => 200
+            - POST /comment/:id { {userId{req.userInfo}} } => 201
+            - DELETE /comment/:id { {userId{req.userInfo}} } => 200
+
+        - bank *verifyUser
+            - POST / { userId(req.userInfo), ?bandId ,fileSrc, mediaType, ratingStars, users[], title, ?date, isPrivate} => 201
+            - PUT /rate/:id { userId(req.userInfo), ?bandId ,stars } => 200
+            - PUT /like/:id { userId(req.userInfo), ?bandId ,stars } => 200
+            - POST /comment/:id { userId(req.userInfo), ?bandId, text } => 201
+            - DELETE /comment/:id { userId(req.userInfo), ?bandId, text } => 200
+
+        - bands *verifyUser
+            - PUT /makeAdmin { userId(req.userInfo), bandId, futureAdminId } => 200
+            - DELETE /participant/:id   { userId(req.userInfo), bandId, toBeRemovedId } => 200
+
+        - messages *verifyUser
+            - POST / { id(req.userInfo), bandId, isJoinReq, content } => 201
+
+            HELLO FROM THE PAST ---- VALIDATE THIS REQ: (users should be in bands and bandmates shall be sent)  - GET *validateUser /personalInfo 
+
+            - GET / { id(req.userInfo) } => { conversations }
+            - DELETE /:id { userId(req.userInfo), id(erq.params) } => 200
+            - PUT /replyJoinRequest/ { id(req.userInfo), bandId, toBeAddedUser ,answer } => 200
+            - POST /group { id(req.userInfo), ?userIds[] } => 201
+            - DELETE /group {id(req.userInfo), groupId} => 200
+
+
+3. Open an Angular Project:
+    - create services
+        _logs
+
+            f:
+            getUserLogs
+            likeLog
+            commentLog
+            addLog
+            delLog
+            rateLog
+
+        
+        _users
+
+            f:
+            getUserInfo
+            getUserLogCategories
+            updateUserLogCategories
+            getUserFeed
+            followUser
+
+        _genres
+
+            f:
+            getGenres
+
+        _explore
+
+            e:
+            getTopData(filter)
+            getExtendedItemData
+            getSearchResults
+
+        _posts
+
+            addPost
+            delPost
+            likedPost
+            commentPost
+
+        _bank
+            addRecording
+            rateRecording
+            likeRecording
+            commentRecording
+            delRecording
+
+        _bands
+            makeAdmin
+            removeFromBand
+
+        _messages
+            getConversations
+            sendMessage
+            delMessage
+            replyJoinRequest
+            createGroupChat
+            delGroupChat
+
+    - create component and fill them up skeletaly, when done [✔]:
+    create a loading animation and implement at every step when fetching
+
+        Log
+            LogAddForm
+            LogItem
+            SocialBar
+        Navbar
+            NavbarBtn
+            AddBtn
+        Header
+            BurgerMenu
+            ProfileBar
+        GenreFormBar
+        Explore
+            ExploreButtonColumn
+                ExploreButtonStack
+                    ExploreButton
+            ExploreUserItem
+        Feed
+            AddPostForm
+            PostUnit
+        Bank
+            RecordingUnit
+            AddRecordingForm
+        Login
+        Signup
+        Inbox
+            Conversation
+
+
+
+    STYLE:
+        design mobile first
+
+    Test, host, update CV, move forwarD: Project4/yourStats/militaryShabzak
