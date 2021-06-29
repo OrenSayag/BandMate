@@ -21,18 +21,18 @@ const verifyUser = async (req,res,next) => {
     }
 
 }
-const verifyAdmin = (req,res,next) => {
-    const payload = jwt.verify(req.headers.authorization, process.env.TOKEN_SECRET)
-    if(!payload){
-        return res.status(401).send({fail:"Invalid token"})
-    }
-    let userInfo=payload.userInfo
-    if(userInfo.type!=='admin'){
-        return res.status(401).send({fail:"you're not an admin"})
-    }
-    req.userInfo = userInfo
-    next()
-}
+// const verifyAdmin = (req,res,next) => {
+//     const payload = jwt.verify(req.headers.authorization, process.env.TOKEN_SECRET)
+//     if(!payload){
+//         return res.status(401).send({fail:"Invalid token"})
+//     }
+//     let userInfo=payload.userInfo
+//     if(userInfo.type!=='admin'){
+//         return res.status(401).send({fail:"you're not an admin"})
+//     }
+//     req.userInfo = userInfo
+//     next()
+// }
 
 
 router.use("/auth", require("../routes/auth"))
@@ -41,6 +41,10 @@ router.use("/user" ,require("../routes/user"))
 router.use("/genres" ,require("../routes/genres"))
 router.use("/explore" ,require("../routes/explore"))
 router.use("/posts" , verifyUser ,require("../routes/posts"))
+router.use("/bank" , verifyUser ,require("../routes/bank"))
+router.use("/band" , verifyUser ,require("../routes/band"))
+router.use("/messages" , verifyUser ,require("../routes/messages"))
+
 
 
 

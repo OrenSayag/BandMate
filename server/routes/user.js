@@ -154,43 +154,43 @@ router.post("/personalInfo", verifyUser, async (req, res) => {
   const { id } = req.userInfo;
   const { bandId } = req.body;
 
-
-
   try {
-      let user;
-      user = await UsersModel.findById( id );
-    if(bandId){
-        if(!user.bands.some(band=>band.id===bandId)){
-            return res.status(400).send({fail:"You're not in this band brother."})
-        } else {
-            user = await UsersModel.findById(bandId)
-        }
+    let user;
+    user = await UsersModel.findById(id);
+    if (bandId) {
+      const band = await UsersModel.findById(bandId);
+
+      if (!band.participants.some((p) => p.userId == id) && band._id != id) {
+        return res
+          .status(400)
+          .send({ fail: "You're not in this band brother." });
+      } else {
+        user = await UsersModel.findById(bandId);
+      }
     }
 
-    // associated users are: participants of the band, or participants of 
+    // associated users are: participants of the band, or participants of
     // a band that a user is in.
-    const myBandMates = []
+    const myBandMates = [];
     for (const band of user.bands) {
-        const aBand = await UsersModel.findById(band)
-        for (const p of aBand.participants) {
-            myBandMates.push(p)
-        }
+      const aBand = await UsersModel.findById(band);
+      for (const p of aBand.participants) {
+        myBandMates.push(p);
+      }
     }
-    console.log(user.logs)
-    const associatedUsers = [...user.participants, ...myBandMates]
+    console.log(user.bands);
+    const associatedUsers = [...user.participants, ...myBandMates];
     const myContent = {
-        logs: 
-        await LogsModel.find({_id:{$in: user.logs}})
-        ,
-        recordings: 
-        await RecordingsModel.find({_id:{$in: user.recordings}})
-        ,
-        posts: 
-        await PostsModel.find({_id:{$in: user.posts}})
-        ,
-    }
+      logs: await LogsModel.find({
+        $or: [{ parentUser: id }, { users: id }],
+      }),
+      recordings: await RecordingsModel.find({
+        $or: [{ parentUser: id }, { users: id }],
+      }),
+      posts: await PostsModel.find({ parentUser: id }),
+    };
 
-    return res.status(200).send({associatedUsers, myContent})
+    return res.status(200).send({ associatedUsers, myContent });
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -202,6 +202,8 @@ router.post("/feed", verifyUser, async (req, res) => {
   const { id } = req.userInfo;
   const { filter } = req.body;
 
+  console.log(req.userInfo.username);
+
   try {
     let user = await UsersModel.find({ _id: id });
     user = user[0];
@@ -210,10 +212,21 @@ router.post("/feed", verifyUser, async (req, res) => {
     // content is: posts, logs, recordings
     // - all user's content
     const userContent = {
-      logs: await LogsModel.find({ _id: { $in: user.logs } }),
-      posts: await PostsModel.find({ _id: { $in: user.logs } }),
-      recordings: await RecordingsModel.find({ _id: { $in: user.logs } }),
+      logs: await LogsModel.find({ parentUser: id }),
+      posts: await PostsModel.find({ parentUser: id }),
+      recordings: await RecordingsModel.find({ parentUser: id }),
     };
+
+    const bandContent = {};
+    for (const band of user.bands) {
+      const logs = await LogsModel.find({ parentUser: band });
+      const posts = await PostsModel.find({ parentUser: band });
+      const recordings = await RecordingsModel.find({ parentUser: band });
+      bandContent.logs = logs;
+      bandContent.posts = posts;
+      bandContent.recordings = recordings;
+    }
+
     // - all the people who the user is follwing's content that is not private
     const followingContent = {
       logs: await LogsModel.find({ parentUser: { $in: user.following } }),
@@ -229,21 +242,35 @@ router.post("/feed", verifyUser, async (req, res) => {
       userContent.recordings,
       followingContent.logs,
       followingContent.posts,
-      followingContent.recordings
+      followingContent.recordings,
+      bandContent.logs,
+      bandContent.posts,
+      bandContent.recordings
     );
     hugeFeed.sort((a, b) => a.date - b.date);
 
     let organizedFeed = {
-        logs: [...userContent.logs.sort((a,b)=>a.date-b.date),followingContent.logs.sort((a,b)=>a.date-b.date),],
-        posts: [...userContent.posts.sort((a,b)=>a.date-b.date),followingContent.posts.sort((a,b)=>a.date-b.date),],
-        recordings: [...userContent.recordings.sort((a,b)=>a.date-b.date),followingContent.recordings.sort((a,b)=>a.date-b.date),]
-    }
+      logs: [
+        ...userContent.logs.sort((a, b) => a.date - b.date),
+        ...followingContent.logs.sort((a, b) => a.date - b.date),
+        ...bandContent.logs.sort((a, b) => a.date - b.date),
+      ],
+      posts: [
+        ...userContent.posts.sort((a, b) => a.date - b.date),
+        ...followingContent.posts.sort((a, b) => a.date - b.date),
+        ...bandContent.posts.sort((a, b) => a.date - b.date),
+      ],
+      recordings: [
+        ...userContent.recordings.sort((a, b) => a.date - b.date),
+        ...followingContent.recordings.sort((a, b) => a.date - b.date),
+        ...bandContent.recordings.sort((a, b) => a.date - b.date),
+      ],
+    };
 
     // filter option: filters the content based on content type.
-        // not doing this now.
+    // not doing this now.
 
-
-    return res.status(200).send({userFeed:hugeFeed, organizedFeed})
+    return res.status(200).send({ userFeed: hugeFeed, organizedFeed });
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

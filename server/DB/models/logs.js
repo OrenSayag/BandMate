@@ -1,23 +1,49 @@
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
+const  {ObjectId} = Schema.Types
 
 const Comment = new Schema({
-    username:String,
-    userId: String,
-    text: String,
-    postedOn: Date,
-    likes: [String],
+    username:{
+        type:String,
+        required: true
+    },
+    userId: {
+        type:ObjectId,
+        required: true,
+        ref:"users"
+    },
+    text: {
+        type:String,
+        required: true
+    },
+    postedOn: {
+        type:String,
+        default: Date.now
+    },
+    likes: [{
+        type:ObjectId,
+        ref:"users"
+    }],
 })
 
 
 const logs = new Schema({
     timeInMins: Number,
-    instruments: [String],
+    instruments: [{
+        type: ObjectId,
+        ref:"instruments"
+    }],
     categories: [String],
     title: String,
     ratingStars: Number,
-    users: [String],
-    parentUser: String,
+    users: [{
+        type: ObjectId,
+        ref:"users"
+    }],
+    parentUser: {
+        type: ObjectId,
+        ref:"users"
+    },
     date: Date,
     comments: [Comment],
     likes: [String],

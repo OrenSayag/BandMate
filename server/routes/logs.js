@@ -43,7 +43,6 @@ router.post("/", async (req, res) => {
     if(user.length===0){
         return res.status(400).send({fail:"no such user"})
     }
-    const userLogs = user[0].logs;
 
     const newLog = await new LogsModel({
       timeInMins,
@@ -58,11 +57,6 @@ router.post("/", async (req, res) => {
     });
 
     await newLog.save();
-
-    await UsersModel.findOneAndUpdate(
-      { _id: id },
-      { logs: [...userLogs, newLog._id] }
-    );
 
     return res.sendStatus(201);
   } catch (error) {

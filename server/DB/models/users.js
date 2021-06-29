@@ -1,10 +1,17 @@
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
+const { ObjectId } = Schema.Types
 
 
 const Participant = new Schema({
-    username:String,
-    role:String
+    userId:{
+        type: ObjectId,
+        ref:"users"
+    },
+    role:{
+        type:String,
+        default: "member"
+    }
 })
 
 const LogCategory = new Schema({
@@ -20,20 +27,53 @@ const users = new Schema({
     hashedPass: String,
     profile_img_src: String,
     cover_img_src: String,
-    instruments: [String],
-    followers: [String],
-    following: [String],
-    bio: String,
-    recordings: [String],
-    posts: [String],
-    logs: [String],
-    bands: [String],
-    genres: [String],
+    instruments: [{
+        type: ObjectId,
+        ref:"instruments"
+    }],
+    followers: [{
+        type: ObjectId,
+        ref:"users"
+    }],
+    following: [{
+        type: ObjectId,
+        ref:"users"
+    }],
+    // bio: String,
+    // recordings: [{
+    //     type: ObjectId,
+    //     ref:"recordings"
+    // }],
+    // posts: [{
+    //     type: ObjectId,
+    //     ref:"posts"
+    // }],
+    // logs: [{
+    //     type: ObjectId,
+    //     ref:"logs"
+    // }],
+    bands: [{
+        type: ObjectId,
+        ref:"users"
+    }],
+    genres: [{
+        type: ObjectId,
+        ref:"genres"
+    }],
     isBand: Boolean,
     participants: [Participant],
-    likedLogs: [String],
-    likedRecordings: [String],
-    likedPosts: [String],
+    likedLogs: [{
+        type: ObjectId,
+        ref:"logs"
+    }],
+    likedRecordings: [{
+        type: ObjectId,
+        ref:"recordings"
+    }],
+    likedPosts: [{
+        type: ObjectId,
+        ref:"posts"
+    }],
     logCategories: [LogCategory],
     isAdmin: Boolean,
 })

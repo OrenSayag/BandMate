@@ -2,7 +2,11 @@ const mongoose = require("mongoose")
 const Instruments = require("./models/instruments")
 const UsersModel = require("./models/users")
 
-mongoose.connect(`mongodb://localhost:27017/bandmate`)
+mongoose.connect(`mongodb://localhost:27017/bandmate`,{
+    useFindAndModify: false,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
 
 mongoose.connection.once(`open`, ()=>{
     console.log('The goose is loose')

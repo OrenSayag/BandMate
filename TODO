@@ -114,8 +114,32 @@ o888bood8P'   `Y8bod8P' o888o o888o `Y8bod8P'
             - GET /search/:value { req.params } { results }
         - posts *verifyUser
             - POST / { id{req.userInfo}, title, content, isPrivate } => 201
+            - DELETE /:id { {userId{req.userInfo}} } => 200
+            - PUT /:id { userId(req.userInfo), content, isPrivate }
+            - PUT /like/:id { {userId{req.userInfo}} } => 200
+            - POST /comment/:id { {userId{req.userInfo}} } => 201
+            - DELETE /comment/:id { {userId{req.userInfo}} } => 200
+            - POST / { userId(req.userInfo), ?bandId ,fileSrc, mediaType, ratingStars, users[], title, ?date, isPrivate} => 201
+        - bank *verifyUser
+            - PUT /rate/:id { userId(req.userInfo), ?bandId ,stars } => 200
+            - PUT /like/:id { userId(req.userInfo) } => 200
+            - POST /comment/:id { userId(req.userInfo), ?bandId, text } => 201
+            - DELETE /comment/:recordingId/:id { userId(req.userInfo), ?bandId, text } => 200
+        - bands *verifyUser
+            - PUT /makeAdmin { userId(req.userInfo), bandId, futureAdminId } => 200
+            - DELETE /participant/:id   { userId(req.userInfo), bandId, toBeRemovedId } => 200
+        - messages *verifyUser
+            - POST / { id(req.userInfo), to, ?bandId, isJoinReq, content } => 201
+            - GET / { id(req.userInfo) } => { conversations }
+            - DELETE /:id { userId(req.userInfo), id(erq.params) } => 200
+            - PUT /replyJoinRequest/:messaageId {  ,id(req.userInfo), bandId, toBeAddedUserId ,answer } => 200
 
 
+            HELLO FROM THE PAST ---- VALIDATE THIS REQ: (users should be in bands and bandmates shall be sent)  - GET *validateUser /personalInfo 
+            also check for PUT band/makeAdmin that an admin can be made
+            also check for DELETE band/participant/:id, band member removal
+            *** HELLO FROM THE PAST - CHECK /posts/like so unparticipants cannot like on private posts and participants can
+            also check for POST /posts/comment
 ooooooooooooo                 .o8            
 8'   888   `8                "888            
      888       .ooooo.   .oooo888   .ooooo.  
@@ -125,37 +149,31 @@ ooooooooooooo                 .o8
     o888o     `Y8bod8P' `Y8bod88P" `Y8bod8P' 
 
 
-            - DELETE /:id { {userId{req.userInfo}} } => 200
 
-
-
-
-
-            - PUT /like/:id { {userId{req.userInfo}} } => 200
-            - POST /comment/:id { {userId{req.userInfo}} } => 201
-            - DELETE /comment/:id { {userId{req.userInfo}} } => 200
-
-        - bank *verifyUser
-            - POST / { userId(req.userInfo), ?bandId ,fileSrc, mediaType, ratingStars, users[], title, ?date, isPrivate} => 201
-            - PUT /rate/:id { userId(req.userInfo), ?bandId ,stars } => 200
-            - PUT /like/:id { userId(req.userInfo), ?bandId ,stars } => 200
-            - POST /comment/:id { userId(req.userInfo), ?bandId, text } => 201
-            - DELETE /comment/:id { userId(req.userInfo), ?bandId, text } => 200
-
-        - bands *verifyUser
-            - PUT /makeAdmin { userId(req.userInfo), bandId, futureAdminId } => 200
-            - DELETE /participant/:id   { userId(req.userInfo), bandId, toBeRemovedId } => 200
-
-        - messages *verifyUser
-            - POST / { id(req.userInfo), bandId, isJoinReq, content } => 201
-
-            HELLO FROM THE PAST ---- VALIDATE THIS REQ: (users should be in bands and bandmates shall be sent)  - GET *validateUser /personalInfo 
-
-            - GET / { id(req.userInfo) } => { conversations }
-            - DELETE /:id { userId(req.userInfo), id(erq.params) } => 200
-            - PUT /replyJoinRequest/ { id(req.userInfo), bandId, toBeAddedUser ,answer } => 200
-            - POST /group { id(req.userInfo), ?userIds[] } => 201
+            - POST /group { id(req.userInfo), ?userIds[], name } => 201
             - DELETE /group {id(req.userInfo), groupId} => 200
+                validate user is admin
+                delete group
+
+            - PUT /group/admin/:toBeAdminned {groupId} => 200
+                validate user is an admin in this group
+                validate toBeAdminned is in this group and not admin
+                make him admin
+
+            - DELETE/group/admin/:toBeAdminned {groupId} => 200
+                validate user is an admin in this group
+                if user is admin, verify his not the only admin
+
+            - 
+
+                
+
+            GET /messages - settle group conversations {a property on returning obj}
+            POST /messages - if recieved groupId(in body), send to that groupId and type it "group message"
+
+
+            new:
+                users follow users resulting in feed showing up
 
 
 3. Open an Angular Project:
@@ -217,6 +235,8 @@ ooooooooooooo                 .o8
             replyJoinRequest
             createGroupChat
             delGroupChat
+            makeGroupAdmin
+            delGroupAdmin
 
     - create component and fill them up skeletaly, when done [✔]:
     create a loading animation and implement at every step when fetching
@@ -262,5 +282,6 @@ ooooooooooooo                 .o8
         API:
             Explroe:Add genre tagging to content, so you can filter it out in explore
             Explore: Add lots of likes and comments randomly so can build and test the top data features. 
-
-            
+            Auth: users, undercase usernames on login and register routes
+            auth Users model beautify types
+            messages/joinbandrequest Join request can't be sent to other side if already exists between them
