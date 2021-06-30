@@ -272,4 +272,62 @@ router.post("/group", async (req, res) => {
   }
 });
 
+// deletes a group
+router.delete("/group/:groupId", async (req, res) => {
+  const {id} = req.userInfo;
+  let {groupId} = req.params;
+  if(!groupId){
+    return res.status(400).send({fail:"Missing groupId"})
+  }
+  try {
+    const group = await GroupConversationsModel.findById(groupId)
+    if(!group){
+      return res.status(400).send({fail:"No such group"})
+    }
+    if(!group.admins.some(admin=>admin==id)){
+      return res.status(400).send({fail:"You are not an admin is this group"})
+    }
+    await GroupConversationsModel.findByIdAndDelete(groupId)
+    return res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
+// admin promotes a member to be an admin
+router.put("/group/admin/:toBeAdminned", async (req, res) => {
+  const {id} = req.userInfo;
+  let {groupId} = req.body;
+  let {toBeAdminned} = req.params;
+  if(!groupId){
+    return res.status(400).send({fail:"Missing groupId"})
+  }
+  try {
+    const group = await GroupConversationsModel.findById(groupId)
+    if(!group){
+      return res.status(400).send({fail:"No such group"})
+    }
+    if(!group.admins.some(admin=>admin==id)){
+      return res.status(400).send({fail:"You are not an admin in this group"})
+    }
+    if(!group.userIds.some(member=>member==toBeAdminned)){
+      return res.status(400).send({fail:"This user is not is this group"})
+    }
+    if(group.admins.some(admin=>admin==toBeAdminned)){
+      return res.status(400).send({fail:"This user is already an admin in this group"})
+    }
+
+    await GroupConversationsModel.findByIdAndUpdate(groupId, {
+      $push:{
+        admins: mongoose.Types.ObjectId(toBeAdminned)
+      }
+    })
+    return res.sendStatus(201);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
 module.exports = router;

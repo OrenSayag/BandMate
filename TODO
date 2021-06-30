@@ -140,6 +140,14 @@ o888bood8P'   `Y8bod8P' o888o o888o `Y8bod8P'
             also check for DELETE band/participant/:id, band member removal
             *** HELLO FROM THE PAST - CHECK /posts/like so unparticipants cannot like on private posts and participants can
             also check for POST /posts/comment
+            - POST /group { id(req.userInfo), ?userIds[], name } => 201
+            - DELETE /group/:groupId {id(req.userInfo)} => 200
+                validate user is admin
+                delete group
+            - PUT /group/admin/:toBeAdminned {groupId} => 200
+                validate user is an admin in this group
+                validate toBeAdminned is in this group and not admin
+                make him admin
 ooooooooooooo                 .o8            
 8'   888   `8                "888            
      888       .ooooo.   .oooo888   .ooooo.  
@@ -150,15 +158,7 @@ ooooooooooooo                 .o8
 
 
 
-            - POST /group { id(req.userInfo), ?userIds[], name } => 201
-            - DELETE /group {id(req.userInfo), groupId} => 200
-                validate user is admin
-                delete group
 
-            - PUT /group/admin/:toBeAdminned {groupId} => 200
-                validate user is an admin in this group
-                validate toBeAdminned is in this group and not admin
-                make him admin
 
             - DELETE/group/admin/:toBeAdminned {groupId} => 200
                 validate user is an admin in this group
@@ -285,3 +285,4 @@ ooooooooooooo                 .o8
             Auth: users, undercase usernames on login and register routes
             auth Users model beautify types
             messages/joinbandrequest Join request can't be sent to other side if already exists between them
+            messages/groupconversations validate added user is not private, if private, that is being followed by me (ofc, after req to follow and approval of the private being followed, something like the join band req and rep)
