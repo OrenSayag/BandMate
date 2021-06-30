@@ -148,6 +148,10 @@ o888bood8P'   `Y8bod8P' o888o o888o `Y8bod8P'
                 validate user is an admin in this group
                 validate toBeAdminned is in this group and not admin
                 make him admin
+            - DELETE/group/admin {groupId} => 200
+                validate user is an admin in this group
+                verify his not the only admin
+                remove the user from being admin (only he can remove himself)
 ooooooooooooo                 .o8            
 8'   888   `8                "888            
      888       .ooooo.   .oooo888   .ooooo.  
@@ -157,16 +161,6 @@ ooooooooooooo                 .o8
     o888o     `Y8bod8P' `Y8bod88P" `Y8bod8P' 
 
 
-
-
-
-            - DELETE/group/admin/:toBeAdminned {groupId} => 200
-                validate user is an admin in this group
-                if user is admin, verify his not the only admin
-
-            - 
-
-                
 
             GET /messages - settle group conversations {a property on returning obj}
             POST /messages - if recieved groupId(in body), send to that groupId and type it "group message"

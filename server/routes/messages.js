@@ -330,4 +330,36 @@ router.put("/group/admin/:toBeAdminned", async (req, res) => {
   }
 });
 
+// admin removes himself from being an admin
+router.delete("/group/admin/removeSelf", async (req, res) => {
+  const {id} = req.userInfo;
+  console.log(id)
+  let {groupId} = req.body;
+  if(!groupId){
+    return res.status(400).send({fail:"Missing groupId"})
+  }
+  try {
+    const group = await GroupConversationsModel.findById(groupId)
+    if(!group){
+      return res.status(400).send({fail:"No such group"})
+    }
+    if(!group.admins.some(admin=>admin==id)){
+      return res.status(400).send({fail:"You are not an admin in this group"})
+    }
+    if(group.admins.length===1){
+      return res.status(400).send({fail:"You are the only admin in this group - you can't quit"})
+    }
+
+    await GroupConversationsModel.findByIdAndUpdate(groupId, {
+      $pull:{
+        admins: mongoose.Types.ObjectId(id)
+      }
+    })
+    return res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
 module.exports = router;
