@@ -7,8 +7,17 @@ const router = require("express").Router();
 router.get("/", async (req, res) => {
   const { id } = req.userInfo;
   try {
-    const user = await UsersModel.find({ _id: id });
-    const userLogs = user[0].logs;
+    const userLogs = await LogsModel.find({
+      // $or:[
+        // {parentUser:id},
+        parentUser:id
+      // ]
+    }).populate({
+      path:"parentUser",
+      select:"username"
+    }).populate({
+      path:"instruments",
+    })
     return res.status(200).send({ userLogs });
   } catch (error) {
     console.log(error);

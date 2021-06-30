@@ -28,27 +28,31 @@ const Comment = new Schema({
 
 
 const logs = new Schema({
-    timeInMins: Number,
+    timeInMins: {type:Number, required:true},
     instruments: [{
         type: ObjectId,
         ref:"instruments"
     }],
     categories: [String],
-    title: String,
-    ratingStars: Number,
+    title: {type:String, required:true},
+    ratingStars: {type:Number, default:0},
     users: [{
         type: ObjectId,
         ref:"users"
     }],
     parentUser: {
         type: ObjectId,
-        ref:"users"
+        ref:"users",
+        required:true,
     },
-    date: Date,
+    date: {type:Date, default:Date.now},
     comments: [Comment],
-    likes: [String],
-    isPrivate: Boolean,
-    type:String
+    likes: [{
+        type: ObjectId,
+        ref:"users"
+    }],
+    isPrivate: {type:Boolean, default: false},
+    type:{type:String, default: "log"}
 
 })
 

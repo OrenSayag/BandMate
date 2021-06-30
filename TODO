@@ -158,6 +158,8 @@ o888bood8P'   `Y8bod8P' o888o o888o `Y8bod8P'
                 (user.js) - PUT /follow/:toFollowId {id(req.params)} => 200{ok:"200"}
                     validate toFollowId is in users
                     push/pull according to existance is User's following arr
+            3. Open an Angular Project:
+            - install material
 ooooooooooooo                 .o8            
 8'   888   `8                "888            
      888       .ooooo.   .oooo888   .ooooo.  
@@ -167,9 +169,20 @@ ooooooooooooo                 .o8
     o888o     `Y8bod8P' `Y8bod88P" `Y8bod8P' 
 
 
-3. Open an Angular Project:
-    - install material
+
     - create services
+
+
+    - create models based on mongoose schemas
+
+
+    
+        _auth
+
+            f:
+            register
+            login
+
         _logs
 
             f:
@@ -180,7 +193,6 @@ ooooooooooooo                 .o8
             delLog
             rateLog
 
-        
         _users
 
             f:
@@ -230,7 +242,7 @@ ooooooooooooo                 .o8
             makeGroupAdmin
             delGroupAdmin
 
-    - setup routing
+    - setup routing (plan first)
 
     - create component and fill them up skeletaly, when done [✔]:
     create a loading animation and implement at every step when fetching
