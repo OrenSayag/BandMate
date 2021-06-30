@@ -152,6 +152,12 @@ o888bood8P'   `Y8bod8P' o888o o888o `Y8bod8P'
                 validate user is an admin in this group
                 verify his not the only admin
                 remove the user from being admin (only he can remove himself)
+            *** setup on shcema of message, togroup referring to GroupConversations
+            GET /messages - settle group conversations {a property on returning obj}
+                users follow users resulting in feed showing up
+                (user.js) - PUT /follow/:toFollowId {id(req.params)} => 200{ok:"200"}
+                    validate toFollowId is in users
+                    push/pull according to existance is User's following arr
 ooooooooooooo                 .o8            
 8'   888   `8                "888            
      888       .ooooo.   .oooo888   .ooooo.  
@@ -161,16 +167,8 @@ ooooooooooooo                 .o8
     o888o     `Y8bod8P' `Y8bod88P" `Y8bod8P' 
 
 
-            *** setup on shcema of message, togroup referring to GroupConversations
-            GET /messages - settle group conversations {a property on returning obj}
-            POST /messages - if recieved groupId(in body), send to that groupId and type it "group message"
-
-
-            new:
-                users follow users resulting in feed showing up
-
-
 3. Open an Angular Project:
+    - install material
     - create services
         _logs
 
@@ -231,6 +229,8 @@ ooooooooooooo                 .o8
             delGroupChat
             makeGroupAdmin
             delGroupAdmin
+
+    - setup routing
 
     - create component and fill them up skeletaly, when done [✔]:
     create a loading animation and implement at every step when fetching

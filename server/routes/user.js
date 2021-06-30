@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const RecordingsModel = require("../DB/models/recordings");
 const PostsModel = require("../DB/models/posts");
 const router = require("express").Router();
+const mongoose = require("mongoose")
 
 // oooooooooooo ooooo     ooo ooooo      ooo   .oooooo.   ooooooooooooo ooooo   .oooooo.   ooooo      ooo  .oooooo..o
 // `888'     `8 `888'     `8' `888b.     `8'  d8P'  `Y8b  8'   888   `8 `888'  d8P'  `Y8b  `888b.     `8' d8P'    `Y8
@@ -129,26 +130,6 @@ router.put("/logCategories/:catId", verifyUser, async (req, res) => {
   }
 });
 
-router.put("/follow/:id", verifyUser, async (req, res) => {
-  const { id } = req.params;
-  const userId = req.userInfo.id;
-
-  try {
-    let user = await UsersModel.findById(userId);
-    if (user.following.some((f) => f === id)) {
-      user.following = user.following.filter((f) => f !== id);
-    } else {
-      user.following.push(id);
-    }
-    await user.save();
-    console.log(user);
-    return res.sendStatus(200);
-  } catch (error) {
-    console.log(error);
-    return res.sendStatus(500);
-  }
-});
-
 // get the user's feed
 router.post("/personalInfo", verifyUser, async (req, res) => {
   const { id } = req.userInfo;
@@ -212,16 +193,34 @@ router.post("/feed", verifyUser, async (req, res) => {
     // content is: posts, logs, recordings
     // - all user's content
     const userContent = {
-      logs: await LogsModel.find({ parentUser: id }),
-      posts: await PostsModel.find({ parentUser: id }),
-      recordings: await RecordingsModel.find({ parentUser: id }),
+      logs: await LogsModel.find({ parentUser: id }).populate({
+        path:"parentUser",
+        select: "username isBand"
+      }),
+      posts: await PostsModel.find({ parentUser: id }).populate({
+        path:"parentUser",
+        select: "username isBand"
+      }),
+      recordings: await RecordingsModel.find({ parentUser: id }).populate({
+        path:"parentUser",
+        select: "username isBand"
+      }),
     };
 
     const bandContent = {};
     for (const band of user.bands) {
-      const logs = await LogsModel.find({ parentUser: band });
-      const posts = await PostsModel.find({ parentUser: band });
-      const recordings = await RecordingsModel.find({ parentUser: band });
+      const logs = await LogsModel.find({ parentUser: band }).populate({
+        path:"parentUser",
+        select: "username isBand"
+      });
+      const posts = await PostsModel.find({ parentUser: band }).populate({
+        path:"parentUser",
+        select: "username isBand"
+      });
+      const recordings = await RecordingsModel.find({ parentUser: band }).populate({
+        path:"parentUser",
+        select: "username isBand"
+      });
       bandContent.logs = logs;
       bandContent.posts = posts;
       bandContent.recordings = recordings;
@@ -229,10 +228,19 @@ router.post("/feed", verifyUser, async (req, res) => {
 
     // - all the people who the user is follwing's content that is not private
     const followingContent = {
-      logs: await LogsModel.find({ parentUser: { $in: user.following } }),
-      posts: await PostsModel.find({ parentUser: { $in: user.following } }),
+      logs: await LogsModel.find({ parentUser: { $in: user.following } }).populate({
+        path:"parentUser",
+        select: "username isBand"
+      }),
+      posts: await PostsModel.find({ parentUser: { $in: user.following } }).populate({
+        path:"parentUser",
+        select: "username isBand"
+      }),
       recordings: await RecordingsModel.find({
         parentUser: { $in: user.following },
+      }).populate({
+        path:"parentUser",
+        select: "username isBand"
       }),
     };
     // everything should be ordered by date desc.
@@ -276,5 +284,43 @@ router.post("/feed", verifyUser, async (req, res) => {
     return res.sendStatus(500);
   }
 });
+
+// user follow user
+router.put('/follow/:toFollowId', verifyUser ,async (req, res)=>{
+  const {id} = req.userInfo
+  const {toFollowId} = req.params
+  try {
+    const toFollowUser = await UsersModel.findById(toFollowId)
+    if(!toFollowUser){
+      return res.status(400).send({fail:"No such user"})
+    }
+    // await UsersModel.findByIdAndUpdate(id, {$set:{following:[]}})
+    if(id==toFollowId){
+      return res.status(400).send({fail:"Don't follow yourself."})
+    }
+    const user = await UsersModel.findById(id)
+    if(user.following.some(followed=>followed==toFollowId)){
+      // console.log("push")
+      await UsersModel.findByIdAndUpdate(id, {
+        $pull: {
+          following: toFollowId
+        }
+      })
+    } else {
+      // console.log("pull")
+      await UsersModel.findByIdAndUpdate(id, {
+        $push: {
+          following: toFollowId
+        }
+      })
+    }
+    return res.status(200).send({ok:await UsersModel.findById(id)})
+  } catch (error) {
+    console.log(error)
+    return res.status(500).send(error)
+  }
+})
+
+
 
 module.exports = router;

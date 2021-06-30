@@ -101,34 +101,42 @@ router.post("/", async (req, res) => {
       return res.sendStatus(201);
     }
 
-    
     if (
       (await UsersModel.findById(to)) === null &&
       (await GroupConversationsModel.findById(to)) === null
+    ) {
+      return res.status(400).send({ fail: "No such user or group" });
+    }
+
+    let newMessage;
+    let group = await GroupConversationsModel.findById(to);
+    if (!group) {
+      newMessage = await new MessagesModel({
+        content,
+        from: id,
+        to,
+        type: "message",
+      });
+    } else {
+      if (
+        !group.userIds.some((member) => member == id) &&
+        !group.admins.some((member) => member == id)
       ) {
-        return res.status(400).send({ fail: "No such user or group" });
-      }
-      
-      let newMessage;
-
-      if(await GroupConversationsModel.findById(to)===null){
-        newMessage = await new MessagesModel({
-          content,
-          from: id,
-          to,
-          type: "message",
-        });
-      } else {
-        newMessage = await new MessagesModel({
-          content,
-          from: id,
-          to,
-          type: "group message",
-        });
+        return res
+          .status(400)
+          .send({ fail: "You're not a member of this group" });
       }
 
-      await newMessage.save();
-      
+      newMessage = await new MessagesModel({
+        content,
+        from: id,
+        to,
+        type: "group message",
+      });
+    }
+
+    await newMessage.save();
+
     return res.sendStatus(201);
   } catch (error) {
     console.log(error);
@@ -140,39 +148,75 @@ router.post("/", async (req, res) => {
 router.get("/", async (req, res) => {
   const { id } = req.userInfo;
   try {
-    const userGroups = await GroupConversationsModel.find({userIds: id})
-    const userGroupsIds = []
+    const userGroups = await GroupConversationsModel.find({ userIds: id });
+    const userGroupsIds = [];
     for (const group of userGroups) {
-      userGroupsIds.push(group._id)
-    } 
-    console.log(userGroupsIds)
+      userGroupsIds.push(group._id);
+    }
+    // console.log(userGroupsIds)
     const conversation = await MessagesModel.find({
-      $or: [{ from: id }, { to: id },{ to: {$in:userGroupsIds} }],
-    }).sort("date");
+      // $or: [{ from: id }, { to: id }, { to: { $in: userGroupsIds } }],
+      $and: [
+        {$or: [{ from: id }, { to: id },]},
+        {type: "message"}
+      ]
+      // $or: [{ from: id }, { to: id }}}],
+    }).sort("date").populate({
+      path:"to",
+      select: "username"
+    }).populate({
+      path:"from",
+      select: "username"
+    });
+
+    // console.log(conversation)
 
     // organize coversations by contact name, and by groups
     let conversations = {};
     for (const message of conversation) {
-      if(message.type=="group message"){
-        // console.log("hey this is a group message")
-        if(!conversations[message.to]){
-          conversations[message.to] = []
-        }
-        conversations[message.to].push(message)
-      } else {
-        if (message.from != id) {
-          if (!Array.isArray(conversation[message.from])) {
-            conversation[message.from] = [];
+      // if (message.type == "group message") {
+      //   // console.log("hey this is a group message")
+      //   console.log(message);
+      //   const group = await GroupConversationsModel.findById(message.to);
+
+      //   if (!conversations[group.name]) {
+      //     conversations[group.name] = [];
+      //   }
+      //   conversations[group.name].push(message);
+      // } else {
+        if (message.from._id != id) {
+          // console.log(message.from)
+          const user = await UsersModel.findById(message.from._id);
+          if (!Array.isArray(conversations[user.username])) {
+            conversations[user.username] = [];
           }
-          conversation[message.from].push(message);
+          conversations[user.username].push(message);
         } else {
-          if (!Array.isArray(conversation[message.to])) {
-            conversation[message.to] = [];
+          const user = await UsersModel.findById(message.to._id);
+          if (!Array.isArray(conversations[user.username])) {
+            conversations[user.username] = [];
           }
-          conversation[message.to].push(message);
+          conversations[user.username].push(message);
         }
       }
+
+      // settle group conversations
+      const groupConversation = await MessagesModel.find({
+        to: {$in: userGroupsIds}
+      }).populate({
+        path:"from",
+        select: "username"
+      });
+      for (const message of groupConversation) {
+        const group = await GroupConversationsModel.findById(message.to);
+
+        if (!conversations[group.name]) {
+          conversations[group.name] = [];
+        }
+        conversations[group.name].push(message);
       }
+
+    // }
 
     return res.status(200).send({ conversations });
   } catch (error) {
@@ -417,11 +461,9 @@ router.delete("/group/admin/removeSelf", async (req, res) => {
         .send({ fail: "You are not an admin in this group" });
     }
     if (group.admins.length === 1) {
-      return res
-        .status(400)
-        .send({
-          fail: "You are the only admin in this group - you can't quit",
-        });
+      return res.status(400).send({
+        fail: "You are the only admin in this group - you can't quit",
+      });
     }
 
     await GroupConversationsModel.findByIdAndUpdate(groupId, {
