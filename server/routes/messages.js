@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
   const { id } = req.userInfo;
   const { to, content, isJoinReq } = req.body;
 
-  console.log(req.userInfo.username);
+  // console.log(req.userInfo.username);
 
   if (!to || !content) {
     return res.status(400).send({ fail: "Missing to || content" });
@@ -32,6 +32,9 @@ router.post("/", async (req, res) => {
       console.log("is join req");
       const fromWho = await UsersModel.findById(id);
       const toWho = await UsersModel.findById(to);
+      if(!toWho){
+        return res.status(400).send({"fail":"No such user brother"})
+      }
       if (fromWho.isBand && toWho.isBand) {
         return res.status(400).send({ fail: "A band can't join a band" });
       }

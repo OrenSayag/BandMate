@@ -17,7 +17,7 @@ const verifyUser = async (req,res,next) => {
         next()
     } catch (error) {
         console.log(error)
-        return res.status(400).send("Invalid token")
+        return res.send({error:"invalid token"})
     }
 
 }
@@ -44,6 +44,7 @@ router.use("/posts" , verifyUser ,require("../routes/posts"))
 router.use("/bank" , verifyUser ,require("../routes/bank"))
 router.use("/band" , verifyUser ,require("../routes/band"))
 router.use("/messages" , verifyUser ,require("../routes/messages"))
+router.use("/instruments", require("../routes/instruments"))
 
 
 

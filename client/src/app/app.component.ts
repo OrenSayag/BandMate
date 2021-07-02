@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LogsService } from './services/logs.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'client';
+
+  constructor(public _logs:LogsService) { }
+
+  ngOnInit(): void {
+    // this._logs.getUserLogs()
+  }
 }

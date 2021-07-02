@@ -4,6 +4,8 @@ require('dotenv').config()
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const UsersModel = require("../DB/models/users");
+const instrumentModel = require("../DB/models/instruments");
+const GenresModel = require("../DB/models/genres");
 
 // mongoose.set('debug', true);
 
@@ -74,17 +76,43 @@ router.post("/register", async (req, res) => {
 
   // validate user_name or mail aren't taken
   try {
+    if(instruments){
+      if(!Array.isArray(instruments)){
+        return res.status(400).send({fail:"send instruments as an array"})
+      }
+      for (const instrument of instruments) {
+        if(await instrumentModel.findById(instrument)===null){
+          return res.status(400).send({fail:"recieved invalid instrument"})
+        }
+      }
+    }
+
+    if(genres){
+      if(!Array.isArray(genres)){
+        return res.status(400).send({fail:"send genres as an array"})
+      }
+      for (const genre of genres) {
+        if(await GenresModel.findById(genre)===null){
+          return res.status(400).send({fail:"recieved invalid genre"})
+        }
+      }
+    }
+
+
     let results = await UsersModel.find({ username: userName });
     // console.log(results)
 
     if (results.length !== 0) {
-      return res.status(400).send({ fail: "Username is taken" });
+      return res.status(400).send({ taken: "Username is taken" });
     }
     results = await UsersModel.find({ mail });
     // console.log(results)
 
+
+
+
     if (results.length !== 0) {
-      return res.status(400).send({ fail: "Mail is taken" });
+      return res.status(400).send({ taken: "Mail is taken" });
     }
 
     // add user to db
@@ -113,7 +141,7 @@ router.post("/register", async (req, res) => {
       });
     }
 
-    return res.sendStatus(200);
+    return res.status(200).send({ok:"new user created"})
   } catch (error) {
     return res.status(500).send({ error });
   }
@@ -130,17 +158,22 @@ router.post("/login", async (req, res) => {
   try {
     let goose = await UsersModel.find({
       $or: [{ username: mailOrUsername }, { mail: mailOrUsername }],
-    });
+    })
+    .populate("bands")
+    .populate("participants.userId")
+    .populate("instruments")
+
+    ;
 
     if (goose.length === 0) {
-      return res.status(401).send({ fail: "no such user or mail" });
+      return res.status(401).send({ failAndDisplay: "no such user or mail" });
     }
 
     const hashed_pass = goose[0].hashedPass;
 
     const verifyPass = await bcrypt.compareSync(password, hashed_pass);
     if (!verifyPass) {
-      return res.status(401).send({ fail: "worng password" });
+      return res.status(401).send({ failAndDisplay: "worng password" });
     }
 
 
@@ -170,7 +203,7 @@ router.post("/login", async (req, res) => {
 
     
 
-    return res.status(200).send({ token });
+    return res.status(200).send({ ok:token });
   } catch (error) {
       console.log(error)
     return res.sendStatus(500)

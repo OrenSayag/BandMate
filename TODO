@@ -129,7 +129,7 @@ o888bood8P'   `Y8bod8P' o888o o888o `Y8bod8P'
             - PUT /makeAdmin { userId(req.userInfo), bandId, futureAdminId } => 200
             - DELETE /participant/:id   { userId(req.userInfo), bandId, toBeRemovedId } => 200
         - messages *verifyUser
-            - POST / { id(req.userInfo), to, ?bandId, isJoinReq, content } => 201
+            - POST / { id(req.userInfo), to, isJoinReq, content } => 201
             - GET / { id(req.userInfo) } => { conversations }
             - DELETE /:id { userId(req.userInfo), id(erq.params) } => 200
             - PUT /replyJoinRequest/:messaageId {  ,id(req.userInfo), bandId, toBeAddedUserId ,answer } => 200
@@ -160,16 +160,6 @@ o888bood8P'   `Y8bod8P' o888o o888o `Y8bod8P'
                     push/pull according to existance is User's following arr
             3. Open an Angular Project:
             - install material
-ooooooooooooo                 .o8            
-8'   888   `8                "888            
-     888       .ooooo.   .oooo888   .ooooo.  
-     888      d88' `88b d88' `888  d88' `88b 
-     888      888   888 888   888  888   888 
-     888      888   888 888   888  888   888 
-    o888o     `Y8bod8P' `Y8bod88P" `Y8bod8P' 
-
-
-
     - create services
 
 
@@ -180,18 +170,62 @@ ooooooooooooo                 .o8
         _auth
 
             f:
-            register
-            login
+            🐱‍🐉register
+            🐱‍🐉login
+
+            *fix:
+                server - create endpoints for getting instruments (future: creating)
+                client - align with server,
+                    select of genres and instruments, optional above
+                        create foo on _genres & _instruments (get genres and instruments catalogues)
+                        array declaration of chosen
+                        get "catalogue" from service
+                        html connect
+                        update functions on _auth and component register
+ooooooooooooo                 .o8            
+8'   888   `8                "888            
+     888       .ooooo.   .oooo888   .ooooo.  
+     888      d88' `88b d88' `888  d88' `88b 
+     888      888   888 888   888  888   888 
+     888      888   888 888   888  888   888 
+    o888o     `Y8bod8P' `Y8bod88P" `Y8bod8P' 
+
+
+    fix: userInfo should be brought from
+    an endpoint on init of main and any changes.
+    NOT FROM TOKEN
+
+    build the header
+        add band and see if it works well
+
+
+    build the navbar
+    build the log form
+    build the log list
+
 
         _logs
 
             f:
-            getUserLogs
-            likeLog
-            commentLog
-            addLog
-            delLog
-            rateLog
+            🐱‍🐉getUserLogs
+            🐱‍👤likeLog
+            🐱‍👤commentLog
+            🐱‍👤addLog
+            🐱‍👤delLog
+            🐱‍👤rateLog
+
+            fix:
+
+                implement /api/user/personalInfo
+                to init of main, let it be on the users service
+
+                make users in header
+                each change (click) of user in header, runs the user/getInfo function,
+                updating the content.
+                Each page filters the content by type, on init
+                
+
+
 
         _users
 
@@ -247,19 +281,22 @@ ooooooooooooo                 .o8
     - create component and fill them up skeletaly, when done [✔]:
     create a loading animation and implement at every step when fetching
 
-        Log
+        AddContentButton (opens forms according to its hosting component)
+        Main
+        Logs
             LogAddForm
-            LogItem
-            SocialBar
+            LogList ///// deprecated
+                LogItem
+                    SocialBar
         Navbar
             NavbarBtn
-            AddBtn
+            NavbarAddBtn
         Header
             BurgerMenu
             ProfileBar
         GenreFormBar
         Explore
-            ExploreButtonColumn
+            ExploreButtonColumn (ExploreBtnCol)
                 ExploreButtonStack
                     ExploreButton
             ExploreUserItem
@@ -270,7 +307,7 @@ ooooooooooooo                 .o8
             RecordingUnit
             AddRecordingForm
         Login
-        Signup
+        Register
         Inbox
             Conversation
 
@@ -278,6 +315,7 @@ ooooooooooooo                 .o8
 
     STYLE:
         design mobile first
+        animations until answer from server
 
     Test, host, update CV, move forwarD: Project4/yourStats/militaryShabzak
 
@@ -292,3 +330,6 @@ ooooooooooooo                 .o8
             auth Users model beautify types
             messages/joinbandrequest Join request can't be sent to other side if already exists between them
             messages/groupconversations validate added user is not private, if private, that is being followed by me (ofc, after req to follow and approval of the private being followed, something like the join band req and rep)
+
+        Client:
+            Delete log-list component

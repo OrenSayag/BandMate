@@ -98,7 +98,7 @@ router.put("/:id", async (req, res) => {
       { $push: { likedLogs: log[0]._id } }
     );
 
-    return res.sendStatus(200);
+    return res.status(200).send({ok:"un/liked log"});
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

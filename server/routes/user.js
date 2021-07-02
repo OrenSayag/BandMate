@@ -145,7 +145,8 @@ router.post("/personalInfo", verifyUser, async (req, res) => {
         return res
           .status(400)
           .send({ fail: "You're not in this band brother." });
-      } else {
+      } 
+      else {
         user = await UsersModel.findById(bandId);
       }
     }
@@ -159,7 +160,7 @@ router.post("/personalInfo", verifyUser, async (req, res) => {
         myBandMates.push(p);
       }
     }
-    console.log(user.bands);
+    // console.log(user.bands);
     const associatedUsers = [...user.participants, ...myBandMates];
     const myContent = {
       logs: await LogsModel.find({

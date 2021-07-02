@@ -1,0 +1,14 @@
+<div class="root">
+    <div class="user-bands-bar">
+        <div class="avatar"
+    (click)="_users.getUserInfo({})"
+        >
+            <img [src]="_users.userInfo.profile_img_src || 'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png'" alt="">
+        </div>
+        <div *ngFor="let userOrBand of _users.userInfo.bands" class="avatar"
+    (click)="_users.getUserInfo({bandId:userOrBand._id})"
+        >
+            {{userOrBand.username}}
+        </div>
+    </div>
+</div>

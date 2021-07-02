@@ -15,10 +15,6 @@ const Comment = new Schema({
         type:ObjectId,
         ref:"users"
     }],
-    username:{
-        type:String,
-        required: true
-    },
     userId: {
         type:ObjectId,
         required: true,
@@ -28,16 +24,29 @@ const Comment = new Schema({
 
 
 const posts = new Schema({
-    content: String,
+    content: {
+        type: String,
+        required: true
+    },
     parentUser: {
         type: ObjectId,
+        required:true,
         ref:"users"
     },
-    date: Date,
+    date: {
+        type:Date,
+        default:Date.now,
+    },
     comments: [Comment],
     likes: [String],
-    isPrivate: Boolean,
-    type:String
+    isPrivate: {
+        type:Boolean,
+        required:true
+    },
+    type:{
+        type:String,
+        required:true
+    }
 })
 
 const PostsModel = mongoose.model("posts", posts)

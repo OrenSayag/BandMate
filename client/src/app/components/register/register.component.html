@@ -1,0 +1,105 @@
+<form class="example-form" [formGroup]="myForm" (ngSubmit)="register()">
+
+    <mat-radio-group aria-label="Select an option" formControlName="isBand" (change)="validatorDynamics()">
+        <mat-radio-button [value]="false">User</mat-radio-button>
+        <mat-radio-button [value]="true">Band</mat-radio-button>
+    </mat-radio-group>
+
+    <mat-form-field *ngIf="!myForm.controls.isBand.value" class="example-full-width" appearance="fill">
+        <mat-label>First Name:</mat-label>
+        <input formControlName="fname" matInput placeholder="" value="">
+    </mat-form-field>
+
+    <div class="error-div" *ngIf="myForm.controls.fname.dirty && myForm.controls.fname.errors?.required">
+        {{"Missing First Name"}}
+    </div>
+
+    <mat-form-field *ngIf="!myForm.controls.isBand.value" class="example-full-width" appearance="fill">
+        <mat-label>Last Name:</mat-label>
+        <input formControlName="lname" matInput placeholder="">
+    </mat-form-field>
+
+    <div class="error-div" *ngIf="myForm.controls.lname.dirty && myForm.controls.lname.errors?.required">
+        {{"Missing Last Name"}}
+    </div>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Username:</mat-label>
+        <input formControlName="userName" matInput placeholder="" value="">
+    </mat-form-field>
+
+    <div class="error-div" *ngIf="myForm.controls.userName.dirty && myForm.controls.userName.errors?.required">
+        {{"Missing User Name"}}
+    </div>
+
+    <div class="error-div" *ngIf="myForm.controls.userName.dirty && myForm.controls.userName.errors?.pattern">
+        {{"Invalid userName. Rules: 4-10 characters, no _ or . at the beginning or end, no double special characters
+        (._), allowed characters: - . , a-z, A-Z, 0-9"}}
+    </div>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Mail:</mat-label>
+        <input formControlName="mail" matInput placeholder="">
+    </mat-form-field>
+
+    <div class="error-div" *ngIf="myForm.controls.mail.dirty && myForm.controls.mail.errors?.required">
+        {{"Missing Mail"}}
+    </div>
+
+    <div class="error-div" *ngIf="myForm.controls.mail.dirty && myForm.controls.mail.errors?.pattern">
+        {{"Invalid Mail Format"}}
+    </div>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Password</mat-label>
+        <input formControlName="password" matInput placeholder="" value="">
+    </mat-form-field>
+
+    <div class="error-div" *ngIf="myForm.controls.password.dirty && myForm.controls.password.errors?.required">
+        {{"Missing Password"}}
+    </div>
+
+    <div class="error-div" *ngIf="myForm.controls.password.dirty && myForm.controls.password.errors?.pattern">
+        {{"Weak Password. Rules: Minimum 8 character password, upper and lower case letters and a number"}}
+    </div>
+
+    <div class="instruments-form">
+        <div class="title">
+            What instruments do you play?
+        </div>
+        <div class="cb-cont">
+            <mat-checkbox
+             *ngFor="let instrument of _instruments.instrumentsCatalog" class="example-margin" 
+             (change)="addItem(instrument._id, chosenInstruments)"
+            >
+           {{instrument.name}}
+       </mat-checkbox>
+        </div>
+    </div>
+    <div class="genres-form">
+        <div class="title">
+            What genres do you play?
+        </div>
+        <div class="cb-cont">
+            <mat-checkbox
+             *ngFor="let genre of _genres.genresCatalog" class="example-margin" 
+             (change)="addItem(genre._id, chosenGenres)"
+            >
+           {{genre.name}}
+       </mat-checkbox>
+        </div>
+    </div>
+
+    <input type="submit">
+
+    <div class="error-message">
+        {{errorMessage}}
+    </div>
+
+    <!-- <p>{{_genres.genresCatalog | json}}</p> -->
+    <!-- <p>{{myForm.valid | json}}</p> -->
+    <!-- <p>{{myForm.controls.mail.errors | json}}</p> -->
+    <!-- <p>{{myForm.controls.password.errors | json}}</p> -->
+
+    <p>Already have an account? <span (click)="_r.navigateByUrl('/login')">Login</span></p>
+</form>

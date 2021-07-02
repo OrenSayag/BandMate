@@ -1,0 +1,5 @@
+<app-add-content-button (click)="formToggler()" ></app-add-content-button>
+<app-log-add-form *ngIf="formTog"></app-log-add-form>
+<div class="list">
+    <app-log-item *ngFor="let log of _users.mainContent.logs"></app-log-item>
+</div>
