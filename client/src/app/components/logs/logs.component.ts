@@ -12,6 +12,15 @@ export class LogsComponent implements OnInit {
 
   public formTog:Boolean = false;
 
+  public formListener(e:boolean):void{
+    if(e){
+      setTimeout(() => {
+        this.formTog = false
+      }, 2000)
+      
+    }
+  }
+
   constructor(
     public _users:UsersService,
     public _logs:LogsService,
@@ -20,7 +29,7 @@ export class LogsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this._users.userInfo)
+    // console.log(this._users.userInfo)
     // this._logs.getUserLogs()
   }
 

@@ -13,14 +13,15 @@ const routes: Routes = [
   {path:"register", pathMatch: "full", component:RegisterComponent},
   {path:"login", pathMatch: "full", component:LoginComponent},
   {path:"", component:MainComponent, canActivate: [TokenBodyGuardGuard], 
-children:[
-  {path:"logs", component:LogsComponent},
-  {path:"bank", component:BankComponent},
-  {path:"feed", component:FeedComponent},
-  {path:"explore", component:ExploreComponent},
-  {path:"", pathMatch:"full" ,redirectTo:"logs"},
-]
+  children:[
+    {path:"logs", component:LogsComponent},
+    {path:"bank", component:BankComponent},
+    {path:"feed", component:FeedComponent},
+    {path:"explore", component:ExploreComponent},
+    {path:"", pathMatch:"full" ,redirectTo:"logs"},
+  ]
 },
+// {path:"**", component:LoginComponent},
 ];
 
 @NgModule({

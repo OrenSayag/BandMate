@@ -44,6 +44,17 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MainComponent } from './components/main/main.component';
 import { AddContentButtonComponent } from './components/add-content-button/add-content-button.component';
 import { LogListComponent } from './components/log-list/log-list.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { ChooseInstrumentsBarComponent } from './components/choose-instruments-bar/choose-instruments-bar.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import { ChooseInstrumentsBarDialogComponent } from './components/choose-instruments-bar-dialog/choose-instruments-bar-dialog.component';
+import {MatListModule} from '@angular/material/list';
+import {MatChipsModule} from '@angular/material/chips';
+
+
+
+
 
 
 
@@ -84,7 +95,9 @@ export function tokenGetter() {
     ConversationComponent,
     MainComponent,
     AddContentButtonComponent,
-    LogListComponent
+    LogListComponent,
+    ChooseInstrumentsBarComponent,
+    ChooseInstrumentsBarDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -97,6 +110,11 @@ export function tokenGetter() {
     MatRadioModule,
     ReactiveFormsModule,
     MatCheckboxModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatDialogModule,
+    MatListModule,
+    MatChipsModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
@@ -105,7 +123,10 @@ export function tokenGetter() {
       },
     }),
   ],
-  providers: [],
+  providers: [
+    MatDatepickerModule,
+    MatNativeDateModule 
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

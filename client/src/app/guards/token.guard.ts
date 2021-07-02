@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTr
 import { Observable } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { UsersService } from '../services/users.service';
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable({
@@ -15,7 +16,7 @@ export class TokenBodyGuardGuard implements CanActivate {
     public jwtHelper: JwtHelperService,
     public _users: UsersService,
     public _r: Router,
-    
+    public _http: HttpClient
     ){}
 
   canActivate(
@@ -32,7 +33,12 @@ export class TokenBodyGuardGuard implements CanActivate {
       this._r.navigateByUrl('/login')
       return false
     }
-    this._users.userInfo = this.jwtHelper.decodeToken(localStorage.token).userInfo
+
+    this._users.getTokenHolderInfo()
+
+    // this._users.userInfo = this.jwtHelper.decodeToken(localStorage.token).userInfo
+
+
 
     return true;
   }

@@ -1,0 +1,14 @@
+<div class="root">
+    <div *ngFor="let instrument of _users.currUserOtBand.instruments"
+    (click)="handleClick(instrument._id)"
+    >
+        {{instrument.img_src}}
+        {{instrument.name}}
+    </div>
+
+    <button
+    mat-raised-button (click)="openDialog()"
+    >Edit Your Instruments</button>
+</div>
+
+<!-- <p>{{_users.userInfo | json}}</p> -->

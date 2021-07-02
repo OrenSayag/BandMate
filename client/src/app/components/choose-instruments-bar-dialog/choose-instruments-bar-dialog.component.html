@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Edit your instruments</h2>
+<mat-dialog-content>
+
+</mat-dialog-content>
+<mat-selection-list>
+  {{errorDivMessage}}
+  <div *ngFor="let instrument of _instruments.instrumentsCatalog">
+    <!-- <input type="checkbox" [checked]="areYouMyInstrument(instrument._id)"
+    (change)="addOrRemoveInstrumentOfUserBand($event)"
+    /> -->
+    <!-- <p>{{instrument |json}}</p> -->
+    <div class="error-div">
+    </div>
+    <mat-checkbox
+    (change)="addOrRemoveInstrumentOfUserBand($event, instrument._id)"
+    [checked]="areYouMyInstrument(instrument._id)"
+    >
+    </mat-checkbox>
+    {{instrument.name}}
+  </div>
+</mat-selection-list>
+<!-- <mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button mat-dialog-close>Save</button>
+</mat-dialog-actions> -->

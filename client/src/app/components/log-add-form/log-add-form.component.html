@@ -1,1 +1,85 @@
-<p>log-add-form works!</p>
+<div class="root">
+
+    <form [formGroup]="myForm" >
+
+        <mat-form-field appearance="fill">
+            <input 
+            type="number"
+            matInput 
+            placeholder="Time practiced in minutes"
+            formControlName="time"
+            >
+        </mat-form-field>
+    
+        <app-choose-instruments-bar (sendInstrumentArr)="chosenInstrumentsListener($event)"></app-choose-instruments-bar>
+    
+    
+        <mat-form-field appearance="fill">
+            <input 
+            type="any"
+             matInput
+             placeholder="Title"
+            formControlName="title"
+
+            >
+        </mat-form-field>
+    
+    
+        <mat-form-field class="example-chip-list" appearance="fill">
+            <mat-label>Categories</mat-label>
+            <mat-chip-list #chipList aria-label="Fruit selection">
+                <mat-chip 
+                (click)="handleClickCategory(category)"
+                *ngFor="let category of _users.currUserOtBand.logCategories" 
+                [ngStyle]="{'background-color': category.color}" >
+                    {{category.name}}
+                    <mat-icon matChipRemove (click)="delCategory(category.name)" >cancel</mat-icon>
+                </mat-chip>
+                <input placeholder="New Category" [matChipInputFor]="chipList"
+                (matChipInputTokenEnd)="addCategory($event)">
+            </mat-chip-list>
+            <!-- [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" -->
+        </mat-form-field>
+    
+        <!-- <p>{{chosenCategories | json}}</p>
+        <p>{{ratingStars | json}}</p> -->
+        <!-- <p>{{myForm.value | json}}</p>
+        <p>{{chosenCategories | json}}</p>
+        <p>{{chosenInstruments | json}}</p>
+        <p>{{ratingStars | json}}</p> -->
+    
+        <div class="rating-stars">
+            <mat-icon
+            (click)="handleRatingStar(0)"
+            >clear</mat-icon>
+            <mat-icon
+            (click)="handleRatingStar(1)"
+            >star</mat-icon>
+            <mat-icon
+            (click)="handleRatingStar(2)"
+            >star</mat-icon>
+            <mat-icon
+            (click)="handleRatingStar(3)"
+            >star</mat-icon>
+            <mat-icon
+            (click)="handleRatingStar(4)"
+            >star</mat-icon>
+            <mat-icon
+            (click)="handleRatingStar(5)"
+            >star</mat-icon>
+        </div>
+    
+        <div class="is-private">
+            <mat-radio-group aria-label="Select an option" formControlName="isPrivate">
+                <mat-radio-button checked="true" [value]="false">Public</mat-radio-button>
+                <mat-radio-button [value]="true">Private</mat-radio-button>
+            </mat-radio-group>
+        </div>
+    
+        <input type="submit" vaule="Post" class="post-btn" (click)="postLog()" />
+
+        <div class="success-div">{{successDivText}}</div>
+    </form>        
+
+
+</div>
