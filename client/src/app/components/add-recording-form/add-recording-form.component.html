@@ -1,1 +1,38 @@
-<p>add-recording-form works!</p>
+<div class="root">
+
+    <button
+    mat-button
+    class="record-btn"
+    (click)="openCloseRecorder()"
+    >Record</button>
+
+    <section #soundClips>
+
+        <audio #audio src=""></audio>
+    </section>
+
+    
+    <div class="recorder" [ngClass]="recorderTog ? 'active' : 'hidden'">
+
+  
+        <section class="main-controls">
+          <div id="buttons">
+            <button
+         
+            #record>{{!recordingState ? 'Start' : 'Stop'}}</button>
+            <!-- <button
+            *ngIf="recordingState"
+            #stop>Stop</button> -->
+          </div>
+        </section>
+
+        <canvas #canvas></canvas>
+
+  
+  
+      </div>
+  
+      <!-- <label for="toggle">❔</label>
+      <input type="checkbox" id="toggle"> -->
+
+</div>

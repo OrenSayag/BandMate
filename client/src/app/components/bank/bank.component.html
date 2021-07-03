@@ -1,1 +1,12 @@
 <p>bank works!</p>
+<app-add-content-button (click)="formToggler()" ></app-add-content-button>
+<app-add-recording-form *ngIf="formTog"
+
+></app-add-recording-form>
+<div class="list">
+    <app-recording-unit
+    *ngFor="let recording of _users.mainContent.recordings.reverse()"
+    
+    ></app-recording-unit>
+
+</div>

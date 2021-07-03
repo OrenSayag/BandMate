@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import LogsModel from 'src/app/models/logs.model';
 import { LogsService } from 'src/app/services/logs.service';
 import { UsersService } from 'src/app/services/users.service';
@@ -11,6 +11,7 @@ import { UsersService } from 'src/app/services/users.service';
 export class LogsComponent implements OnInit {
 
   public formTog:Boolean = false;
+  
 
   public formListener(e:boolean):void{
     if(e){

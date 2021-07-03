@@ -1,0 +1,38 @@
+<p>comment-section works!</p>
+<div class="root">
+    <div class="list">
+        <div class="comment" *ngFor="let comment of comments">
+            <div class="profile-pic">
+                {{comment.userId.profile_img_src || 'somr src'}}
+            </div>
+            <div class="username">
+                {{comment.userId.username}}
+            </div>
+            <div class="text">
+                {{comment.text}}
+            </div>
+            <div class="posted-on">
+                {{comment.postedOn | date: 'dd/MM/yyyy'}}
+            </div>
+
+            <div class="div">
+                
+                <mat-icon
+                (click)="delComment(comment._id)"
+                >delete</mat-icon>
+                <!-- <p>{{comment | json}}</p> -->
+            </div>
+        </div>
+    </div>
+
+    <div class="input">
+        <mat-form-field [formGroup]="myForm">
+
+            <input matInput placeholder="" value="" formControlName="commentInput">
+        </mat-form-field>
+        <button mat-button color="primary" (click)="postComment()">
+            <mat-icon>send</mat-icon>
+        </button>
+    </div>
+
+</div>

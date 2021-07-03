@@ -41,7 +41,7 @@ export class LogAddFormComponent implements OnInit {
 
     public myForm = this._fb.group({
       time: ["", [Validators.required]],
-      title: ["", Validators.maxLength(10)],
+      title: ["", Validators.maxLength(25)],
       isPrivate: [false, Validators.required],
     })
 
@@ -85,6 +85,7 @@ export class LogAddFormComponent implements OnInit {
           this.myForm.controls.time.value,
           this.chosenInstruments,
           this.myForm.controls.isPrivate.value,
+          this._users.currUserOtBand._id,
           this.myForm.controls.title.value,
           this.chosenCategories,
           this.ratingStars,
@@ -92,6 +93,14 @@ export class LogAddFormComponent implements OnInit {
 
         if(res){
           this.myForm.reset()
+          this.myForm.controls.time.clearValidators()
+          this.myForm.controls.time.updateValueAndValidity()
+          setTimeout(() => {
+            this.myForm.controls.time.setValidators(Validators.required)
+            this.myForm.controls.time.updateValueAndValidity()
+          }, 2000)
+          
+
           this.ratingStars = 0
           this.chosenCategories = []
           this.chosenInstruments = []

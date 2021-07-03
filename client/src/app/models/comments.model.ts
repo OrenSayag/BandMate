@@ -1,7 +1,7 @@
 export default interface CommentsModel{
-    username:string,
-    userId:string,
+    userId:{userId:string,username:string,profile_img_src:string},
     text:string,
     postedOn:Date,
-    likes?: string[],
+    likes: string[],
+    _id:string
 }

@@ -76,10 +76,14 @@
             </mat-radio-group>
         </div>
     
-        <input type="submit" vaule="Post" class="post-btn" (click)="postLog()" />
+        <input type="submit" vaule="Post" class="post-btn" (click)="postLog()"
+        [disabled]="!myForm.valid || chosenInstruments.length===0"
+        />
 
         <div class="success-div">{{successDivText}}</div>
     </form>        
+
+    <p>{{ratingStars}}</p>
 
 
 </div>

@@ -18,15 +18,17 @@ export class LogsService {
 
 
   
-  public async postLog(timeInMins:number, instruments:string[], isPrivate:boolean, title?:string, categories?:ContentCategory[], ratingStars?:number,
+  public async postLog(timeInMins:number, instruments:string[], isPrivate:boolean, bandId:string, title?:string, categories?:ContentCategory[], ratingStars?:number, 
     users?:string[], date?:string[]
     
     ):Promise<boolean>{
+    
     const res:any = await this._http.post("http://localhost:666/api/logs/",
     {
       timeInMins,
       instruments,
       isPrivate,
+      bandId,
       title,
       categories,
       ratingStars
@@ -49,9 +51,10 @@ export class LogsService {
   }
 
   public async likeLog(id:string){
-    const res:any = await this._http.put("http://localhost:666/api/logs/"+id, {
+    const res:any = await this._http.put("http://localhost:666/api/logs/"+id, {},{
       headers: {
-        authorization: localStorage.token
+        authorization: localStorage.token,
+        "content-type":"application/json"
       }
     }).toPromise()
 
@@ -59,6 +62,8 @@ export class LogsService {
     // console.log(logs)
     if(res.ok){
       console.log("un/liked log succesfuly")
+    } else {
+      console.log("failed to like/unlike log")
     }
   }
 
@@ -73,6 +78,10 @@ export class LogsService {
     // console.log(logs)
     if(res.ok){
       console.log("commented log succesfuly")
+      return true
+    } else {
+      console.log("failed to comment log")
+      return false
     }
   }
 
@@ -81,12 +90,16 @@ export class LogsService {
       headers: {
         authorization: localStorage.token
       }
-    }).toPromise()
+    }).toPromise().catch(err=>console.log(err))
 
 
     // console.log(logs)
     if(res.ok){
       console.log("comment of log deleted succesfuly")
+      return true
+    } else {
+      console.log("failed to deleted log comment")
+      return false
     }
   }
 
@@ -103,6 +116,8 @@ export class LogsService {
     // console.log(logs)
     if(res.ok){
       console.log("rated log successfully")
+    } else {
+      console.log("failed to rate log")
     }
   }
 
@@ -118,6 +133,9 @@ export class LogsService {
     // console.log(logs)
     if(res.ok){
       console.log("deleted log successfully")
+      this._users.updateContent()
+    } else {
+      console.log("failed to delete this log")
     }
   }
 

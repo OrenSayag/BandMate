@@ -4,6 +4,7 @@ import { JwtModule } from "@auth0/angular-jwt";
 import { HttpClientModule } from '@angular/common/http';
 
 
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -51,6 +52,16 @@ import {MatDialogModule} from '@angular/material/dialog';
 import { ChooseInstrumentsBarDialogComponent } from './components/choose-instruments-bar-dialog/choose-instruments-bar-dialog.component';
 import {MatListModule} from '@angular/material/list';
 import {MatChipsModule} from '@angular/material/chips';
+import {MatMenuModule} from '@angular/material/menu';
+import { MinuteSecondsPipe } from './pipes/minsToNormal-pipe';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import { CommentSectionComponent } from './components/comment-section/comment-section.component';
+import {MatExpansionModule} from '@angular/material/expansion';
+
+
+
+
 
 
 
@@ -98,6 +109,8 @@ export function tokenGetter() {
     LogListComponent,
     ChooseInstrumentsBarComponent,
     ChooseInstrumentsBarDialogComponent,
+    MinuteSecondsPipe,
+    CommentSectionComponent,
   ],
   imports: [
     BrowserModule,
@@ -115,6 +128,10 @@ export function tokenGetter() {
     MatDialogModule,
     MatListModule,
     MatChipsModule,
+    MatMenuModule,
+    MatButtonModule,
+    MatCardModule,
+    MatExpansionModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,

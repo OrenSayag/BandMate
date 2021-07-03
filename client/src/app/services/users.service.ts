@@ -23,7 +23,7 @@ export class UsersService {
     bands: [],
     fname: '',
     lname: '',
-    id: '',
+    _id: '',
     instruments: [],
     participants: [],
     isBand: false,
@@ -37,8 +37,10 @@ export class UsersService {
   public currUserOtBand: {
     _id: string;
     username: string;
+    // profile_img_src: string;
+    // cover_img_src: string;
     instruments: InstrumentsModel[];
-    logCategories:{name:"", color:""}[]
+    logCategories:{name:"", color:""}[];
   } = { _id: '', username: '', instruments: [], logCategories: [] };
 
   constructor(public _http: HttpClient) {}
@@ -55,7 +57,7 @@ export class UsersService {
     if (res.myContent) {
       this.mainContent = res.myContent;
       this.associatedUsers = res.associatedUsers;
-      // console.log(this.mainContent)
+      console.log(this.mainContent)
       // console.log(res.userOrHisBand)
       this.currUserOtBand = {
         _id: res.userOrHisBand._id,
@@ -65,7 +67,13 @@ export class UsersService {
       };
       // console.log(this.associatedUsers)
       // console.log(res)
+    } else {
+      console.log("wha the gell")
     }
+  }
+
+  public async updateContent() {
+    await this.getUserInfo({bandId:this.currUserOtBand._id})
   }
 
   public async getTokenHolderInfo() {

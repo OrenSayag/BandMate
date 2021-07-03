@@ -1,0 +1,16 @@
+.root {
+    background-color: rgb(48, 48 ,48);
+    height: 400px;
+}
+
+.record-btn{
+    background-color: blueviolet;
+    color: white;
+}
+
+.active{
+    display: block;
+}
+.hidden{
+    display: none;
+}

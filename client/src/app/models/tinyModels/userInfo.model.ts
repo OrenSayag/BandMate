@@ -7,7 +7,7 @@ export default interface UserInfoModel{
     bands?: UsersModel[],
     fname:string,
     lname:string,
-    id:string,
+    _id:string,
     instruments:InstrumentsModel[],
     isBand:boolean,
     mail:string,

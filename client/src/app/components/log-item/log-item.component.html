@@ -1,1 +1,83 @@
-<p>log-item works!</p>
+<div *ngIf="!log.isPrivate || canISeeAndRateIt() " class="root">
+    <div class="isPrivate">
+        <mat-icon>private</mat-icon>
+    </div>
+
+    <div class="date">
+        {{ log.date | date: 'dd/MM/yyyy' }}
+    </div>
+    <div class="time">
+        {{ log.timeInMins |minuteSeconds }}
+    </div>
+    <div class="instruments">
+        <div class="instrument" *ngFor="let instrument of log.instruments">
+            {{ instrument.name }}
+
+        </div>
+    </div>
+    <div class="categories">
+        <div class="category" *ngFor="let category of log.categories">
+
+            {{ category.name }}
+        </div>
+    </div>
+    <div *ngIf="canISeeAndRateIt()" class="ratingStars">
+        {{ log.ratingStars }}
+
+        <mat-icon (click)="_logs.rateLog(log._id, 0);_users.updateContent()">cancel</mat-icon>
+        <mat-icon [color]="log.ratingStars>0&&'accent'" (click)="_logs.rateLog(log._id, 1);_users.updateContent()">star
+        </mat-icon>
+        <mat-icon [color]="log.ratingStars>1&&'accent'" (click)="_logs.rateLog(log._id, 2);_users.updateContent()">star
+        </mat-icon>
+        <mat-icon [color]="log.ratingStars>2&&'accent'" (click)="_logs.rateLog(log._id, 3);_users.updateContent()">star
+        </mat-icon>
+        <mat-icon [color]="log.ratingStars>3&&'accent'" (click)="_logs.rateLog(log._id, 4);_users.updateContent()">star
+        </mat-icon>
+        <mat-icon [color]="log.ratingStars>4&&'accent'" (click)="_logs.rateLog(log._id, 5);_users.updateContent()">star
+        </mat-icon>
+        <!--         
+        <mat-icon
+        *ngFor="let star of [].constructor(5-log.ratingStars)"
+        (click)="_logs.rateLog(log._id, 5-star);_users.updateContent()"
+        >star</mat-icon> -->
+    </div>
+    <div class="title">
+        {{ log.title }}
+    </div>
+    <div class="user-pic">
+        {{log.parentUser.profile_img_src || "some img src" }}
+        {{log.parentUser.username }}
+    </div>
+
+    <div class="social-bar">
+        <!-- <div class="comment"></div>
+        <div class="like"></div> -->
+        <button 
+        (click)="commentToggler()"
+        mat-raised-button color="primary">
+            <mat-icon>comment</mat-icon>
+        </button>
+        <button mat-raised-button color="primary" (click)="_logs.likeLog(log._id);_users.updateContent()"
+            [ngStyle]="{'background-color': log.likes.includes(_users.userInfo._id) && 'gold' }">
+            <mat-icon>thumb_up</mat-icon>
+        </button>
+    </div>
+
+    <app-comment-section
+    [comments]="log.comments"
+    [commentFoo]="addComment"
+    [contentId]="log._id"
+    *ngIf="commentsTog"
+    ></app-comment-section>
+
+    <mat-icon *ngIf="canISeeAndRateIt()" mat-button [matMenuTriggerFor]="beforeMenu">more_vert</mat-icon>
+    <mat-menu #beforeMenu="matMenu" xPosition="before">
+        <button 
+        (click)="_logs.deleteLog(log._id)"
+        mat-menu-item>Delete</button>
+    </mat-menu>
+
+    <!-- <p>{{log.comments | json}}</p> -->
+</div>
+
+<!-- <p>{{log | json}}</p> -->

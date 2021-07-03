@@ -4,5 +4,6 @@
 ></app-log-add-form>
 <div class="list">
     <app-log-item
-    *ngFor="let log of _users.mainContent.logs"></app-log-item>
+    [log]="log"
+    *ngFor="let log of _users.mainContent.logs.reverse()"></app-log-item>
 </div>
