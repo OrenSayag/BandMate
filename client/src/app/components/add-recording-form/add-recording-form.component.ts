@@ -1,4 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
+import ContentCategory from 'src/app/models/tinyModels/content-category.model';
+import { UsersService } from 'src/app/services/users.service';
+
 
 declare var MediaRecorder: any;
 
@@ -13,24 +19,216 @@ export class AddRecordingFormComponent implements AfterViewInit {
   @ViewChild('soundClips') soundClips: any;
   @ViewChild('audio') audio: any;
   @ViewChild('canvas') canvas: any;
+  @ViewChild('fileInput') fileInput: any;
+
+  // move to recording unit
+  @ViewChild('testAudio') testAudio: any;
 
   public recordingState: boolean = false;
   public recorderTog: boolean = false;
 
-  public recordingSrc:any = ""
+  public recordingSrc: any = '';
+  public fileId:string = "";
+  public ratingStars:number = 0;
 
-  constructor() {}
+  public chosenInstruments:string[] = []
+  public chosenCategories:ContentCategory[] = []
+  
+  
+  // move to recording unit
+  public audioUrl: string = '';
+  public blob: Blob = new Blob();
+  
+  constructor(
+    public _http: HttpClient,
+    private _sanitizer: DomSanitizer,
+    private _fb: FormBuilder,
+    private _users: UsersService,
+    ) {}
+    
+    ngOnInit(): void {}
+    
+    ngAfterViewInit(): void {
+      this.recorder();
+    }
+    
+    public myForm = this._fb.group({
+      isPrivate:[false, [Validators.required]],
+      audioTrueVideoFalse:[true, [Validators.required]],
+      title:["", [Validators.required]],
+    });
 
-  ngOnInit(): void {}
+    // public addCategory(e:any){
+    //   console.log(e.value)
+    //   const colorArr = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
+		//   '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
+		//   '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', 
+		//   '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
+		//   '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', 
+		//   '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
+		//   '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680', 
+		//   '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
+		//   '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', 
+		//   '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
 
-  ngAfterViewInit(): void {
-    this.recorder();
+    //   this._logs.addLogCategory({name:e.value, color:colorArr[Math.floor(Math.random()*colorArr.length)]}, this._users.currUserOtBand._id)
+    //   e.input.value = ""
+    // }
+
+    // public delCategory(catName:string){
+    
+    //   this._logs.delLogCategory(catName, this._users.currUserOtBand._id)
+    // }
+
+    public handleClickCategory(category:ContentCategory):void{
+      if(this.chosenCategories.some(c=>c===category)){
+        this.chosenCategories = this.chosenCategories.filter(c=>c!==category)
+      } else {
+        this.chosenCategories.push(category)
+      }
+    }
+
+    public chosenInstrumentsListener(e:string[]):void{
+          this.chosenInstruments = e
+          // console.log("from log form add:")
+          // console.log(this.chosenInstruments)
+        }
+
+  public tempHandleChange(): void {
+    // const file = this.fileInput.nativeElement.files[0]
+    // console.log(file)
+
+    this.recordingSrc = '';
+    const div = document.createElement('div');
+    this.soundClips.nativeElement.removeChild(
+      this.soundClips.nativeElement.lastChild
+    );
+    this.soundClips.nativeElement.appendChild(div);
   }
 
   public openCloseRecorder(): void {
     this.recorderTog = !this.recorderTog;
     console.log(this.recorderTog);
   }
+
+  public uploadFile(): void {
+    if (this.fileInput.nativeElement.files.length > 1) {
+      return console.log('Choose a single file');
+    }
+    const mediaBlob = this.fileInput.nativeElement.files[0];
+
+    const file = new FormData();
+    file.set('file', mediaBlob);
+    this._http
+      .post('http://localhost:666/api/bank/uploadFile', file, {
+        headers: { authorization: localStorage.token },
+      })
+      .subscribe((res: any) => {
+        console.log(res);
+        this.fileId = res.fileId;
+      });
+  }
+
+  public uploadRecording(): void {
+    const file = new FormData();
+    file.set('file', this.recordingSrc);
+    this._http
+      .post('http://localhost:666/api/bank/uploadFile', file, {
+        headers: { authorization: localStorage.token },
+      })
+      .subscribe((res: any) => {
+        console.log(res);
+        this.fileId = res.fileId;
+      });
+  }
+
+  // move to recording unit
+  public async streamVideo(fileId: string) {
+    this._http
+      .get('http://localhost:666/api/bank/streamdVideo/' + fileId, {
+        headers: {
+          authorization: localStorage.token,
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
+          'Access-Control-Allow-Headers':
+            'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With',
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        },
+        responseType: 'arraybuffer',
+      })
+      .subscribe(
+        (res) => {
+          console.log(res);
+          this.blob = new Blob([new Uint8Array(res)], {
+            type: 'audio/mp3; codecs=opus',
+          });
+          this.audioUrl = window.URL.createObjectURL(this.blob);
+          console.log(this.blob);
+          console.log(this.audioUrl);
+
+          this.testAudio.nativeElement.src = this.audioUrl;
+
+          // **** Use this when printing logs (append children dynamicly after)
+          // const clipContainer = document.createElement('article');
+          // const audio = document.createElement('audio');
+          // audio.setAttribute('controls', '');
+          // clipContainer.appendChild(audio);
+          // this.soundClips.nativeElement.appendChild(clipContainer);
+          // audio.src = this.audioUrl;
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+  }
+
+  // move to recording unit
+  public async streamAudio(fileId: string) {
+    this._http
+      .get('http://localhost:666/api/bank/streamdAudio/' + fileId, {
+        headers: {
+          authorization: localStorage.token,
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
+          'Access-Control-Allow-Headers':
+            'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With',
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        },
+        responseType: 'arraybuffer',
+      })
+      .subscribe(
+        (res) => {
+          console.log(res);
+          this.blob = new Blob([new Uint8Array(res)], {
+            type: 'audio/mp3; codecs=opus',
+          });
+          this.audioUrl = window.URL.createObjectURL(this.blob);
+          console.log(this.blob);
+          console.log(this.audioUrl);
+
+          this.testAudio.nativeElement.src = this.audioUrl;
+
+          // **** Use this when printing logs (append children dynamicly after)
+          // const clipContainer = document.createElement('article');
+          // const audio = document.createElement('audio');
+          // audio.setAttribute('controls', '');
+          // clipContainer.appendChild(audio);
+          // this.soundClips.nativeElement.appendChild(clipContainer);
+          // audio.src = this.audioUrl;
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+  }
+
+  public getSantizeUrl(url: string) {
+    return this._sanitizer.bypassSecurityTrustUrl(url);
+  }
+
+  public handleRatingStar(star:number):void{
+       this.ratingStars = star
+     }
 
   public recorder() {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -84,7 +282,7 @@ export class AddRecordingFormComponent implements AfterViewInit {
           //   this.record.nativeElement.style.color = "";
           // }
 
-          mediaRecorder.onstop =async  (e: any) => {
+          mediaRecorder.onstop = async (e: any) => {
             console.log('recorder stopped');
 
             // const clipName = prompt('Enter a name for your sound clip');
@@ -101,16 +299,21 @@ export class AddRecordingFormComponent implements AfterViewInit {
             clipContainer.appendChild(audio);
             clipContainer.appendChild(clipLabel);
             // clipContainer.appendChild(deleteButton);
-            this.soundClips.nativeElement.removeChild(this.soundClips.nativeElement.lastChild);
+            this.soundClips.nativeElement.removeChild(
+              this.soundClips.nativeElement.lastChild
+            );
             this.soundClips.nativeElement.appendChild(clipContainer);
 
-            const blob = new Blob(chunks, { type: 'audio/wav; codecs=opus' });
+            const blob = new Blob(chunks, { type: 'audio/mp3; codecs=opus' });
             // console.log(await blob.text())
             chunks = [];
             const audioURL = window.URL.createObjectURL(blob);
             audio.src = audioURL;
             this.recordingSrc = blob;
-            console.log(this.recordingSrc)
+            console.log(this.recordingSrc);
+
+            // if there's a recording, there's no chosen file
+            this.fileInput.nativeElement.value = '';
 
             // deleteButton.onclick = (e:any) => {
             //   let evtTgt = e.target;
@@ -139,7 +342,8 @@ export class AddRecordingFormComponent implements AfterViewInit {
             const drawVisual = requestAnimationFrame(draw);
             analyser.getByteTimeDomainData(dataArray);
             // canvasCtx.fillStyle = 'rgb(200, 200, 200)';
-            canvasCtx.fillStyle = 'linear-gradient(to right, #0f0c29, #302b63, #24243e);';
+            canvasCtx.fillStyle =
+              'linear-gradient(to right, #0f0c29, #302b63, #24243e);';
             canvasCtx.fillRect(0, 0, 300, 150);
             canvasCtx.lineWidth = 2;
             canvasCtx.strokeStyle = 'white';
@@ -166,7 +370,6 @@ export class AddRecordingFormComponent implements AfterViewInit {
           };
 
           draw();
-
 
           // this.record.addEvent
         })

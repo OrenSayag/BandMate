@@ -1,15 +1,168 @@
-const PostsModel = require("../DB/models/posts");
 const UsersModel = require("../DB/models/users");
 const router = require("express").Router();
 const mongoose = require("mongoose");
-const { ObjectId } = mongoose.Schema;
 const { privateGuard } = require("../toolFunctions");
 const RecordingsModel = require("../DB/models/recordings");
+const multer = require("multer")
 
-// test
-router.get("/", async (req, res) => {
-  return res.send("/bank works!");
+const mongodb = require('mongodb');
+const MongoClient = require('mongodb').MongoClient;
+const ObjectID = require('mongodb').ObjectID;
+
+/**
+ * Connect Mongo Driver to MongoDB.
+ * ------------ for the streaming endpoints
+ */
+ let db;
+ MongoClient.connect('mongodb://localhost/bandmate', (err, client) => {
+   if (err) {
+     console.log('MongoDB Connection Error. Please make sure that MongoDB is running.');
+     process.exit(1);
+   }
+   db = client.db('bandmate')
+   console.log("alright STREAMIT")
+ });
+
+
+
+// stream video
+router.get("/streamVideo/:fileId", async (req, res) => {
+  const { fileId } = req.params
+
+  res.set('content-type', 'video/mp4');
+  res.set('accept-ranges', 'bytes');
+
+  let bucket = new mongodb.GridFSBucket(db, {
+    bucketName: 'fs'
+  });
+
+  try {
+    var trackID = new ObjectID(fileId);
+  } catch(err) {
+    return res.status(400).json({ message: "Invalid trackID in URL parameter. Must be a single String of 12 bytes or a string of 24 hex characters" }); 
+  }
+
+  let downloadStream = bucket.openDownloadStream(trackID);
+
+  downloadStream.on('data', (chunk) => {
+     res.write(chunk);
+  });
+
+  downloadStream.on('error', (err) => {
+    console.log(err)
+     res.sendStatus(404);
+  });
+
+  downloadStream.on('end', () => {
+     res.end();
+  });
 });
+
+// stream audio
+router.get("/streamAudio/:fileId", async (req, res) => {
+  const { fileId } = req.params
+
+  res.set('content-type', 'audio/mp3');
+  res.set('accept-ranges', 'bytes');
+
+  let bucket = new mongodb.GridFSBucket(db, {
+    bucketName: 'fs'
+  });
+
+  try {
+    var trackID = new ObjectID(fileId);
+  } catch(err) {
+    return res.status(400).json({ message: "Invalid trackID in URL parameter. Must be a single String of 12 bytes or a string of 24 hex characters" }); 
+  }
+
+  let downloadStream = bucket.openDownloadStream(trackID);
+
+  downloadStream.on('data', (chunk) => {
+     res.write(chunk);
+  });
+
+  downloadStream.on('error', (err) => {
+    console.log(err)
+     res.sendStatus(404);
+  });
+
+  downloadStream.on('end', () => {
+     res.end();
+  });
+});
+
+const upload = require("../middleware/upload");
+// const AudioModel = require("../DB/models/audio");
+
+// upload file
+router.post("/uploadFile", async (req, res) => {
+  try{
+  await upload(req, res);
+
+  console.log(req.file);
+  if (req.file == undefined) {
+    return res.send({fail:`You must select a file.`});
+  }
+
+  return res.send({ok:`File ${req.file.id} has been uploaded.`,
+                   fileId: req.file.id
+});
+} catch (error) {
+  console.log(error);
+  return res.send({fail:`Error when trying upload image: ${error}`});
+}
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // post new recording
 router.post("/", async (req, res) => {
@@ -19,15 +172,41 @@ router.post("/", async (req, res) => {
     isPrivate,
     fileSrc,
     mediaType,
+    categories,
     ratingStars,
     users,
     title,
+    instruments,
     date,
   } = req.body;
-  if (!fileSrc || !isPrivate || !mediaType ) {
-    return res.status(400).send({ fail: "Missing fileSrc || isPrivate || mediaType" });
+  if (!fileSrc || !isPrivate || !mediaType || !instruments ) {
+    return res.status(400).send({ fail: "Missing fileSrc || isPrivate || mediaType || instruments" });
+  }
+  if(mediaType=="video" || mediaType=="audio"){
+    return res.status(400).send({"fail":"recieved wrong media type"})
   }
   try {
+
+    let user = await UsersModel.findById(id);
+
+    if(bandId && (id!=bandId)){
+      if(!user.bands.some(b=>b==bandId)){
+  
+        return res.status(400).send({"fail":"You're not in this band brother."})
+      }
+      //  else {
+      //   user = await UsersModel.findById(bandId)
+      // }
+    }
+
+    let parentUser;
+
+    if(bandId&&id!=bandId){
+        parentUser = bandId
+      } else {
+      parentUser = id
+    }
+
     const recording = await new RecordingsModel({
       bandId,
       isPrivate,
@@ -37,14 +216,16 @@ router.post("/", async (req, res) => {
       users,
       title,
       date,
-      parentUser: mongoose.Types.ObjectId(id),
+      parentUser,
       isPrivate,
+      categories,
+      instruments,
       type: "recording",
     });
 
     await recording.save();
 
-    return res.sendStatus(201);
+    return res.status(201).send({"ok":"successfully added recording to LA BANK"});
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -55,22 +236,32 @@ router.post("/", async (req, res) => {
 router.put("/rate/:id", async (req, res) => {
   const userId = req.userInfo.id;
   const {id} = req.params;
-  const {bandId, stars} = req.body;
+  const {stars} = req.body;
   if(!stars){
     return res.status(400).send({fail:"missing stars"})
   }
+  if(stars < 0 || stars > 5){
+    
+    return res.status(400).send({ fail: "Invalid rating rate between 0 and 5" });
+  }
   try {
     const recording = await RecordingsModel.findById(id)
-    
-    if(await privateGuard(recording, userId)===false){
-      return res.status(400).send({fail:"Hey you shouldn't even see this recording!"})
-      }
+
+    if(!recoridng){
+      return res.status(400).send({"fail":"no such recording"})
+    }
+
+    const parentUser = await UsersModel.findById(log.parentUser)
+    if((log.parentUser!=userId && !parentUser.participants.some(p=>p.userId==userId))){
+
+      return res.status(400).send({ fail: "Only parentuser or participants can rate content" });
+    }
 
     recording.ratingStars = Math.floor(stars)
     await recording.save()
 
 
-    return res.sendStatus(201);
+    return res.status(201).send({"ok":"successfully rated recording"});
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -94,9 +285,9 @@ router.put("/like/:id" ,async (req, res) => {
 
     const user = await UsersModel.findById(userId)
 
-    console.log(user.likedRecordings)
+    // console.log(user.likedRecordings)
 
-    if(!user.likedRecordings.some(p=>p.toString()==id)){
+    if(!user.likedRecordings.some(r=>r.toString()==id)){
       console.log("it is not liked")
       await UsersModel.findByIdAndUpdate(userId, {
         $push:{
@@ -114,7 +305,7 @@ router.put("/like/:id" ,async (req, res) => {
       )
     }
 
-    return res.sendStatus(200)
+    return res.status(200).send({"ok":"successfully un/liked recording"})
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -123,7 +314,7 @@ router.put("/like/:id" ,async (req, res) => {
 
 // post new comment
 router.post("/comment/:id" ,async (req, res) => {
-  const { username } = req.userInfo;
+  // const { username } = req.userInfo;
   const userId = req.userInfo.id;
   const { id } = req.params;
   const { text } = req.body;
@@ -134,7 +325,7 @@ router.post("/comment/:id" ,async (req, res) => {
   try {
     const recording = await RecordingsModel.findById(id)
     if(recording===null){
-      return res.status(400).send({fail:"no such ercording"})
+      return res.status(400).send({fail:"no such recording"})
     }
 
     if(await privateGuard(recording, userId)===false){
@@ -150,7 +341,7 @@ router.post("/comment/:id" ,async (req, res) => {
       }
     })
 
-    return res.sendStatus(201)
+    return res.status(201).send("successfully posted comment for this recording")
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -194,175 +385,31 @@ router.delete("/comment/:recordingId/:commentId" ,async (req, res) => {
   }
 });
 
-// // edit a post
-// router.put("/:id", async (req, res) => {
-//   const { id } = req.params;
-//   const userId = req.userInfo.id;
-//   const { content, isPrivate } = req.body;
-//   if (!content && !isPrivate) {
-//     return res.status(400).send({ fail: "Missing content or isPrivate" });
-//   }
-//   try {
-//     const post = await PostsModel.findById(id);
-//     if (!post) {
-//       return res.status(400).send({ fail: "No such post" });
-//     }
-//     if (post.parentUser !== userId) {
-//       return res.status(400).send({ fail: "This isn't your post" });
-//     }
-//     if (content) {
-//       await PostsModel.findByIdAndUpdate(id, {
-//         $set: {
-//           content,
-//         },
-//       });
-//     }
-//     if (isPrivate) {
-//       await PostsModel.findByIdAndUpdate(id, {
-//         $set: {
-//           isPrivate,
-//         },
-//       });
-//     }
+// deletes a recording
+router.delete("/:recordingId" ,async (req, res) => {
+  const { recordingId } = req.params;
+  const userId = req.userInfo.id;
+  try {
+    // check that user is the parentuser of this post
+    const recording = await RecordingsModel.findById(recordingId)
+    if(!recording){
+      return res.status(400).send({fail:"No such recording"})
+    }
 
-//     return res.sendStatus(200);
-//   } catch (error) {
-//     console.log(error);
-//     return res.sendStatus(500);
-//   }
-// });
 
-// // edit a post
-// router.delete("/:id", async (req, res) => {
-//   const { id } = req.params;
-//   const userId = req.userInfo.id;
-//   try {
-//     const post = await PostsModel.findById(id);
-//     if (!post) {
-//       return res.status(400).send({ fail: "No such post" });
-//     }
-//     if (post.parentUser !== userId) {
-//       return res.status(400).send({ fail: "This isn't your post to delete." });
-//     }
+    const parentUser = await UsersModel.findById(recording.parentUser)
+    if((recording.parentUser!=userId && !parentUser.participants.some(p=>p.userId==userId))){
 
-//     post.remove();
+      return res.status(400).send({ fail: "This recording is not yours to delete" });
+    }
 
-//     return res.sendStatus(200);
-//   } catch (error) {
-//     console.log(error);
-//     return res.sendStatus(500);
-//   }
-// });
+    await RecordingsModel.findByIdAndDelete(recordingId)
 
-// // toggles like on a post
-// router.put("/like/:id", async (req, res) => {
-//   const { id } = req.params;
-//   const userId = req.userInfo.id;
-//   try {
-//     const post = await PostsModel.findById(id);
-//     if (!post) {
-//       return res.status(400).send({ fail: "No such post" });
-//     }
-//     let participants = await UsersModel.findById(post.parentUser);
-//     participants = participants.participants;
-
-//     if (
-//       post.isPrivate &&
-//       userId !== post.parentUser.toString() &&
-//       !participants.some((p) => p.id === userId)
-//     ) {
-//       return res.status(400).send({ fail: "This isn't your post to like." });
-//     }
-
-//     const user = await UsersModel.findById(userId);
-
-//     if (!user.likedPosts.some((p) => p.toString() == post._id)) {
-//       await UsersModel.findByIdAndUpdate(userId, {
-//         $push: {
-//           likedPosts: post._id,
-//         },
-//       });
-//     } else {
-//       await UsersModel.findByIdAndUpdate(userId, {
-//         $pull: {
-//           likedPosts: post._id,
-//         },
-//       });
-//     }
-
-//     return res.sendStatus(200);
-//   } catch (error) {
-//     console.log(error);
-//     return res.sendStatus(500);
-//   }
-// });
-
-// // post new comment
-// router.post("/comment/:id", async (req, res) => {
-//   const { username } = req.userInfo;
-//   const userId = req.userInfo.id;
-//   const { id } = req.params;
-//   const { text } = req.body;
-
-//   if (!text) {
-//     return res.status(400).send({ fail: "Missing text" });
-//   }
-//   try {
-//     const post = await PostsModel.findById(id);
-//     if (post === null) {
-//       return res.status(400).send({ fail: "no such post" });
-//     }
-
-//     if ((await privateGuard(post, userId)) === false) {
-//       return res
-//         .status(400)
-//         .send({ fail: "Hey you shouldn't even see this post!" });
-//     }
-
-//     await PostsModel.findByIdAndUpdate(id, {
-//       $push: {
-//         comments: {
-//           text,
-//           username,
-//           userId,
-//         },
-//       },
-//     });
-
-//     return res.sendStatus(201);
-//   } catch (error) {
-//     console.log(error);
-//     return res.sendStatus(500);
-//   }
-// });
-
-// // deletes a comment
-// router.delete("/comment/:postId/:commentId", async (req, res) => {
-//   const { commentId, postId } = req.params;
-//   const userId = req.userInfo.id;
-//   try {
-//     // check that user is the parentuser of this post
-//     const post = await PostsModel.findById(postId);
-//     const comment = post.comments.id(commentId);
-//     console.log(comment);
-//     if (comment.userId != userId) {
-//       return res.status(400).send({ fail: "Hey, this is not your comment!" });
-//     }
-
-//     await PostsModel.findByIdAndUpdate(postId, {
-//       $pull: {
-//         comments: {
-//           _id: commentId,
-//           // text:"test comment on post",
-//         },
-//       },
-//     });
-
-//     return res.sendStatus(200);
-//   } catch (error) {
-//     console.log(error);
-//     return res.sendStatus(500);
-//   }
-// });
+    return res.status(200).send({"ok":"deleted this recording"})
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
 
 module.exports = router;

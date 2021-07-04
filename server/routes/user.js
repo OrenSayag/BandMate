@@ -56,6 +56,114 @@ router.get("/info/:id", async (req, res) => {
   }
 });
 
+// get user instruments
+router.post("/instruments", verifyUser, async (req, res) => {
+  const { id } = req.userInfo;
+  const { bandId } = req.body;
+  try {
+    let user = await UsersModel.findById(id).populate("instruments");
+    if(id!=bandId){
+      if(bandId){
+        if(!user.bands.some(b=>b==bandId)){
+  
+          return res.status(400).send({"fail":"You're not in this band brother."})
+        } else {
+          user = await UsersModel.findById(bandId).populate("instruments")
+        }
+      }
+    }
+    return res.status(200).send({ ok:user.instruments });
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
+// add to user instruments
+router.post("/instruments/:instrumentId", verifyUser, async (req, res) => {
+  const { id } = req.userInfo;
+  const { instrumentId } = req.params;
+  const { bandId } = req.body;
+  try {
+    let user = await UsersModel.findById(id);
+    if(bandId && (id!=bandId)){
+      if(!user.bands.some(b=>b==bandId)){
+
+        return res.status(400).send({"fail":"You're not in this band brother."})
+      } else {
+        user = await UsersModel.findById(bandId)
+      }
+    }
+
+    if(user.instruments.some(i=>i==instrumentId)){
+      if(bandId && (id!=bandId)){
+        return res.status(400).send({"fail":"Instrument already of band"})
+      }
+      return res.status(400).send({"fail":"Instrument already of user"})
+    }
+    if(bandId && (id!=bandId)){
+      await UsersModel.findByIdAndUpdate(bandId, {
+        $push:{
+          instruments: instrumentId
+        }
+      })
+    } else {
+      await UsersModel.findByIdAndUpdate(id, {
+        $push:{
+          instruments: instrumentId
+        }
+      })
+    }
+    return res.status(200).send({ ok:"ok" });
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
+// delete user instrument
+router.post("/instruments/delete/:instrumentId", verifyUser, async (req, res) => {
+  const { id } = req.userInfo;
+  const { instrumentId } = req.params;
+  const { bandId } = req.body;
+
+  try {
+
+    let user = await UsersModel.findById(id)
+    if(bandId && (id!=bandId)){
+      if(!user.bands.some(b=>b==bandId)){
+
+        return res.status(400).send({"fail":"You're not in this band brother."})
+      } else {
+        user = await UsersModel.findById(bandId)
+      }
+    }
+    if(user.instruments.length===1){
+      return res.status(400).send({"fail":"You have to have atleast one instrument"})
+    }
+  if(bandId && (id!=bandId)){
+      await UsersModel.findByIdAndUpdate(bandId, {
+        $pull:{
+          instruments: instrumentId
+        }
+      })
+    } else {
+      await UsersModel.findByIdAndUpdate(id, {
+        $pull:{
+          instruments: instrumentId
+        }
+      })
+    }
+  if(bandId && (id!=bandId)){
+    return res.status(200).send({ ok:"deleted instrument from band" });
+  } 
+  return res.status(200).send({ ok:"deleted instrument from user" });
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
 // get log categories of user
 router.get("/logCategories", verifyUser, async (req, res) => {
   const { id } = req.userInfo;
@@ -69,61 +177,221 @@ router.get("/logCategories", verifyUser, async (req, res) => {
   }
 });
 
-// change log categories of user
+// add log category to user
 router.post("/logCategories", verifyUser, async (req, res) => {
   const { id } = req.userInfo;
-  const { newCategory } = req.body;
+  const { newCategory, bandId } = req.body;
 
   if (!newCategory) {
     return res.status(400).send("Missing some info");
   }
 
   try {
-    const user = await UsersModel.find({ _id: id });
+    let user = await UsersModel.findById(id);
+    if(bandId && (id!=bandId)){
+      if(!user.bands.some(b=>b==bandId)){
+
+        return res.status(400).send({"fail":"You're not in this band brother."})
+      } else {
+        user = await UsersModel.findById(bandId)
+      }
+    }
     if (
-      user[0].logCategories.some((category) => category.name === newCategory)
+      user.logCategories.some((category) => category.name === newCategory.name)
     ) {
       return res.status(400).send({ fail: "Cannot add duplicate categories" });
     }
 
-    await UsersModel.findOneAndUpdate(
-      { _id: id },
-      {
-        $push: {
-          logCategories: { name: newCategory },
-        },
-      }
-    );
+    if(bandId&&id!=bandId){
+      await UsersModel.findByIdAndUpdate(
+        bandId,
+        {
+          $push: {
+            logCategories: { name: newCategory.name, color:newCategory.color },
+          },
+        }
+      );
+    } else {
+      await UsersModel.findByIdAndUpdate(
+        id,
+        {
+          $push: {
+            logCategories: { name: newCategory.name, color:newCategory.color },
+          },
+        }
+      );
+    }
 
-    return res.sendStatus(201);
+    return res.status(201).send({ok:"added a new category"});
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
   }
 });
 
-router.put("/logCategories/:catId", verifyUser, async (req, res) => {
+// deletes a log category
+router.post("/logCategories/:catName", verifyUser, async (req, res) => {
   const { id } = req.userInfo;
-  const { newName } = req.body;
-  const { catId } = req.params;
+  const { catName } = req.params;
+  const { bandId } = req.body
+console.log(bandId)
 
-  if (!newName) {
+  try {
+    let user = await UsersModel.findById(  id );
+    if(bandId && (id!=bandId)){
+      if(!user.bands.some(b=>b==bandId)){
+
+        return res.status(400).send({"fail":"You're not in this band brother."})
+      } else {
+        user = await UsersModel.findById(bandId)
+      }
+    }
+
+    const cat = user.logCategories.find(c=>c.name===catName)
+    
+    if (!cat) {
+      return res.status(400).send({ fail: "no such category" });
+    }
+
+    if(bandId&&id!=bandId){
+      await UsersModel.findByIdAndUpdate(
+        bandId,
+        {
+       $pull:{
+        logCategories:{name:catName}
+      }
+        }
+      );
+    } else {
+      await UsersModel.findByIdAndUpdate(
+        id,
+        {
+         $pull:{
+        logCategories:{name:catName}
+      }
+        }
+      );
+    }
+    
+
+    return res.status(200).send({ok:"removed this category"});
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
+// get recording categories of user
+router.get("/bankCategories", verifyUser, async (req, res) => {
+  const { id } = req.userInfo;
+  try {
+    const user = await UsersModel.find({ _id: id });
+    const bankCategories = user[0].bankCategories;
+    return res.status(200).send({ bankCategories });
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
+// add log category to user
+router.post("/bankCategories", verifyUser, async (req, res) => {
+  const { id } = req.userInfo;
+  const { newCategory, bandId } = req.body;
+
+  if (!newCategory) {
     return res.status(400).send("Missing some info");
   }
 
   try {
-    const user = await UsersModel.find({ _id: id });
-    const cat = user[0].logCategories.id(catId);
+    let user = await UsersModel.findById(id);
+    if(bandId && (id!=bandId)){
+      if(!user.bands.some(b=>b==bandId)){
 
-    if (cat === null) {
+        return res.status(400).send({"fail":"You're not in this band brother."})
+      } else {
+        user = await UsersModel.findById(bandId)
+      }
+    }
+    if (
+      user.bankCategories.some((category) => category.name === newCategory.name)
+    ) {
+      return res.status(400).send({ fail: "Cannot add duplicate categories" });
+    }
+
+    if(bandId&&id!=bandId){
+      await UsersModel.findByIdAndUpdate(
+        bandId,
+        {
+          $push: {
+            bankCategories: { name: newCategory.name, color:newCategory.color },
+          },
+        }
+      );
+    } else {
+      await UsersModel.findByIdAndUpdate(
+        id,
+        {
+          $push: {
+            bankCategories: { name: newCategory.name, color:newCategory.color },
+          },
+        }
+      );
+    }
+
+    return res.status(201).send({ok:"added a new category"});
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
+// deletes a log category
+router.post("/bankCategories/:catName", verifyUser, async (req, res) => {
+  const { id } = req.userInfo;
+  const { catName } = req.params;
+  const { bandId } = req.body
+console.log(bandId)
+
+  try {
+    let user = await UsersModel.findById(  id );
+    if(bandId && (id!=bandId)){
+      if(!user.bands.some(b=>b==bandId)){
+
+        return res.status(400).send({"fail":"You're not in this band brother."})
+      } else {
+        user = await UsersModel.findById(bandId)
+      }
+    }
+
+    const cat = user.bankCategories.find(c=>c.name===catName)
+    
+    if (!cat) {
       return res.status(400).send({ fail: "no such category" });
     }
 
-    cat.remove();
+    if(bandId&&id!=bandId){
+      await UsersModel.findByIdAndUpdate(
+        bandId,
+        {
+       $pull:{
+        bankCategories:{name:catName}
+      }
+        }
+      );
+    } else {
+      await UsersModel.findByIdAndUpdate(
+        id,
+        {
+         $pull:{
+        bankCategories:{name:catName}
+      }
+        }
+      );
+    }
+    
 
-    await user[0].save();
-
-    return res.sendStatus(201);
+    return res.status(200).send({ok:"removed this category"});
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -137,42 +405,57 @@ router.post("/personalInfo", verifyUser, async (req, res) => {
 
   try {
     let user;
-    user = await UsersModel.findById(id);
+    // let myParticipants = []
+    user = await UsersModel.findById(id).populate("participants.userId").populate("bands").populate("instruments");
     if (bandId) {
       const band = await UsersModel.findById(bandId);
-
+      // for (const p of band.participants) {
+      //   myParticipants.push(p.userId)
+      // }
       if (!band.participants.some((p) => p.userId == id) && band._id != id) {
         return res
           .status(400)
           .send({ fail: "You're not in this band brother." });
       } 
       else {
-        user = await UsersModel.findById(bandId);
+        user = await UsersModel.findById(bandId).populate("participants.userId").populate("bands").populate("instruments");
       }
     }
+
+    // console.log(bandId)
 
     // associated users are: participants of the band, or participants of
     // a band that a user is in.
     const myBandMates = [];
     for (const band of user.bands) {
-      const aBand = await UsersModel.findById(band);
+      const aBand = await UsersModel.findById(band).populate("participants.userId");
       for (const p of aBand.participants) {
         myBandMates.push(p);
       }
     }
     // console.log(user.bands);
+    
     const associatedUsers = [...user.participants, ...myBandMates];
     const myContent = {
       logs: await LogsModel.find({
-        $or: [{ parentUser: id }, { users: id }],
-      }),
+        $or: [{ parentUser: {$in:[user._id]} } ,{ users: user._id },],
+      }).populate("instruments").populate({path:"parentUser", select:"profile_img_src _id participants username"})
+      .populate({path:"comments.userId", select:"username profile_img_src"})
+      ,
       recordings: await RecordingsModel.find({
-        $or: [{ parentUser: id }, { users: id }],
-      }),
-      posts: await PostsModel.find({ parentUser: id }),
+        $or: [{ parentUser: {$in:[user._id]} } ,{ users: user._id },],
+      }).populate("instruments").populate({path:"parentUser", select:"profile_img_src _id participants username"})
+      .populate({path:"comments.userId", select:"username profile_img_src"})
+      ,
+      // posts: await PostsModel.find({ parentUser: id }),
+      posts: await PostsModel.find({ parentUser: {$in:[user._id]} }).populate("instruments").populate({path:"parentUser", select:"profile_img_src _id participants username"})
+      .populate({path:"comments.userId", select:"username profile_img_src"})
+      ,
     };
 
-    return res.status(200).send({ associatedUsers, myContent });
+
+    return res.status(200).send({ associatedUsers, myContent, userOrHisBand: user });
+    // return res.status(200).send({  logs:myContent.logs });
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -321,6 +604,31 @@ router.put('/follow/:toFollowId', verifyUser ,async (req, res)=>{
     return res.status(500).send(error)
   }
 })
+
+// userInfo (of token holder)
+router.get('/tokenHolderInfo', verifyUser ,async (req, res)=>{
+  const {id} = req.userInfo
+  try {
+    
+    const userInfo = await UsersModel.findById(id)
+    .populate({
+      select:"username",
+      path:"bands"
+    })
+    .populate({
+      path:"instruments"
+    })
+    .populate({
+      path:"genres"
+    })
+    return res.status(200).send({ok:userInfo})
+  } catch (error) {
+    console.log(error)
+    return res.status(500).send(error)
+  }
+})
+
+
 
 
 

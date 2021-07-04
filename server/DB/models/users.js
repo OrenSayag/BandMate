@@ -14,7 +14,7 @@ const Participant = new Schema({
     }
 })
 
-const LogCategory = new Schema({
+const ContentCategory = new Schema({
     name:String,
     color:String
 })
@@ -74,7 +74,8 @@ const users = new Schema({
         type: ObjectId,
         ref:"posts"
     }],
-    logCategories: [LogCategory],
+    logCategories: [ContentCategory],
+    bankCategories: [ContentCategory],
     isAdmin: Boolean,
 })
 

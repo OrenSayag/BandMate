@@ -3,6 +3,10 @@
     height: 400px;
 }
 
+.form {
+    color: white;
+}
+
 .record-btn{
     background-color: blueviolet;
     color: white;

@@ -1,20 +1,58 @@
 <div class="root">
 
-    <button
-    mat-button
-    class="record-btn"
-    (click)="openCloseRecorder()"
-    >Record</button>
+  <form class="form" [formGroup]="myForm">
 
-    <section #soundClips>
+    <mat-form-field appearance="fill">
+      <input 
+      type="any"
+       matInput
+       placeholder="Title"
+      formControlName="title"
 
-        <audio #audio src=""></audio>
+      >
+  </mat-form-field>
+
+    <mat-radio-group aria-label="Select an option" formControlName="audioTrueVideoFalse">
+      <mat-radio-button [value]="true">Audio</mat-radio-button>
+      <mat-radio-button [value]="false">Video</mat-radio-button>
+  </mat-radio-group>
+
+    <mat-radio-group aria-label="Select an option" formControlName="isPrivate">
+      <mat-radio-button [value]="false">Public</mat-radio-button>
+      <mat-radio-button [value]="true">Private</mat-radio-button>
+  </mat-radio-group>
+
+    <div class="media-input-btns">
+
+      <input #fileInput
+      (change)="tempHandleChange()"
+      class="ng-hide" id="input-file-id" multiple type="file"
+      
+      />
+      <span>mp3/mp4</span>
+
+      <button
+      mat-button
+      class="record-btn"
+      (click)="openCloseRecorder()"
+      [ngClass]="myForm.controls.audioTrueVideoFalse.value ? 'active' : 'hidden'"
+      >Record</button>
+    </div>
+
+
+
+  </form>
+
+
+    <section #soundClips 
+    [ngClass]="myForm.controls.audioTrueVideoFalse.value ? 'active' : 'hidden'"
+    >
+      <div></div>
     </section>
 
-    
-    <div class="recorder" [ngClass]="recorderTog ? 'active' : 'hidden'">
-
-  
+    <div 
+    [ngClass]="myForm.controls.audioTrueVideoFalse.value ? 'active' : 'hidden'"
+    class="recorder" [ngClass]="recorderTog ? 'active' : 'hidden'">
         <section class="main-controls">
           <div id="buttons">
             <button
@@ -26,13 +64,42 @@
           </div>
         </section>
 
+        <!-- VISUALISER -->
         <canvas #canvas></canvas>
-
-  
-  
       </div>
-  
-      <!-- <label for="toggle">❔</label>
-      <input type="checkbox" id="toggle"> -->
+
+      <div class="error-div"></div>
+      <div class="success-div"></div>
+
+      <app-choose-instruments-bar (sendInstrumentArr)="chosenInstrumentsListener($event)"></app-choose-instruments-bar>
+    
+    
+
+
+      <div class="rating-stars">
+          <mat-icon
+          (click)="handleRatingStar(0)"
+          >clear</mat-icon>
+          <mat-icon
+          (click)="handleRatingStar(1)"
+          >star</mat-icon>
+          <mat-icon
+          (click)="handleRatingStar(2)"
+          >star</mat-icon>
+          <mat-icon
+          (click)="handleRatingStar(3)"
+          >star</mat-icon>
+          <mat-icon
+          (click)="handleRatingStar(4)"
+          >star</mat-icon>
+          <mat-icon
+          (click)="handleRatingStar(5)"
+          >star</mat-icon>
+      </div>
+
+      <button
+      (click)="uploadRecording()"
+      >Upload</button>
+      <!-- (click)="uploadFile()" -->
 
 </div>

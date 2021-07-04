@@ -182,37 +182,54 @@ o888bood8P'   `Y8bod8P' o888o o888o `Y8bod8P'
                         get "catalogue" from service
                         html connect
                         update functions on _auth and component register
-ooooooooooooo                 .o8            
-8'   888   `8                "888            
-     888       .ooooo.   .oooo888   .ooooo.  
-     888      d88' `88b d88' `888  d88' `88b 
-     888      888   888 888   888  888   888 
-     888      888   888 888   888  888   888 
-    o888o     `Y8bod8P' `Y8bod88P" `Y8bod8P' 
-
-
-    fix: userInfo should be brought from
-    an endpoint on init of main and any changes.
-    NOT FROM TOKEN
-
     build the header
         add band and see if it works well
-
-
-    build the navbar
+        build the navbar
     build the log form
+        html:
+            number input (timeInMins)
+            user instruments bar
+                ngFor instruments
+                plus btn (open module)
+                    module: ngfor of instrumetns catalog, user selected is selected
+            text input
+            log category
+            ratingStars area
+                div containing stars, on click of
+                each star a variable changes to desired number,
+                which default of is 0.
+            users area //// Not doing this now
+            isPrivate
+            post btn
     build the log list
+        it *ngfor s log items
+            logitem:
+                div.date
+                div.time
+                div.instruments
+                div.categories
+                div.ratingStars
+                div.title
+                div.user-pic
+                div.social-bar
+                mat-menu-button
+                    delete
 
-
+            connect display to functions and test:
+                rate(parent),
+                like(parent),
+                comment(parent),
+                delete (parent),
+                del comment (parent),
         _logs
 
             f:
             🐱‍🐉getUserLogs
-            🐱‍👤likeLog
-            🐱‍👤commentLog
-            🐱‍👤addLog
-            🐱‍👤delLog
-            🐱‍👤rateLog
+            🐱‍🐉likeLog
+            🐱‍🐉commentLog
+            🐱‍🐉addLog
+            🐱‍🐉delLog
+            🐱‍🐉rateLog
 
             fix:
 
@@ -223,7 +240,55 @@ ooooooooooooo                 .o8
                 each change (click) of user in header, runs the user/getInfo function,
                 updating the content.
                 Each page filters the content by type, on init
-                
+        -------------------------- BUILD THE BANK
+
+        _bank
+
+            ** add recordingCategories to user modules, create users again
+
+            addRecording
+            rateRecording
+            likeRecording
+            commentRecording
+            delCommentRecording
+            delRecording
+ooooooooooooo                 .o8            
+8'   888   `8                "888            
+     888       .ooooo.   .oooo888   .ooooo.  
+     888      d88' `88b d88' `888  d88' `88b 
+     888      888   888 888   888  888   888 
+     888      888   888 888   888  888   888 
+    o888o     `Y8bod8P' `Y8bod88P" `Y8bod8P' 
+
+        bank component:
+            🐱‍🐉test upload video
+
+            build _bank category functions,
+            connect to ts of bank,
+            add categories form html and align
+            check proper value changes within the form:
+                title, audio/video, public/private, fileId, instruments,
+                categories, stars
+            ensure validity: title, audio/video, public/private, fileId
+
+            display form
+                radio, inputs,
+                connect html inputs to form,
+                determine form validation
+                disable the upload until form is valid
+                close the form after 2000ms displaying a success message
+
+            content(in .list) 
+            
+        bank form component:
+            learn how to upload file - test it - audio and video
+            continue to build form
+
+        -------------------------- BUILD THE BANK
+
+
+
+
 
 
 
@@ -255,13 +320,6 @@ ooooooooooooo                 .o8
             likedPost
             commentPost
 
-        _bank
-            addRecording
-            rateRecording
-            likeRecording
-            commentRecording
-            delRecording
-
         _bands
             makeAdmin
             removeFromBand
@@ -282,15 +340,16 @@ ooooooooooooo                 .o8
     create a loading animation and implement at every step when fetching
 
         AddContentButton (opens forms according to its hosting component)
+        CommentSection (@Input: commentFoo(according to parent component), comments(it ngFors them), )
         Main
         Logs
             LogAddForm
+                ChooseInstrumentBar
             LogList ///// deprecated
                 LogItem
                     SocialBar
         Navbar
-            NavbarBtn
-            NavbarAddBtn
+            NavbarBtn ////// deprecated
         Header
             BurgerMenu
             ProfileBar
@@ -317,7 +376,10 @@ ooooooooooooo                 .o8
         design mobile first
         animations until answer from server
 
+    production: disable cors, check envs
     Test, host, update CV, move forwarD: Project4/yourStats/militaryShabzak
+
+
 
 
 
@@ -332,4 +394,21 @@ ooooooooooooo                 .o8
             messages/groupconversations validate added user is not private, if private, that is being followed by me (ofc, after req to follow and approval of the private being followed, something like the join band req and rep)
 
         Client:
+
+
             Delete log-list component
+
+            FIX: comment section closes when updating content - find solution
+
+            Opt: different bands will be a different route and by this
+            route a req to get currUserOrBand and mainContent will be made.
+            (so that refreshing the page won't get us to token holder)
+            Opt: share content resulting post to own posts with display info of content
+            Opt: band settings, an option in which only band admin can add,
+            only admin can delete, (align with server)
+
+            Good Opt: add multiple users recordings and logs feature(align with server)
+            Good Opt: edit content (create reqs in server, and edit components in client)
+            Good Opt: add metronome to bank add form
+
+            

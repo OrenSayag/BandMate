@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import ContentCategory from '../models/tinyModels/content-category.model';
 
 @Injectable({
   providedIn: 'root',
@@ -12,9 +13,11 @@ export class BankService {
     isPrivate: boolean,
     mediaType: string,
     bandId: string,
+    instruments: string[],
+    categories?: ContentCategory[],
     ratingStars?: number,
     users?: string[],
-    title?: string
+    title?: string,
   ): Promise<void> {
     const res: any = await this._http
       .post(

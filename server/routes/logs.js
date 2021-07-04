@@ -37,20 +37,34 @@ router.post("/", async (req, res) => {
     users,
     date,
     isPrivate,
+    bandId
   } = req.body;
 
-  if (!timeInMins || !instruments || !title || !isPrivate) {
+  if (!timeInMins || !instruments || isPrivate===undefined) {
+    console.log(req.body)
     return res.status(400).send({ fail: "missing some info" });
   }
 
-  if (!date) {
-    date = new Date();
-  }
-
+  
   try {
-    const user = await UsersModel.find({ _id: id });
-    if(user.length===0){
-        return res.status(400).send({fail:"no such user"})
+    let user = await UsersModel.findById(id);
+
+    if(bandId && (id!=bandId)){
+      if(!user.bands.some(b=>b==bandId)){
+  
+        return res.status(400).send({"fail":"You're not in this band brother."})
+      }
+      //  else {
+      //   user = await UsersModel.findById(bandId)
+      // }
+    }
+
+    let parentUser;
+
+    if(bandId&&id!=bandId){
+        parentUser = bandId
+      } else {
+      parentUser = id
     }
 
     const newLog = await new LogsModel({
@@ -60,14 +74,16 @@ router.post("/", async (req, res) => {
       title,
       ratingStars,
       users,
-      parentUser: id,
+      parentUser,
       date,
       isPrivate,
     });
+    
+
 
     await newLog.save();
-
-    return res.sendStatus(201);
+    
+    return res.status(201).send({ok:"successfully created a log! for the user/band " + user.username});
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -80,23 +96,39 @@ router.put("/:id", async (req, res) => {
   const userId = req.userInfo.id;
   try {
     // find log, add to user's liked logs array
-    const log = await LogsModel.find({ _id: id });
+    const log = await LogsModel.findById( id );
 
-    if (log.length === 0) {
+    if (!log) {
       return res.status(400).send({ fail: "No such log" });
     }
 
-    let user = await UsersModel.find({ _id: userId });
-    user = user[0];
+    if(log.isPrivate){
+      const parentUser = await UsersModel.findById(log.parentUser)
+      if((log.parentUser!=userId && !parentUser.participants.some(p=>p.userId==userId))){
 
-    if(log.isPrivate && (log.parentUser!==userId && !log.users.some(user=>user.id===userId))){
-        return res.status(400).send({ fail: "You shouldn't even see this log" });
+        return res.status(400).send({ fail: "You shouldn't even see this log (not parentUser or participant)" });
+      }
     }
 
-    await UsersModel.findOneAndUpdate(
-      { _id: userId },
-      { $push: { likedLogs: log[0]._id } }
+    await UsersModel.findByIdAndUpdate(
+       userId ,
+      { $push: { likedLogs: log._id } }
     );
+
+    if(log.likes.some(u=>u==userId)){
+      await LogsModel.findByIdAndUpdate(
+         id ,
+        { $pull: { likes: userId } }
+      );
+    } else {
+      await LogsModel.findByIdAndUpdate(
+         id ,
+        { $push: { likes: userId } }
+      );
+    }
+
+
+
 
     return res.status(200).send({ok:"un/liked log"});
   } catch (error) {
@@ -116,26 +148,30 @@ router.post("/comment/:id", async (req, res) => {
   }
 
   try {
-    let log = await LogsModel.find({ _id: id });
+    let log = await LogsModel.findById( id );
 
-    if (log.length === 0) {
+    if (!log) {
       return res.status(400).send({ fail: "No such log" });
     }
 
-    log = log[0];
+    if(log.isPrivate){
+      const parentUser = await UsersModel.findById(log.parentUser)
+      if((log.parentUser!=userId && !parentUser.participants.some(p=>p.userId==userId))){
 
-    if(log.isPrivate && (log.parentUser!==userId && !log.users.some(user=>user.id===userId))){
-        return res.status(400).send({ fail: "You shouldn't even see this log" });
+        return res.status(400).send({ fail: "You shouldn't even see this log (not parentUser or participant)" });
+      }
     }
 
-    await LogsModel.findOneAndUpdate({ _id: id }, { $push: { comments: {
-        username: req.userInfo.username,
+    // if(log.isPrivate && (log.parentUser!==userId && !log.users.some(user=>user.id===userId))){
+    //     return res.status(400).send({ fail: "You shouldn't even see this log" });
+    // }
+
+    await LogsModel.findByIdAndUpdate(id, { $push: { comments: {
         userId,
         text,
-        postedOn: new Date(),
     } } });
 
-    return res.sendStatus(201);
+    return res.status(201).send({"ok":"posted new comment on this log"});
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -147,33 +183,31 @@ router.delete("/comment/:logId/:commentId", async (req, res) => {
   const { logId, commentId } = req.params;
   const userId = req.userInfo.id;
 
-  if (!logId, !commentId) {
+  if (!logId || !commentId) {
     return res.status(400).send({ fail: "Missing some info" });
   }
 
   try {
-    let log = await LogsModel.find({ _id: logId });
+    let log = await LogsModel.findById(  logId );
 
-    if (log.length === 0) {
+    if (!log) {
       return res.status(400).send({ fail: "No such log" });
     }
 
-    log = log[0];
-
-    const comment = log.comments.find(comment=>comment.id===commentId)
+    const comment = log.comments.find(comment=>comment.id==commentId)
     if(!comment){
            
         return res.status(400).send({"fail":"No such comment on this log"})
     }
-    if(comment.userId!==userId){
+    if(comment.userId!=userId){
         return res.status(400).send({"fail":"This isn't your comment"})
     }
 
-    await LogsModel.findOneAndUpdate({ _id: logId }, { $pull: { comments: {
+    await LogsModel.findByIdAndUpdate( logId , { $pull: { comments: {
         _id: commentId
     } } });
 
-    return res.sendStatus(202);
+    return res.status(200).send({"ok":"Successfuly deleted comment of this log"});
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -186,7 +220,10 @@ router.put("/rate/:logId", async (req, res) => {
   const userId = req.userInfo.id;
   const {newRating} = req.body
 
-  if (!logId || !newRating) {
+  console.log(logId)
+  console.log(newRating)
+
+  if (!logId || newRating===undefined) {
     return res.status(400).send({ fail: "Missing some info" });
 }
 
@@ -196,21 +233,26 @@ if(newRating < 0 || newRating > 5){
   }
 
   try {
-    let log = await LogsModel.find({ _id: logId });
+    let log = await LogsModel.findById( logId );
 
-    if (log.length === 0) {
+    if (!log) {
       return res.status(400).send({ fail: "No such log" });
     }
-    
-    log = log[0];
-    
-    if((log.parentUser!==userId && !log.users.some(user=>user.id===userId))){
-        return res.status(400).send({ fail: "Only users of this log can rate it" });
+
+    const parentUser = await UsersModel.findById(log.parentUser)
+    if((log.parentUser!=userId && !parentUser.participants.some(p=>p.userId==userId))){
+
+      return res.status(400).send({ fail: "Only parentuser or participants can rate content" });
     }
     
-    await LogsModel.findOneAndUpdate({_id:logId}, {ratingStars: Math.floor(newRating)})
+    // *** keep in mind for an opt multiple user logs feature
+    // if((log.parentUser!=userId && !log.users.some(user=>user.id===userId))){
+    //     return res.status(400).send({ fail: "Only users of this log can rate it" });
+    // }
+    
+    await LogsModel.findByIdAndUpdate(logId, {ratingStars: Math.floor(newRating)})
 
-    return res.sendStatus(200);
+    return res.send({"ok":"successfully rated log!"});
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -222,9 +264,9 @@ router.delete("/:logId", async (req, res) => {
   const { logId } = req.params;
   const userId = req.userInfo.id;
 
-  if (!logId) {
-    return res.status(400).send({ fail: "Missing some info" });
-  }
+  // if (!logId) {
+  //   return res.status(400).send({ fail: "Missing some info" });
+  // }
 
   try {
     let log = await LogsModel.find({ _id: logId });
@@ -234,14 +276,20 @@ router.delete("/:logId", async (req, res) => {
     }
     
     log = log[0];
-    
-    if(log.parentUser!==userId){
-        return res.status(400).send({ fail: "This log is not yours to delete" });
+
+    const parentUser = await UsersModel.findById(log.parentUser)
+    if((log.parentUser!=userId && !parentUser.participants.some(p=>p.userId==userId))){
+
+      return res.status(400).send({ fail: "This log is not yours to delete" });
     }
+    
+    // if(log.parentUser!=userId){
+    //     return res.status(400).send({ fail: "This log is not yours to delete" });
+    // }
 
     await LogsModel.remove({ _id: logId });
 
-    return res.sendStatus(202);
+    return res.status(200).send({"ok":"successfully deleted this log"});
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

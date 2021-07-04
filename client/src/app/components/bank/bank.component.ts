@@ -34,4 +34,6 @@ export class BankComponent implements OnInit {
     this.formTog = !this.formTog
   }
 
+  
+
 }

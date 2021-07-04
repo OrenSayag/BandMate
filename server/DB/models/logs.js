@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 const  {ObjectId} = Schema.Types
+const ContentCategory = require('./contentCategory')
 
 const Comment = new Schema({
     username:{
@@ -33,8 +34,8 @@ const logs = new Schema({
         type: ObjectId,
         ref:"instruments"
     }],
-    categories: [String],
-    title: {type:String, required:true},
+    categories: [ContentCategory],
+    title: {type:String},
     ratingStars: {type:Number, default:0},
     users: [{
         type: ObjectId,
