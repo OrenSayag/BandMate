@@ -41,7 +41,8 @@ export class UsersService {
     // cover_img_src: string;
     instruments: InstrumentsModel[];
     logCategories:{name:"", color:""}[];
-  } = { _id: '', username: '', instruments: [], logCategories: [] };
+    bankCategories:{name:"", color:""}[];
+  } = { _id: '', username: '', instruments: [], logCategories: [],bankCategories: [], };
 
   constructor(public _http: HttpClient) {}
 
@@ -63,7 +64,8 @@ export class UsersService {
         _id: res.userOrHisBand._id,
         username: res.userOrHisBand.username,
         instruments: res.userOrHisBand.instruments,
-        logCategories: res.userOrHisBand.logCategories
+        logCategories: res.userOrHisBand.logCategories,
+        bankCategories: res.userOrHisBand.bankCategories,
       };
       // console.log(this.associatedUsers)
       // console.log(res)

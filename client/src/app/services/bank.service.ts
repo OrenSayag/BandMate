@@ -1,12 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import ContentCategory from '../models/tinyModels/content-category.model';
+import { UsersService } from './users.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BankService {
-  constructor(public _http: HttpClient) {}
+  constructor(
+    public _http: HttpClient,
+    public _users: UsersService,
+    ) {}
 
   public async postRecording(
     fileSrc: string,
@@ -16,20 +20,22 @@ export class BankService {
     instruments: string[],
     categories?: ContentCategory[],
     ratingStars?: number,
-    users?: string[],
     title?: string,
-  ): Promise<void> {
+    users?: string[],
+  ): Promise<boolean> {
     const res: any = await this._http
       .post(
-        'http://localhost:666/bank',
+        'http://localhost:666/api/bank',
         {
           bandId,
           isPrivate,
           mediaType,
           fileSrc,
           ratingStars,
-          users,
           title,
+          users,
+          instruments,
+          categories
         },
         {
           headers: {
@@ -42,8 +48,10 @@ export class BankService {
 
     if (res.ok) {
       console.log('succesfully added recording');
+      return true
     } else {
       console.log('failed to add recording');
+      return false
     }
   }
 
@@ -53,7 +61,7 @@ export class BankService {
   ): Promise<void> {
     const res: any = await this._http
       .put(
-        'http://localhost:666/bank/rate/'+id,
+        'http://localhost:666/api/bank/rate/'+id,
         {
           stars
         },
@@ -76,7 +84,7 @@ export class BankService {
   public async likeRecording(id:string): Promise<void> {
     const res: any = await this._http
       .put(
-        'http://localhost:666/bank/like/'+id,
+        'http://localhost:666/api/bank/like/'+id,
         {
           
         },
@@ -99,7 +107,7 @@ export class BankService {
   public async postCommentRecording(id:string, text:string): Promise<void> {
     const res: any = await this._http
       .put(
-        'http://localhost:666/bank/comment/'+id,
+        'http://localhost:666/api/bank/comment/'+id,
         {
           text
         },
@@ -122,7 +130,7 @@ export class BankService {
   public async delCommentRecording(recordingId:string,commentId:string): Promise<boolean> {
     const res: any = await this._http
       .delete(
-        'http://localhost:666/bank/comment/'+recordingId+'/'+commentId,
+        'http://localhost:666/api/bank/comment/'+recordingId+'/'+commentId,
         {
           headers: {
             'content-type': 'application/json',
@@ -144,7 +152,7 @@ export class BankService {
   public async delRecording(recordingId:string): Promise<boolean> {
     const res: any = await this._http
       .delete(
-        'http://localhost:666/bank/'+recordingId,
+        'http://localhost:666/api/bank/'+recordingId,
         {
           headers: {
             'content-type': 'application/json',
@@ -160,6 +168,42 @@ export class BankService {
     } else {
       console.log('failed to delete comment recording');
       return false
+    }
+  }
+  
+  public async addBankCategory(newCategory:{name:string,color:string}, bandId:string){
+    const res:any = await this._http.post("http://localhost:666/api/user/bankCategories"
+    ,{newCategory, bandId},{
+      headers: {
+        authorization: localStorage.token
+      }
+    }).toPromise()
+
+    if(res.ok){
+      console.log("added a new bank category")
+      this._users.getUserInfo({bandId: this._users.currUserOtBand._id})
+    }
+    if(res.fail){
+      console.log(res.fail)
+    }
+  }
+
+  public async delBankCategory(catName:string, bandId:string){
+    // console.log(bandId)
+    const res:any = await this._http.post("http://localhost:666/api/user/bankCategories/"+catName
+    ,{bandId},{
+      headers: {
+        authorization: localStorage.token,
+        "content-type":"application/json"
+      }
+    }).toPromise()
+
+    if(res.ok){
+      console.log("removed this bank category")
+      this._users.getUserInfo({bandId: this._users.currUserOtBand._id})
+    }
+    if(res.fail){
+      console.log(res.fail)
     }
   }
 }

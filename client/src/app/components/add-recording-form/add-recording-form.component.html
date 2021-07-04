@@ -14,7 +14,9 @@
 
     <mat-radio-group aria-label="Select an option" formControlName="audioTrueVideoFalse">
       <mat-radio-button [value]="true">Audio</mat-radio-button>
-      <mat-radio-button [value]="false">Video</mat-radio-button>
+      <mat-radio-button [value]="false"
+      (click)="openCloseRecorder(true)"
+      >Video</mat-radio-button>
   </mat-radio-group>
 
     <mat-radio-group aria-label="Select an option" formControlName="isPrivate">
@@ -51,7 +53,7 @@
     </section>
 
     <div 
-    [ngClass]="myForm.controls.audioTrueVideoFalse.value ? 'active' : 'hidden'"
+   
     class="recorder" [ngClass]="recorderTog ? 'active' : 'hidden'">
         <section class="main-controls">
           <div id="buttons">
@@ -73,7 +75,21 @@
 
       <app-choose-instruments-bar (sendInstrumentArr)="chosenInstrumentsListener($event)"></app-choose-instruments-bar>
     
-    
+      <mat-form-field class="example-chip-list" appearance="fill">
+        <mat-label>Categories</mat-label>
+        <mat-chip-list #chipList aria-label="Fruit selection">
+            <mat-chip 
+            (click)="handleClickCategory(category)"
+            *ngFor="let category of _users.currUserOtBand.bankCategories" 
+            [ngStyle]="{'background-color': category.color}" >
+                {{category.name}}
+                <mat-icon matChipRemove (click)="delCategory(category.name)" >cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="New Category" [matChipInputFor]="chipList"
+            (matChipInputTokenEnd)="addCategory($event)">
+        </mat-chip-list>
+        <!-- [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" -->
+    </mat-form-field>
 
 
       <div class="rating-stars">
@@ -98,8 +114,20 @@
       </div>
 
       <button
-      (click)="uploadRecording()"
+      (click)="postRecording()"
       >Upload</button>
+
+      <div class="error-div">{{errorDivMessage}}</div>
+      <div class="success-div">{{successDivMessage}}</div>
       <!-- (click)="uploadFile()" -->
+
+      <!-- {{myForm.value | json}}
+      {{recordingSrc | json}}
+      {{ratingStars | json}} -->
+      <!-- {{chosenInstruments.length | json}}  -->
+      <!-- {{chosenCategories.length | json}} -->
+        <!-- {{fileToUpload | json}} -->
+
+      <!-- {{myForm.valid}} -->
 
 </div>

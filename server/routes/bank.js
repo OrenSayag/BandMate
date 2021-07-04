@@ -179,10 +179,14 @@ router.post("/", async (req, res) => {
     instruments,
     date,
   } = req.body;
-  if (!fileSrc || !isPrivate || !mediaType || !instruments ) {
+  if (!fileSrc || isPrivate===undefined || !mediaType || !instruments ) {
+    console.log(fileSrc)
+    console.log(isPrivate)
+    console.log(mediaType)
+    console.log(instruments)
     return res.status(400).send({ fail: "Missing fileSrc || isPrivate || mediaType || instruments" });
   }
-  if(mediaType=="video" || mediaType=="audio"){
+  if(mediaType!=="video" && mediaType!=="audio"){
     return res.status(400).send({"fail":"recieved wrong media type"})
   }
   try {

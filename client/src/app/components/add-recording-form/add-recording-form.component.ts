@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AstMemoryEfficientTransformer } from '@angular/compiler';
+import { AfterViewInit, Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import ContentCategory from 'src/app/models/tinyModels/content-category.model';
+import { BankService } from 'src/app/services/bank.service';
 import { UsersService } from 'src/app/services/users.service';
 
 
@@ -28,22 +30,30 @@ export class AddRecordingFormComponent implements AfterViewInit {
   public recorderTog: boolean = false;
 
   public recordingSrc: any = '';
-  public fileId:string = "";
+  public fileToUpload:any = {};
   public ratingStars:number = 0;
+  
+  public fileId:string = "";
 
   public chosenInstruments:string[] = []
   public chosenCategories:ContentCategory[] = []
-  
+
+  public errorDivMessage:string = ""
+  public successDivMessage:string = ""
   
   // move to recording unit
   public audioUrl: string = '';
   public blob: Blob = new Blob();
+
+  @Output()
+  public successfulpost:EventEmitter<boolean> = new EventEmitter()
   
   constructor(
     public _http: HttpClient,
     private _sanitizer: DomSanitizer,
     private _fb: FormBuilder,
-    private _users: UsersService,
+    public _users: UsersService,
+    public _bank: BankService,
     ) {}
     
     ngOnInit(): void {}
@@ -53,32 +63,102 @@ export class AddRecordingFormComponent implements AfterViewInit {
     }
     
     public myForm = this._fb.group({
-      isPrivate:[false, [Validators.required]],
-      audioTrueVideoFalse:[true, [Validators.required]],
-      title:["", [Validators.required]],
+      isPrivate:[false],
+      audioTrueVideoFalse:[true],
+      title:[""],
     });
 
-    // public addCategory(e:any){
-    //   console.log(e.value)
-    //   const colorArr = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
-		//   '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
-		//   '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', 
-		//   '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
-		//   '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', 
-		//   '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
-		//   '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680', 
-		//   '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
-		//   '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', 
-		//   '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
+    public async postRecording():Promise<void>{
 
-    //   this._logs.addLogCategory({name:e.value, color:colorArr[Math.floor(Math.random()*colorArr.length)]}, this._users.currUserOtBand._id)
-    //   e.input.value = ""
-    // }
 
-    // public delCategory(catName:string){
+      
+      
+      let mediaType:string = ""
+      if(this.myForm.controls.audioTrueVideoFalse.value){
+        mediaType="audio"
+        
+      } else {
+        mediaType="video"
+      }
+      //form validation
+      if(this.chosenInstruments.length===0){
+        this.errorDivMessage = "Please choose an instrument"
+        setTimeout(() => {
+          this.errorDivMessage = ""
+        }, 2000)
+        
+        return
+      }
+      
+      if(this.recordingSrc!=""){
+        await this.uploadRecording()
+      } else {
+        console.log("uploading a file")
+        await this.uploadFile()
+      }
+
+      if(!this.fileId){
+        this.errorDivMessage = "Missing file to upload"
+        setTimeout(() => {
+          this.errorDivMessage = ""
+        }, 2000)
+        
+        return
+      }
+      
+      // console.log(this.chosenInstruments)
+      
+      const res = await this._bank.postRecording(
+        this.fileId,
+        this.myForm.controls.isPrivate.value,
+        mediaType,
+        this._users.currUserOtBand._id,
+        this.chosenInstruments,
+        this.chosenCategories,
+        this.ratingStars,
+        this.myForm.controls.title.value
+      )
+      if(res){
+
+        this.successfulpost.emit(true)
+        this.successDivMessage = "Posted to the bank!"
+        setTimeout(() => {
+          this.myForm.reset()
+          this.chosenInstruments = []
+          this.chosenCategories = []
+          this.ratingStars = 0
+          this.fileId = ''
+          this.fileInput.nativeElement.value = ''
+          const div = document.createElement('div');
+          this.soundClips.nativeElement.removeChild(
+            this.soundClips.nativeElement.lastChild
+          );
+          this.soundClips.nativeElement.appendChild(div);
+        }, 2000)
+      }
+    }
+
+    public addCategory(e:any){
+      console.log(e.value)
+      const colorArr = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
+		  '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
+		  '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', 
+		  '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
+		  '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', 
+		  '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
+		  '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680', 
+		  '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
+		  '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', 
+		  '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
+
+      this._bank.addBankCategory({name:e.value, color:colorArr[Math.floor(Math.random()*colorArr.length)]}, this._users.currUserOtBand._id)
+      e.input.value = ""
+    }
+
+    public delCategory(catName:string){
     
-    //   this._logs.delLogCategory(catName, this._users.currUserOtBand._id)
-    // }
+      this._bank.delBankCategory(catName, this._users.currUserOtBand._id)
+    }
 
     public handleClickCategory(category:ContentCategory):void{
       if(this.chosenCategories.some(c=>c===category)){
@@ -99,47 +179,65 @@ export class AddRecordingFormComponent implements AfterViewInit {
     // console.log(file)
 
     this.recordingSrc = '';
+    this.fileToUpload = this.fileInput.nativeElement.files[0]
     const div = document.createElement('div');
     this.soundClips.nativeElement.removeChild(
       this.soundClips.nativeElement.lastChild
     );
     this.soundClips.nativeElement.appendChild(div);
+    console.log(this.fileToUpload)
   }
 
-  public openCloseRecorder(): void {
+  public openCloseRecorder(close?:boolean): void {
     this.recorderTog = !this.recorderTog;
     console.log(this.recorderTog);
+    if(close){
+      this.recorderTog = false;
+    }
   }
 
-  public uploadFile(): void {
+  public async uploadFile() {
     if (this.fileInput.nativeElement.files.length > 1) {
-      return console.log('Choose a single file');
+      this.errorDivMessage = "Choose a single file"
+      setTimeout(() => {
+        this.errorDivMessage = ""
+      }, 2000)
+      return
     }
     const mediaBlob = this.fileInput.nativeElement.files[0];
 
     const file = new FormData();
     file.set('file', mediaBlob);
-    this._http
+    const res:any = await this._http
       .post('http://localhost:666/api/bank/uploadFile', file, {
         headers: { authorization: localStorage.token },
       })
-      .subscribe((res: any) => {
-        console.log(res);
-        this.fileId = res.fileId;
-      });
+      .toPromise()
+      .catch(err=>this.fileId = "")
+      // .subscribe((res: any) => {
+        //   console.log(res);
+        //   this.fileId = res.fileId;
+        // })
+          console.log(res);
+          this.fileId = res.fileId;
+     
   }
 
-  public uploadRecording(): void {
+  public async uploadRecording() {
     const file = new FormData();
     file.set('file', this.recordingSrc);
-    this._http
+    const res:any = await   this._http
       .post('http://localhost:666/api/bank/uploadFile', file, {
         headers: { authorization: localStorage.token },
       })
-      .subscribe((res: any) => {
-        console.log(res);
-        this.fileId = res.fileId;
-      });
+      .toPromise()
+      .catch(err=>this.fileId="")
+
+      // .subscribe((res: any) => {
+      //   console.log(res);
+      //   this.fileId = res.fileId;
+      this.fileId = res.fileId;
+
   }
 
   // move to recording unit
@@ -314,6 +412,7 @@ export class AddRecordingFormComponent implements AfterViewInit {
 
             // if there's a recording, there's no chosen file
             this.fileInput.nativeElement.value = '';
+            this.fileToUpload = ''
 
             // deleteButton.onclick = (e:any) => {
             //   let evtTgt = e.target;
