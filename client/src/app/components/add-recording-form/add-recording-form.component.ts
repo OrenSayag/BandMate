@@ -23,8 +23,7 @@ export class AddRecordingFormComponent implements AfterViewInit {
   @ViewChild('canvas') canvas: any;
   @ViewChild('fileInput') fileInput: any;
 
-  // move to recording unit
-  @ViewChild('testAudio') testAudio: any;
+ 
 
   public recordingState: boolean = false;
   public recorderTog: boolean = false;
@@ -41,9 +40,7 @@ export class AddRecordingFormComponent implements AfterViewInit {
   public errorDivMessage:string = ""
   public successDivMessage:string = ""
   
-  // move to recording unit
-  public audioUrl: string = '';
-  public blob: Blob = new Blob();
+  
 
   @Output()
   public successfulpost:EventEmitter<boolean> = new EventEmitter()
@@ -240,89 +237,7 @@ export class AddRecordingFormComponent implements AfterViewInit {
 
   }
 
-  // move to recording unit
-  public async streamVideo(fileId: string) {
-    this._http
-      .get('http://localhost:666/api/bank/streamdVideo/' + fileId, {
-        headers: {
-          authorization: localStorage.token,
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
-          'Access-Control-Allow-Headers':
-            'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With',
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        },
-        responseType: 'arraybuffer',
-      })
-      .subscribe(
-        (res) => {
-          console.log(res);
-          this.blob = new Blob([new Uint8Array(res)], {
-            type: 'audio/mp3; codecs=opus',
-          });
-          this.audioUrl = window.URL.createObjectURL(this.blob);
-          console.log(this.blob);
-          console.log(this.audioUrl);
 
-          this.testAudio.nativeElement.src = this.audioUrl;
-
-          // **** Use this when printing logs (append children dynamicly after)
-          // const clipContainer = document.createElement('article');
-          // const audio = document.createElement('audio');
-          // audio.setAttribute('controls', '');
-          // clipContainer.appendChild(audio);
-          // this.soundClips.nativeElement.appendChild(clipContainer);
-          // audio.src = this.audioUrl;
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
-  }
-
-  // move to recording unit
-  public async streamAudio(fileId: string) {
-    this._http
-      .get('http://localhost:666/api/bank/streamdAudio/' + fileId, {
-        headers: {
-          authorization: localStorage.token,
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
-          'Access-Control-Allow-Headers':
-            'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With',
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        },
-        responseType: 'arraybuffer',
-      })
-      .subscribe(
-        (res) => {
-          console.log(res);
-          this.blob = new Blob([new Uint8Array(res)], {
-            type: 'audio/mp3; codecs=opus',
-          });
-          this.audioUrl = window.URL.createObjectURL(this.blob);
-          console.log(this.blob);
-          console.log(this.audioUrl);
-
-          this.testAudio.nativeElement.src = this.audioUrl;
-
-          // **** Use this when printing logs (append children dynamicly after)
-          // const clipContainer = document.createElement('article');
-          // const audio = document.createElement('audio');
-          // audio.setAttribute('controls', '');
-          // clipContainer.appendChild(audio);
-          // this.soundClips.nativeElement.appendChild(clipContainer);
-          // audio.src = this.audioUrl;
-        },
-        (err) => {
-          console.log(err);
-        }
-      );
-  }
-
-  public getSantizeUrl(url: string) {
-    return this._sanitizer.bypassSecurityTrustUrl(url);
-  }
 
   public handleRatingStar(star:number):void{
        this.ratingStars = star

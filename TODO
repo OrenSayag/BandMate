@@ -252,14 +252,6 @@ o888bood8P'   `Y8bod8P' o888o o888o `Y8bod8P'
             commentRecording
             delCommentRecording
             delRecording
-ooooooooooooo                 .o8            
-8'   888   `8                "888            
-     888       .ooooo.   .oooo888   .ooooo.  
-     888      d88' `88b d88' `888  d88' `88b 
-     888      888   888 888   888  888   888 
-     888      888   888 888   888  888   888 
-    o888o     `Y8bod8P' `Y8bod88P" `Y8bod8P' 
-
         bank component:
             🐱‍🐉test upload video
             build _bank category functions,
@@ -271,18 +263,30 @@ ooooooooooooo                 .o8
             ensure validity: title, audio/video, public/private, fileId
 
 
+        bank form component:
+            learn how to upload file - test it - audio and video
+            continue to build form
             display form
                 radio, inputs,
                 connect html inputs to form,
                 determine form validation
                 disable the upload until form is valid
                 close the form after 2000ms displaying a success message
+ooooooooooooo                 .o8            
+8'   888   `8                "888            
+     888       .ooooo.   .oooo888   .ooooo.  
+     888      d88' `88b d88' `888  d88' `88b 
+     888      888   888 888   888  888   888 
+     888      888   888 888   888  888   888 
+    o888o     `Y8bod8P' `Y8bod88P" `Y8bod8P' 
 
-            content(in .list) 
+
+        content(in .list)
+            display raw data
+            stream each unit
+            make btns
+            align btns and foo
             
-        bank form component:
-            learn how to upload file - test it - audio and video
-            continue to build form
 
         -------------------------- BUILD THE BANK
 
@@ -383,6 +387,9 @@ ooooooooooooo                 .o8
 
 
 
+    BUG CATCHER:
+        - when adding a new recording, reopening the form results in empty
+        radios.
 
     FOR THE FUTURE:
         API:

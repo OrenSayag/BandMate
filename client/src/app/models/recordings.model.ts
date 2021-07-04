@@ -5,15 +5,15 @@ interface Comment{
     userId: string
 }
 
-export default interface recordings {
+export default interface Recording {
     fileSrc:string,
     mediaType:string,
     ratingStars:number,
     users?:string[],
-    title:string,
-    parentUser:string,
-    date:string,
-    comment?:Comment[],
+    title?:string,
+    parentUser:{profile_img_src:string, _id:string, participants:{userId:string}[], username:string},
+    date:Date,
+    comments?:Comment[],
     likes?:string[],
     isPrivate:boolean,
     type:string
