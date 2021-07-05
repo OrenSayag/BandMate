@@ -99,7 +99,7 @@ router.post("/uploadFile", async (req, res) => {
   try{
   await upload(req, res);
 
-  console.log(req.file);
+  // console.log(req.file);
   if (req.file == undefined) {
     return res.send({fail:`You must select a file.`});
   }
@@ -180,10 +180,10 @@ router.post("/", async (req, res) => {
     date,
   } = req.body;
   if (!fileSrc || isPrivate===undefined || !mediaType || !instruments ) {
-    console.log(fileSrc)
-    console.log(isPrivate)
-    console.log(mediaType)
-    console.log(instruments)
+    // console.log(fileSrc)
+    // console.log(isPrivate)
+    // console.log(mediaType)
+    // console.log(instruments)
     return res.status(400).send({ fail: "Missing fileSrc || isPrivate || mediaType || instruments" });
   }
   if(mediaType!=="video" && mediaType!=="audio"){
@@ -210,6 +210,8 @@ router.post("/", async (req, res) => {
       } else {
       parentUser = id
     }
+
+    console.log("INSTRUMENTS: ",instruments)
 
     const recording = await new RecordingsModel({
       bandId,
@@ -241,7 +243,7 @@ router.put("/rate/:id", async (req, res) => {
   const userId = req.userInfo.id;
   const {id} = req.params;
   const {stars} = req.body;
-  if(!stars){
+  if(stars===undefined){
     return res.status(400).send({fail:"missing stars"})
   }
   if(stars < 0 || stars > 5){
@@ -251,12 +253,12 @@ router.put("/rate/:id", async (req, res) => {
   try {
     const recording = await RecordingsModel.findById(id)
 
-    if(!recoridng){
+    if(!recording){
       return res.status(400).send({"fail":"no such recording"})
     }
 
-    const parentUser = await UsersModel.findById(log.parentUser)
-    if((log.parentUser!=userId && !parentUser.participants.some(p=>p.userId==userId))){
+    const parentUser = await UsersModel.findById(recording.parentUser)
+    if((recording.parentUser!=userId && !parentUser.participants.some(p=>p.userId==userId))){
 
       return res.status(400).send({ fail: "Only parentuser or participants can rate content" });
     }
@@ -292,18 +294,30 @@ router.put("/like/:id" ,async (req, res) => {
     // console.log(user.likedRecordings)
 
     if(!user.likedRecordings.some(r=>r.toString()==id)){
-      console.log("it is not liked")
+      // console.log("it is not liked")
       await UsersModel.findByIdAndUpdate(userId, {
         $push:{
           likedRecordings:mongoose.Types.ObjectId(recording._id)
         }
       }
       )
+      await RecordingsModel.findByIdAndUpdate(id, {
+        $push:{
+          likes:mongoose.Types.ObjectId(userId)
+        }
+      }
+      )
     } else {
-      console.log("it is liked")
+      // console.log("it is liked")
       await UsersModel.findByIdAndUpdate(userId, {
         $pull:{
           likedRecordings:mongoose.Types.ObjectId(recording._id)
+          }
+        }
+      )
+      await RecordingsModel.findByIdAndUpdate(id, {
+        $pull:{
+          likes:mongoose.Types.ObjectId(userId)
           }
         }
       )
@@ -336,7 +350,7 @@ router.post("/comment/:id" ,async (req, res) => {
     return res.status(400).send({fail:"Hey you shouldn't even see this recording!"})
     }
 
-    await RecordingsModel.findByIdAndUpdate(id, {
+    let comment = await RecordingsModel.findByIdAndUpdate(id, {
       $push:{
         comments: {
           text,
@@ -344,8 +358,13 @@ router.post("/comment/:id" ,async (req, res) => {
         }
       }
     })
+    // .populate({path:"comments.userId", select:"username profile_img_src"})
 
-    return res.status(201).send("successfully posted comment for this recording")
+    comment = comment.comments[comment.comments.length-1]
+
+    // console.log(comment)
+
+    return res.status(201).send({ok:"successfully posted comment for this recording", id: comment._id})
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -363,7 +382,8 @@ router.delete("/comment/:recordingId/:commentId" ,async (req, res) => {
     if(!recording){
       return res.status(400).send({fail:"No such recording"})
     }
-    const comment = recording.comments.id(commentId)
+    // console.log("comment id: "+commentId)
+    const comment = recording.comments.id(mongoose.Types.ObjectId(commentId))
     if(!comment){
       return res.status(400).send({fail:"No such comment"})
     }
@@ -382,7 +402,7 @@ router.delete("/comment/:recordingId/:commentId" ,async (req, res) => {
       }
     })
 
-    return res.sendStatus(200)
+    return res.status(200).send({ok:"successfully deleted comment from recording"})
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -410,6 +430,33 @@ router.delete("/:recordingId" ,async (req, res) => {
     await RecordingsModel.findByIdAndDelete(recordingId)
 
     return res.status(200).send({"ok":"deleted this recording"})
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
+// get a single recording
+router.get("/:recordingId" ,async (req, res) => {
+  const { recordingId } = req.params;
+  const userId = req.userInfo.id;
+  try {
+   // check that it can be seen
+    const recording = await RecordingsModel.findById(recordingId)
+      .populate({
+        path:"parentUser",
+        populate:"participants",
+        select:"-hashedPass -mail"
+      })
+    if(!recording){
+      return res.status(400).send({"fail":"no such recording"})
+    }
+
+   if(await privateGuard(recording, userId) === false){
+    return res.status(400).send({fail:"this recording is private for participants and parent user, and you cannot see it"})
+   }
+
+    return res.status(200).send({"ok":"this is the recording", recording})
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

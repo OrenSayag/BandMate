@@ -272,6 +272,14 @@ o888bood8P'   `Y8bod8P' o888o o888o `Y8bod8P'
                 determine form validation
                 disable the upload until form is valid
                 close the form after 2000ms displaying a success message
+        content(in .list)
+            display raw data
+            stream each unit
+            make btns
+            align btns and foo
+            
+
+        -------------------------- BUILD THE BANK
 ooooooooooooo                 .o8            
 8'   888   `8                "888            
      888       .ooooo.   .oooo888   .ooooo.  
@@ -281,16 +289,20 @@ ooooooooooooo                 .o8
     o888o     `Y8bod8P' `Y8bod88P" `Y8bod8P' 
 
 
-        content(in .list)
-            display raw data
-            stream each unit
-            make btns
-            align btns and foo
-            
 
-        -------------------------- BUILD THE BANK
+        ------------------ BUILD THE FEED
 
 
+
+        models:
+            add fileSrc to moedl, here we could upload videos or photos with the post
+            edit server endpoint - allow addition of files and uploading them
+            create foo on _posts (returning bools)
+            create the post form (dont allow media that isnt photo or mp4)
+            display posts with media conditionals (null || video || photo)
+            build the post units (date, type, username, profile_img_src, socialbar, CommentSection, text-content, media-content)
+
+        ------------------ BUILD THE FEED
 
 
 
@@ -385,6 +397,9 @@ ooooooooooooo                 .o8
 
 
 
+    TESTING:
+        - test avaiability of CRUD private content by unallowed users
+
 
 
     BUG CATCHER:
@@ -402,8 +417,17 @@ ooooooooooooo                 .o8
 
         Client:
 
+            Implement 'fake update' on logs (when rating/comenting), instead of fetching
+            all data again, upon change endpoint res.ok return true and only then 
+            change manually the data to the same as sent to foo
 
             Delete log-list component
+
+            metronome
+
+            stats
+
+            LAZY LOADING
 
             FIX: comment section closes when updating content - find solution
 

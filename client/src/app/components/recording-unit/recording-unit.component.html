@@ -1,4 +1,9 @@
-<div class="root" *ngIf="!recording.isPrivate || canISeeAndRateIt() ">
+<div class="root" *ngIf="!recording.isPrivate || canISeeAndRateIt()">
+
+    <div class="user-pic">
+        {{recording.parentUser.profile_img_src || "some img src" }}
+        {{recording.parentUser.username }}
+    </div>
     
     <div class="date">
         {{recording.date |date: 'dd/MM/yyyy'}}
@@ -8,21 +13,22 @@
         {{recording.title}}
     </div>
 
-    <div *ngIf="canISeeAndRateIt()" class="ratingStars">
+    <div *ngIf="!recording.isPrivate || canISeeAndRateIt()" class="ratingStars">
         {{ recording.ratingStars }}
 
-        <!-- <mat-icon (click)="_logs.rateLog(log._id, 0);_users.updateContent()">cancel</mat-icon>
-        <mat-icon [color]="log.ratingStars>0&&'accent'" (click)="_logs.rateLog(log._id, 1);_users.updateContent()">star
+    <mat-icon (click)="rateRecording(recording._id, 0)">cancel</mat-icon>
+        <mat-icon [color]="recording.ratingStars>0&&'accent'" (click)="rateRecording(recording._id, 1)">star
         </mat-icon>
-        <mat-icon [color]="log.ratingStars>1&&'accent'" (click)="_logs.rateLog(log._id, 2);_users.updateContent()">star
+        <mat-icon [color]="recording.ratingStars>1&&'accent'" (click)="rateRecording(recording._id, 2)">star
         </mat-icon>
-        <mat-icon [color]="log.ratingStars>2&&'accent'" (click)="_logs.rateLog(log._id, 3);_users.updateContent()">star
+        <mat-icon [color]="recording.ratingStars>2&&'accent'" (click)="rateRecording(recording._id, 3)">star
         </mat-icon>
-        <mat-icon [color]="log.ratingStars>3&&'accent'" (click)="_logs.rateLog(log._id, 4);_users.updateContent()">star
+        <mat-icon [color]="recording.ratingStars>3&&'accent'" (click)="rateRecording(recording._id, 4)">star
         </mat-icon>
-        <mat-icon [color]="log.ratingStars>4&&'accent'" (click)="_logs.rateLog(log._id, 5);_users.updateContent()">star
-        </mat-icon> -->
-        <!--         
+        <mat-icon [color]
+        ="recording.ratingStars>4&&'accent'" (click)="rateRecording(recording._id, 5)">star
+        </mat-icon> 
+<!--             
         <mat-icon
         *ngFor="let star of [].constructor(5-log.ratingStars)"
         (click)="_logs.rateLog(log._id, 5-star);_users.updateContent()"
@@ -32,6 +38,53 @@
     <div #mediaCont class="media-cont">
         
     </div>
-    
-    {{recording |json}}
+
+    <div class="social-bar">
+        <!-- <div class="comment"></div>
+        <div class="like"></div> -->
+        <button 
+        (click)="commentToggler()"
+        mat-raised-button color="primary">
+            <mat-icon>comment</mat-icon>
+        </button>
+        <!-- [ngStyle]="{'background-color': recording.likes.includes(_users.userInfo._id) && 'gold' }"> -->
+        <!-- [ngStyle]="{'background-color': (like===true) && 'gold' }"> -->
+        <button 
+        [ngClass]="like ? 'gold' : ''"
+        mat-raised-button color="primary" (click)="likeRecording(recording._id);"
+        >
+            <mat-icon>thumb_up</mat-icon>
+        </button>
+    </div>
+
+    <div class="categories">
+        <div class="category" *ngFor="let category of recording.categories">
+
+            {{ category.name }}
+        </div>
+    </div>
+
+    <div class="instruments">
+        <div class="instrument" *ngFor="let instrument of recording.instruments">
+            {{ instrument.name }}
+        </div>
+    </div>
+
+    <app-comment-section
+    [comments]="recording.comments"
+    [commentFoo]="addComment"
+    [delCommentFoo]="delComment"
+    [contentId]="recording._id"
+    *ngIf="commentsTog"
+    ></app-comment-section>
+
+    <mat-icon *ngIf="canISeeAndRateIt()" mat-button [matMenuTriggerFor]="beforeMenu">more_vert</mat-icon>
+    <mat-menu #beforeMenu="matMenu" xPosition="before">
+        <button 
+        (click)="_bank.delRecording(recording._id)"
+        mat-menu-item>Delete</button>
+    </mat-menu>
+ 
+    {{recording.instruments |json}}
+    <!-- {{recording.categories |json}} -->
 </div>

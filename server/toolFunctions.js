@@ -14,7 +14,7 @@ const privateGuard = async (content, userId) => {
       console.log("content is private, and user is not the contents parent user or a participant")
       return false
     } else {
-      console.log("you can comment")
+      // console.log("you can comment")
       return true
     }
   

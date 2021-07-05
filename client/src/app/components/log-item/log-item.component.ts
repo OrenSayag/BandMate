@@ -62,4 +62,15 @@ export class LogItemComponent implements OnInit {
     await this._logs.commentLog(id, text)
     await this._users.updateContent()
   }
+
+  public async delComment(logId:string ,commentId:string):Promise<boolean>{
+      
+    const res = await this._logs.delCommentFromLog(logId ,commentId);
+    if(res){
+      return true
+    }
+    else {
+      return false
+    }
+}
 }

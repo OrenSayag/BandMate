@@ -234,7 +234,7 @@ router.post("/logCategories/:catName", verifyUser, async (req, res) => {
   const { id } = req.userInfo;
   const { catName } = req.params;
   const { bandId } = req.body
-console.log(bandId)
+// console.log(bandId)
 
   try {
     let user = await UsersModel.findById(  id );
@@ -351,7 +351,7 @@ router.post("/bankCategories/:catName", verifyUser, async (req, res) => {
   const { id } = req.userInfo;
   const { catName } = req.params;
   const { bandId } = req.body
-console.log(bandId)
+// console.log(bandId)
 
   try {
     let user = await UsersModel.findById(  id );
@@ -398,7 +398,7 @@ console.log(bandId)
   }
 });
 
-// get the user's feed
+// get the currUserOrBand's content
 router.post("/personalInfo", verifyUser, async (req, res) => {
   const { id } = req.userInfo;
   const { bandId } = req.body;
@@ -467,7 +467,7 @@ router.post("/feed", verifyUser, async (req, res) => {
   const { id } = req.userInfo;
   const { filter } = req.body;
 
-  console.log(req.userInfo.username);
+  // console.log(req.userInfo.username);
 
   try {
     let user = await UsersModel.find({ _id: id });

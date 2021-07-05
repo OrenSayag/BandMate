@@ -1,3 +1,7 @@
+import CommentsModel from "./comments.model";
+import InstrumentsModel from "./instruments.model";
+import ContentCategory from "./tinyModels/content-category.model";
+
 interface Comment{
     text:string,
     postedOn:string,
@@ -13,9 +17,12 @@ export default interface Recording {
     title?:string,
     parentUser:{profile_img_src:string, _id:string, participants:{userId:string}[], username:string},
     date:Date,
-    comments?:Comment[],
-    likes?:string[],
+    comments:CommentsModel[],
+    categories:ContentCategory[],
+    instruments:InstrumentsModel[],
+    likes:string[],
     isPrivate:boolean,
-    type:string
+    type:string,
+    _id:string
 
 }

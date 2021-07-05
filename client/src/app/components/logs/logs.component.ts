@@ -1,3 +1,4 @@
+
 import { Component, Input, OnInit } from '@angular/core';
 import LogsModel from 'src/app/models/logs.model';
 import { LogsService } from 'src/app/services/logs.service';

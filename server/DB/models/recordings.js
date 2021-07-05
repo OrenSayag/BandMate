@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 const ContentCategory = require("./contentCategory")
+const instrumentModel = require("./instruments")
 const Schema = mongoose.Schema
 const { ObjectId } = Schema.Types
 
@@ -68,6 +69,11 @@ const recordings = new Schema({
         required: true
     },
     categories: [ContentCategory],
+    instruments: [{
+        type:ObjectId,
+        ref:"instruments",
+        required:"true"
+    }],
 })
 
 const RecordingsModel = mongoose.model("recordings", recordings)

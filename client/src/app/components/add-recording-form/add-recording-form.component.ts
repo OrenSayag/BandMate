@@ -90,7 +90,7 @@ export class AddRecordingFormComponent implements AfterViewInit {
       if(this.recordingSrc!=""){
         await this.uploadRecording()
       } else {
-        console.log("uploading a file")
+        // console.log("uploading a file")
         await this.uploadFile()
       }
 
@@ -117,10 +117,14 @@ export class AddRecordingFormComponent implements AfterViewInit {
       )
       if(res){
 
+
+
         this.successfulpost.emit(true)
         this.successDivMessage = "Posted to the bank!"
         setTimeout(() => {
-          this.myForm.reset()
+          this.myForm.reset({isPrivate:false, audioTrueVideoFalse:true, text:""})
+          this.errorDivMessage = ""
+          this.successDivMessage = ""
           this.chosenInstruments = []
           this.chosenCategories = []
           this.ratingStars = 0
@@ -132,11 +136,12 @@ export class AddRecordingFormComponent implements AfterViewInit {
           );
           this.soundClips.nativeElement.appendChild(div);
         }, 2000)
+        this._users.updateContent()
       }
     }
 
     public addCategory(e:any){
-      console.log(e.value)
+      // console.log(e.value)
       const colorArr = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
 		  '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
 		  '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', 
@@ -182,12 +187,12 @@ export class AddRecordingFormComponent implements AfterViewInit {
       this.soundClips.nativeElement.lastChild
     );
     this.soundClips.nativeElement.appendChild(div);
-    console.log(this.fileToUpload)
+    // console.log(this.fileToUpload)
   }
 
   public openCloseRecorder(close?:boolean): void {
     this.recorderTog = !this.recorderTog;
-    console.log(this.recorderTog);
+    // console.log(this.recorderTog);
     if(close){
       this.recorderTog = false;
     }
@@ -215,7 +220,7 @@ export class AddRecordingFormComponent implements AfterViewInit {
         //   console.log(res);
         //   this.fileId = res.fileId;
         // })
-          console.log(res);
+          // console.log(res);
           this.fileId = res.fileId;
      
   }
@@ -237,6 +242,8 @@ export class AddRecordingFormComponent implements AfterViewInit {
 
   }
 
+ 
+
 
 
   public handleRatingStar(star:number):void{
@@ -245,7 +252,7 @@ export class AddRecordingFormComponent implements AfterViewInit {
 
   public recorder() {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      console.log('getUserMedia supported.');
+      // console.log('getUserMedia supported.');
       navigator.mediaDevices
         .getUserMedia(
           // constraints - only audio needed for this app
@@ -261,8 +268,8 @@ export class AddRecordingFormComponent implements AfterViewInit {
           this.record.nativeElement.onclick = () => {
             if (mediaRecorder.state !== 'recording') {
               mediaRecorder.start();
-              console.log(mediaRecorder.state);
-              console.log('recorder started');
+              // console.log(mediaRecorder.state);
+              // console.log('recorder started');
 
               this.recordingState = true;
 
@@ -270,8 +277,8 @@ export class AddRecordingFormComponent implements AfterViewInit {
               this.record.nativeElement.style.color = 'black';
             } else {
               mediaRecorder.stop();
-              console.log(mediaRecorder.state);
-              console.log('recorder stopped');
+              // console.log(mediaRecorder.state);
+              // console.log('recorder stopped');
 
               this.recordingState = false;
               this.recorderTog = false;
@@ -296,7 +303,7 @@ export class AddRecordingFormComponent implements AfterViewInit {
           // }
 
           mediaRecorder.onstop = async (e: any) => {
-            console.log('recorder stopped');
+            // console.log('recorder stopped');
 
             // const clipName = prompt('Enter a name for your sound clip');
 
@@ -323,7 +330,7 @@ export class AddRecordingFormComponent implements AfterViewInit {
             const audioURL = window.URL.createObjectURL(blob);
             audio.src = audioURL;
             this.recordingSrc = blob;
-            console.log(this.recordingSrc);
+            // console.log(this.recordingSrc);
 
             // if there's a recording, there's no chosen file
             this.fileInput.nativeElement.value = '';
@@ -337,7 +344,7 @@ export class AddRecordingFormComponent implements AfterViewInit {
 
           const audioCtx = new window.AudioContext();
           const analyser = audioCtx.createAnalyser();
-          console.log(analyser);
+          // console.log(analyser);
           const source = audioCtx.createMediaStreamSource(stream);
           source.connect(analyser);
           // analyser.connect(distortion);

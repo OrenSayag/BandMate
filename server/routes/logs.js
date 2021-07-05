@@ -110,23 +110,27 @@ router.put("/:id", async (req, res) => {
       }
     }
 
-    await UsersModel.findByIdAndUpdate(
-       userId ,
-      { $push: { likedLogs: log._id } }
-    );
-
+    
     if(log.likes.some(u=>u==userId)){
       await LogsModel.findByIdAndUpdate(
-         id ,
+        id ,
         { $pull: { likes: userId } }
+        );
+        await UsersModel.findByIdAndUpdate(
+           userId ,
+          { $pull: { likedLogs: log._id } }
+        );
+      } else {
+      await UsersModel.findByIdAndUpdate(
+         userId ,
+        { $push: { likedLogs: log._id } }
       );
-    } else {
       await LogsModel.findByIdAndUpdate(
          id ,
         { $push: { likes: userId } }
       );
     }
-
+    console.log("liking")
 
 
 

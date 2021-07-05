@@ -19,8 +19,9 @@ export class RecordingUnitComponent implements AfterViewInit {
     public blob: Blob = new Blob();
 
   public commentsTog:boolean = false;
-
-
+  
+  
+  
   @Input()
   public recording:Recording = {
     fileSrc: "",
@@ -30,9 +31,16 @@ export class RecordingUnitComponent implements AfterViewInit {
     parentUser: {profile_img_src:"", _id:"", participants:[], username:""},
     date: new Date(),
     isPrivate: false,
-    type: ""
+    type: "",
+    _id:"",
+    comments:[],
+    likes:[],
+    categories:[],
+    instruments:[],
   }
 
+  public like:boolean = this.recording.likes.includes(this._users.userInfo._id);
+  
   constructor(
     public _http:HttpClient,
     public _sanitizer:DomSanitizer,
@@ -41,15 +49,21 @@ export class RecordingUnitComponent implements AfterViewInit {
 
   ) { }
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit(): Promise<void> {
     if(this.recording.mediaType=="audio"){
       this.streamAudio(this.recording.fileSrc)
     } else {
       this.streamVideo(this.recording.fileSrc)
     }
+    // const test = await this._bank.getSingleRecording("60e1a35db7a99066801f2994")
+    // console.log(test)
   }
 
   public canISeeAndRateIt():boolean{
+    if(this.recording===undefined){
+      return false
+    }
+
     // check if token holder is log owner or a participant
   const recordingParentUser:string = this.recording.parentUser._id
   const participantsOfRecording:{userId:string}[] = this.recording.parentUser.participants
@@ -71,6 +85,54 @@ public commentToggler():void {
 //   await this._users.updateContent()
 // }
 
+  // rate recording
+  public async rateRecording(id:string, stars:number):Promise<void>{
+    const res = await this._bank.rateRecording(id, stars).catch(err=>console.log(err))
+    if(res){
+      this.recording.ratingStars = stars
+    }
+  }
+  // like recording
+  public async likeRecording(id:string):Promise<void>{
+    const res = await this._bank.likeRecording(id).catch(err=>console.log(err))
+    // console.log(res)
+    if(res){
+      // console.log(res)
+      // console.log(this.recording.likes)
+      // console.log(this._users.userInfo._id)
+      if(!this.like){
+        // this.recording.likes.push(this._users.userInfo._id)
+        this.like = true
+        // console.log("like")
+      } else {
+        // this.recording.likes = this.recording.likes.filter(u => u != this._users.userInfo._id)
+        this.like = false
+        // console.log("unlike")
+      }
+    }
+  }
+
+  public async addComment(id:string, text:string):Promise<{ok:string,id:string}|boolean>{
+    const res:any = await this._bank.postCommentRecording(id, text)
+    if(res){
+      console.log(res)
+      return res
+    } else {
+      return false
+    }
+  }
+
+  public async delComment(contentId:string ,commentId:string):Promise<boolean>{
+      
+    const res = await this._bank.delCommentRecording(contentId, commentId);
+    if(res){
+      return true
+    }
+    else{
+      return false
+    }
+}
+
 
      // move to recording unit
      public async streamVideo(fileId: string) {
@@ -88,13 +150,13 @@ public commentToggler():void {
          })
          .subscribe(
            (res) => {
-             console.log(res);
+            //  console.log(res);
              this.blob = new Blob([new Uint8Array(res)], {
                type: 'audio/mp3; codecs=opus',
              });
              this.audioUrl = window.URL.createObjectURL(this.blob);
-             console.log(this.blob);
-             console.log(this.audioUrl);
+            //  console.log(this.blob);
+            //  console.log(this.audioUrl);
    
             //  this.testAudio.nativeElement.src = this.audioUrl;
    
@@ -128,7 +190,7 @@ public commentToggler():void {
          })
          .subscribe(
            (res) => {
-             console.log(res);
+            //  console.log(res);
              this.blob = new Blob([new Uint8Array(res)], {
                type: 'audio/mp3; codecs=opus',
              });
