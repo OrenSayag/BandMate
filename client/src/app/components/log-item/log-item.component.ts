@@ -13,7 +13,7 @@ export class LogItemComponent implements OnInit {
 
 
   public commentsTog:boolean = false;
-
+  
   
   @Input()
   public log:LogsModel = {
@@ -27,7 +27,8 @@ export class LogItemComponent implements OnInit {
     likes:[],
     comments:[],
   }
-
+  
+  public like:boolean = this.log.likes.includes(this._users.userInfo._id)
   
   
   constructor(
@@ -39,6 +40,13 @@ export class LogItemComponent implements OnInit {
     
     ngOnInit(): void {
 
+    }
+
+    public async likeLog(id:string):Promise<void>{
+      const res = await this._logs.likeLog(id)
+      if(res){
+        this.like = !this.like
+      }
     }
     
     public canISeeAndRateIt():boolean{
@@ -58,9 +66,13 @@ export class LogItemComponent implements OnInit {
     this.commentsTog = !this.commentsTog
   }
   
-  public async addComment(id:string, text:string):Promise<void>{
-    await this._logs.commentLog(id, text)
-    await this._users.updateContent()
+  public async addComment(id:string, text:string):Promise<string|boolean>{
+    const res = await this._logs.commentLog(id, text)
+    if(res){
+        return res
+    }
+    return false
+    // await this._users.updateContent()
   }
 
   public async delComment(logId:string ,commentId:string):Promise<boolean>{

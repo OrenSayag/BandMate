@@ -1,1 +1,11 @@
-<p>feed works!</p>
+<app-add-content-button (click)="formToggler()" ></app-add-content-button>
+
+<app-add-post-form *ngIf="formTog"
+(successfulPost)="formListener($event)"
+></app-add-post-form>
+
+<div class="list">
+    <app-post-unit
+    [post]="post"
+    *ngFor="let post of _users.mainContent.posts.reverse()"></app-post-unit>
+</div>

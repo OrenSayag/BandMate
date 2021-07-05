@@ -1,1 +1,36 @@
-<p>add-post-form works!</p>
+<div class="root">
+    <form [formGroup]="myForm">
+
+        <mat-form-field appearance="fill">
+            <input type="any" matInput placeholder="What's new?" formControlName="content">
+        </mat-form-field>
+
+        <div class="is-private">
+            <mat-radio-group aria-label="Select an option" formControlName="isPrivate">
+                <mat-radio-button checked="true" [value]="false">Public</mat-radio-button>
+                <mat-radio-button [value]="true">Private</mat-radio-button>
+            </mat-radio-group>
+        </div>
+
+        <input type="file" #fileInput
+        (change)="handleFileInputChange()"
+        >
+
+        <button class="post-btn"
+        (click)="postPost()"
+        >
+            Post
+        </button>
+
+        <div class="error-div">
+            {{errorDivMessage}}
+        </div>
+
+        <div class="success-div">
+            {{successDivMessage}}
+        </div>
+
+    </form>
+
+
+</div>

@@ -41,12 +41,24 @@ const posts = new Schema({
     likes: [String],
     isPrivate: {
         type:Boolean,
-        required:true
+        required:false
     },
     type:{
         type:String,
-        required:true
-    }
+        default: "post"
+    },
+    fileSrc:{
+        type:String,
+    },
+    mediaType:{
+        type: String,
+        required:true,
+        deafult: "no media"
+    },
+    likes:[{
+        type: ObjectId,
+        ref:"users"
+    }],
 })
 
 const PostsModel = mongoose.model("posts", posts)

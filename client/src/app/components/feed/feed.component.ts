@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-feed',
@@ -7,9 +8,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FeedComponent implements OnInit {
 
-  constructor() { }
+  public formTog:Boolean = false;
+  
+  constructor(
+    public _users:UsersService,
+    
+    ) { }
+    
+    ngOnInit(): void {
+    }
+    
+    public formToggler(){
+      this.formTog = !this.formTog
+    }
 
-  ngOnInit(): void {
+    
+    public formListener(e:boolean):void{
+      if(e){
+        setTimeout(() => {
+          this.formTog = false
+        }, 2000)
+        
+      }
+    }
   }
-
-}

@@ -56,8 +56,8 @@
         mat-raised-button color="primary">
             <mat-icon>comment</mat-icon>
         </button>
-        <button mat-raised-button color="primary" (click)="_logs.likeLog(log._id);_users.updateContent()"
-            [ngStyle]="{'background-color': log.likes.includes(_users.userInfo._id) && 'gold' }">
+        <button mat-raised-button color="primary" (click)="likeLog(log._id);"
+            [ngClass]="like ? 'gold' : ''">
             <mat-icon>thumb_up</mat-icon>
         </button>
     </div>

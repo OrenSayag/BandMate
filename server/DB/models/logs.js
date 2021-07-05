@@ -4,27 +4,23 @@ const  {ObjectId} = Schema.Types
 const ContentCategory = require('./contentCategory')
 
 const Comment = new Schema({
-    username:{
-        type:String,
-        required: true
-    },
-    userId: {
-        type:ObjectId,
-        required: true,
-        ref:"users"
-    },
     text: {
-        type:String,
+        type: String,
         required: true
     },
     postedOn: {
-        type:String,
+        type: Date,
         default: Date.now
     },
     likes: [{
-        type:ObjectId,
-        ref:"users"
+        type: ObjectId,
+        ref: "users"
     }],
+    userId: {
+        type: ObjectId,
+        ref: "users",
+        required:true
+    }
 })
 
 

@@ -13,22 +13,48 @@ router.get("/", async (req, res) => {
 // post new post
 router.post("/" ,async (req, res) => {
   const { id } = req.userInfo;
-  const { content, isPrivate } = req.body;
-    if(!content || !isPrivate) {
+  const { content, isPrivate, fileSrc, bandId, mediaType } = req.body;
+    if(!content || isPrivate === undefined) {
         return res.status(400).send({fail:"Missing content || isPrivate"})
     }
+    if(mediaType!=="no media" && mediaType!=="video" && mediaType!=="picture"){
+      return res.status(400).send({"fail":"recieved wrong media type"})
+    }
+    if((mediaType==="video" || mediaType==="picture") && fileSrc===undefined){
+      return res.status(400).send({"fail":"recieved a positive media type but no fileSrc"})
+    }
   try {
+
+    let user = await UsersModel.findById(id);
+
+    if(bandId && (id!=bandId)){
+      if(!user.bands.some(b=>b==bandId)){
+  
+        return res.status(400).send({"fail":"You're not in this band brother."})
+      }
+    }
+
+    let parentUser;
+
+    if(bandId&&id!=bandId){
+        parentUser = bandId
+      } else {
+      parentUser = id
+    }
+
     const post = await new PostsModel({
         content,
-        parentUser: id,
+        parentUser,
         date: new Date(),
         isPrivate,
-        type: "post"
+        type: "post",
+        mediaType,
+        fileSrc
     })
 
     await post.save()
 
-    return res.sendStatus(201)
+    return res.status(201).send({ok:"successfully added a post"})
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -73,7 +99,7 @@ router.put("/:id" ,async (req, res) => {
   }
 });
 
-// edit a post
+// delete a post
 router.delete("/:id" ,async (req, res) => {
   const { id } = req.params;
   const userId = req.userInfo.id;
@@ -83,13 +109,21 @@ router.delete("/:id" ,async (req, res) => {
     if(!post){
       return res.status(400).send({fail:"No such post"})
     }
-    if(post.parentUser!==userId){
-      return res.status(400).send({fail:"This isn't your post to delete."})
+
+    const parentUser = await UsersModel.findById(post.parentUser)
+    if((post.parentUser!=userId && !parentUser.participants.some(p=>p.userId==userId))){
+
+      return res.status(400).send({ fail: "This post is not yours to delete" });
     }
+
+
+    // if(post.parentUser!==userId){
+    //   return res.status(400).send({fail:"This isn't your post to delete."})
+    // }
 
     post.remove()
 
-    return res.sendStatus(200)
+    return res.status(200).send({ok:"successfully deleted this post"})
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -130,6 +164,12 @@ router.put("/like/:id" ,async (req, res) => {
           }
         }
       )
+      await PostsModel.findByIdAndUpdate(id, {
+        $push:{
+          likes:userId
+          }
+        }
+      )
     } else {
       await UsersModel.findByIdAndUpdate(userId, {
         $pull:{
@@ -137,9 +177,15 @@ router.put("/like/:id" ,async (req, res) => {
           }
         }
       )
+      await PostsModel.findByIdAndUpdate(id, {
+        $pull:{
+          likes:userId
+          }
+        }
+      )
     }
 
-    return res.sendStatus(200)
+    return res.status(200).send({ok:"liked/unliked post"})
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -176,7 +222,11 @@ router.post("/comment/:id" ,async (req, res) => {
       }
     })
 
-    return res.sendStatus(201)
+    let comment = await PostsModel.findById(id)
+
+    comment = comment.comments[comment.comments.length-1]
+
+    return res.status(201).send({ok:"successfully posted a comment on this post",id:comment._id})
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -192,7 +242,7 @@ router.delete("/comment/:postId/:commentId" ,async (req, res) => {
     // check that user is the parentuser of this post
     const post = await PostsModel.findById(postId)
     const comment = post.comments.id(commentId)
-    console.log(comment)
+    // console.log(comment)
     if(comment.userId!=userId){
       return res.status(400).send({fail:"Hey, this is not your comment!"})
     }
@@ -206,7 +256,34 @@ router.delete("/comment/:postId/:commentId" ,async (req, res) => {
       }
     })
 
-    return res.sendStatus(200)
+    return res.status(200).send({ok:"successfully deleted this comment"})
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
+
+// deletes a post
+router.delete("/:postId" ,async (req, res) => {
+  const { postId } = req.params;
+  const userId = req.userInfo.id;
+  try {
+    // check that user is the parentuser of this post
+    const post = await PostsModel.findById(postId)
+    if(!post){
+      return res.status(400).send({fail:"No such post"})
+    }
+
+    const parentUser = await UsersModel.findById(poat.parentUser)
+    if((post.parentUser!=userId && !parentUser.participants.some(p=>p.userId==userId))){
+
+      return res.status(400).send({ fail: "This post is not yours to delete" });
+    }
+
+    await PostsModel.findByIdAndDelete(postId)
+
+    return res.status(200).send({"ok":"deleted this post"})
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

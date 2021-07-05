@@ -4,6 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import CommentsModel from 'src/app/models/comments.model';
 import { BankService } from 'src/app/services/bank.service';
 import { LogsService } from 'src/app/services/logs.service';
+import { PostsService } from 'src/app/services/posts.service';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -21,13 +22,15 @@ export class CommentSectionComponent implements OnInit {
   public comments:CommentsModel[] = []
   @Input()
   public contentId:string = ""
-
+  @Input()
+  public canIDeleteIt:boolean = false
 
 
 
   constructor(
     public _logs:LogsService,
     public _bank:BankService,
+    public _posts:PostsService,
     public _users:UsersService,
     public _fb:FormBuilder,
   ) { }
@@ -41,7 +44,9 @@ export class CommentSectionComponent implements OnInit {
   }
 
   public async postComment():Promise<void>{
-      const res = await this.commentFoo(this.contentId, this.myForm.controls.commentInput.value)
+    console.log("posting comment")
+    const res = await this.commentFoo(this.contentId, this.myForm.controls.commentInput.value)
+    console.log(res)
       if(res){
         console.log(res)
         this.comments.push({
@@ -67,5 +72,24 @@ export class CommentSectionComponent implements OnInit {
         this.comments = this.comments.filter(c=>c._id!=commentId)
       }
   }
+
+//   public canISeeAndRateIt(comment:Comment):boolean{
+//     if(comment===undefined){
+//       return false
+//     }
+
+//     // check if token holder is log owner or a participant
+//   const recordingParentUser:string = comment.userId.userId
+//   const participantsOfRecording:{userId:string}[] = this.recording.parentUser.participants
+//   const tokenHolder:string = this._users.userInfo._id
+//   const isParticipant = participantsOfRecording.some(p=>p.userId===tokenHolder)
+//   // console.log(logParentUser)
+//   // console.log(participantsOfLog)
+//   // console.log(tokenHolder)
+//   // console.log(isParticipant)
+//   return tokenHolder===recordingParentUser || isParticipant
+// }
+
+
 
 }

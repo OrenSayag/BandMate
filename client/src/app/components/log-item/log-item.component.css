@@ -1,3 +1,7 @@
 .root{
     border: 1px solid purple;
 }
+
+.gold {
+    background-color: gold;
+}

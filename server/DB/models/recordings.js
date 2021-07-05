@@ -74,6 +74,10 @@ const recordings = new Schema({
         ref:"instruments",
         required:"true"
     }],
+    isPrivate:{
+        type:Boolean,
+        required:true
+    },
 })
 
 const RecordingsModel = mongoose.model("recordings", recordings)

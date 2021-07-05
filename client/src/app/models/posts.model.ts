@@ -1,21 +1,21 @@
-interface Comment{
-    text:string,
-    postedOn:string,
-    likes?: string[],
-    userId: string
-}
+import CommentsModel from "./comments.model";
 
-export default interface recordings {
+// interface Comment{
+//     text:string,
+//     postedOn:string,
+//     likes?: string[],
+//     userId: string
+// }
+
+export default interface PostModel {
     fileSrc:string,
-    mediaType:string,
-    ratingStars:number,
-    users?:string[],
-    title:string,
-    parentUser:string,
-    date:string,
-    comment?:Comment[],
-    likes?:string[],
+    content:string,
+    parentUser:{profile_img_src:string, _id:string, participants:{userId:string}[], username:string,},
+    date:Date,
+    comments:CommentsModel[],
+    likes:string[],
     isPrivate:boolean,
-    type:string
-
+    type:string,
+    mediaType: string,
+    _id:string
 }

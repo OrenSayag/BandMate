@@ -17,13 +17,16 @@
 
             <div class="div">
                 
+                <!-- *ngIf="comment.userId._id == _users.userInfo._id" -->
                 <mat-icon
                 (click)="delComment(comment._id)"
                 >delete</mat-icon>
-                <!-- <p>{{comment | json}}</p> -->
+                <p>{{comment | json}}</p>
+
             </div>
         </div>
     </div>
+
 
     <div class="input">
         <mat-form-field [formGroup]="myForm">

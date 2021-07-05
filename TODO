@@ -295,18 +295,15 @@ ooooooooooooo                 .o8
 
 
         models:
-            add fileSrc to moedl, here we could upload videos or photos with the post
+            add fileSrc to model, here we could upload videos or photos with the post
             edit server endpoint - allow addition of files and uploading them
             create foo on _posts (returning bools)
             create the post form (dont allow media that isnt photo or mp4)
+
             display posts with media conditionals (null || video || photo)
             build the post units (date, type, username, profile_img_src, socialbar, CommentSection, text-content, media-content)
 
         ------------------ BUILD THE FEED
-
-
-
-
 
         _users
 

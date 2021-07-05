@@ -29,6 +29,8 @@ const ObjectID = require('mongodb').ObjectID;
 router.get("/streamVideo/:fileId", async (req, res) => {
   const { fileId } = req.params
 
+  console.log(fileId)
+
   res.set('content-type', 'video/mp4');
   res.set('accept-ranges', 'bytes');
 
@@ -211,7 +213,7 @@ router.post("/", async (req, res) => {
       parentUser = id
     }
 
-    console.log("INSTRUMENTS: ",instruments)
+    // console.log("INSTRUMENTS: ",instruments)
 
     const recording = await new RecordingsModel({
       bandId,
@@ -350,7 +352,7 @@ router.post("/comment/:id" ,async (req, res) => {
     return res.status(400).send({fail:"Hey you shouldn't even see this recording!"})
     }
 
-    let comment = await RecordingsModel.findByIdAndUpdate(id, {
+    await RecordingsModel.findByIdAndUpdate(id, {
       $push:{
         comments: {
           text,
@@ -359,6 +361,8 @@ router.post("/comment/:id" ,async (req, res) => {
       }
     })
     // .populate({path:"comments.userId", select:"username profile_img_src"})
+
+    let comment = await RecordingsModel.findById(id)
 
     comment = comment.comments[comment.comments.length-1]
 

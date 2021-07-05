@@ -175,7 +175,13 @@ router.post("/comment/:id", async (req, res) => {
         text,
     } } });
 
-    return res.status(201).send({"ok":"posted new comment on this log"});
+    
+    let comment = await LogsModel.findById(id)
+    
+    console.log(comment)
+    comment = comment.comments[comment.comments.length-1]
+
+    return res.status(201).send({"ok":"posted new comment on this log", id:comment._id});
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
