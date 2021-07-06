@@ -3,6 +3,10 @@
         <mat-icon>private</mat-icon>
     </div>
 
+    <div *ngIf="displayType" class="display-type">
+        Log
+    </div>
+
     <div class="date">
         {{ log.date | date: 'dd/MM/yyyy' }}
     </div>
@@ -57,7 +61,7 @@
             <mat-icon>comment</mat-icon>
         </button>
         <button mat-raised-button color="primary" (click)="likeLog(log._id);"
-            [ngClass]="like ? 'gold' : ''">
+            [ngClass]="this.log.likes.includes(this._users.userInfo._id) ? 'gold' : ''">
             <mat-icon>thumb_up</mat-icon>
         </button>
     </div>

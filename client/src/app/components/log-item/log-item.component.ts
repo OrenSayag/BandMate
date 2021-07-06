@@ -13,6 +13,9 @@ export class LogItemComponent implements OnInit {
 
 
   public commentsTog:boolean = false;
+
+  @Input()
+  public displayType:boolean = false;
   
   
   @Input()
@@ -28,7 +31,7 @@ export class LogItemComponent implements OnInit {
     comments:[],
   }
   
-  public like:boolean = this.log.likes.includes(this._users.userInfo._id)
+  // public like:boolean = this.log.likes.includes(this._users.userInfo._id)
   
   
   constructor(
@@ -39,13 +42,19 @@ export class LogItemComponent implements OnInit {
     ) { }
     
     ngOnInit(): void {
-
+      
     }
 
     public async likeLog(id:string):Promise<void>{
       const res = await this._logs.likeLog(id)
       if(res){
-        this.like = !this.like
+        // this.like = !this.like
+        if(this.log.likes.includes(this._users.userInfo._id)){
+          this.log.likes = this.log.likes.filter(u=>u!==this._users.userInfo._id)
+        } 
+        else {
+          this.log.likes.push(this._users.userInfo._id)
+        }
       }
     }
     

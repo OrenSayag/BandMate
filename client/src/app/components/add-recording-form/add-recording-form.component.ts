@@ -140,7 +140,7 @@ export class AddRecordingFormComponent implements AfterViewInit {
       }
     }
 
-    public addCategory(e:any){
+    public async addCategory(e:any):Promise<void>{
       // console.log(e.value)
       const colorArr = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
 		  '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
@@ -153,13 +153,26 @@ export class AddRecordingFormComponent implements AfterViewInit {
 		  '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', 
 		  '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
 
-      this._bank.addBankCategory({name:e.value, color:colorArr[Math.floor(Math.random()*colorArr.length)]}, this._users.currUserOtBand._id)
-      e.input.value = ""
+      // this._bank.addBankCategory({name:e.value, color:colorArr[Math.floor(Math.random()*colorArr.length)]}, this._users.currUserOtBand._id)
+      // e.input.value = ""
+
+      const color = colorArr[Math.floor(Math.random()*colorArr.length)]
+
+      const res = await this._bank.addBankCategory({name:e.value, color}, this._users.currUserOtBand._id)
+      if(res){
+        this._users.currUserOtBand.bankCategories.push({name: e.value, color})
+        e.input.value = ""
+      }
     }
 
-    public delCategory(catName:string){
+    public async delCategory(catName:string){
     
-      this._bank.delBankCategory(catName, this._users.currUserOtBand._id)
+      // this._bank.delBankCategory(catName, this._users.currUserOtBand._id)
+
+      const res = await this._bank.delBankCategory(catName, this._users.currUserOtBand._id)
+      if(res){
+        this._users.currUserOtBand.bankCategories = this._users.currUserOtBand.bankCategories.filter(c=>c.name!==catName)
+      }
     }
 
     public handleClickCategory(category:ContentCategory):void{

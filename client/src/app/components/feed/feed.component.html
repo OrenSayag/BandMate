@@ -5,7 +5,40 @@
 ></app-add-post-form>
 
 <div class="list">
+
+    <div
+    *ngFor="let content of _users.userFeed.reverse()"
+    class="content-unit">
+
+    <app-log-item
+    [displayType]="true"
+    *ngIf="content.type==='log'"
+    [log]="content | castLog"
+    >   
+    </app-log-item>
+
+    <app-recording-unit
+    [displayType]="true"
+    *ngIf="content.type==='recording'"
+    [recording]="content | castRecording"
+    >   
+    </app-recording-unit>
+
+    <app-post-unit
+    [displayType]="true"
+    *ngIf="content.type==='post'"
+    [post]="content | castPost"
+    >   
+    </app-post-unit>
+
+
+    </div>
+
+
+</div>
+
+<!-- <div class="list">
     <app-post-unit
     [post]="post"
     *ngFor="let post of _users.mainContent.posts.reverse()"></app-post-unit>
-</div>
+</div> -->

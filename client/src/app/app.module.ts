@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 
 
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -58,6 +59,9 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import { CommentSectionComponent } from './components/comment-section/comment-section.component';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { CastToLogPipe } from './pipes/cast-to-log.pipe';
+import { CastToRecordingPipe } from './pipes/cast-to-recording.pipe';
+import { CastToPostPipe } from './pipes/cast-to-post.pipe';
 
 
 
@@ -111,6 +115,9 @@ export function tokenGetter() {
     ChooseInstrumentsBarDialogComponent,
     MinuteSecondsPipe,
     CommentSectionComponent,
+    CastToLogPipe,
+    CastToRecordingPipe,
+    CastToPostPipe,
   ],
   imports: [
     BrowserModule,

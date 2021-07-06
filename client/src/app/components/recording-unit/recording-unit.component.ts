@@ -20,7 +20,8 @@ export class RecordingUnitComponent implements AfterViewInit {
 
   public commentsTog:boolean = false;
   
-  
+  @Input()
+  public displayType:boolean = false
   
   @Input()
   public recording:Recording = {
@@ -39,7 +40,7 @@ export class RecordingUnitComponent implements AfterViewInit {
     instruments:[],
   }
 
-  public like:boolean = this.recording.likes.includes(this._users.userInfo._id);
+  // public like:boolean = this.recording.likes.includes(this._users.userInfo._id);
   
   constructor(
     public _http:HttpClient,
@@ -97,17 +98,11 @@ public commentToggler():void {
     const res = await this._bank.likeRecording(id).catch(err=>console.log(err))
     // console.log(res)
     if(res){
-      // console.log(res)
-      // console.log(this.recording.likes)
-      // console.log(this._users.userInfo._id)
-      if(!this.like){
-        // this.recording.likes.push(this._users.userInfo._id)
-        this.like = true
-        // console.log("like")
-      } else {
-        // this.recording.likes = this.recording.likes.filter(u => u != this._users.userInfo._id)
-        this.like = false
-        // console.log("unlike")
+      if(this.recording.likes.includes(this._users.userInfo._id)){
+        this.recording.likes = this.recording.likes.filter(u=>u!==this._users.userInfo._id)
+      } 
+      else {
+        this.recording.likes.push(this._users.userInfo._id)
       }
     }
   }

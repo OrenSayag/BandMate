@@ -4,6 +4,9 @@ import InstrumentsModel from '../models/instruments.model';
 import MainContentModel from '../models/main-content.model';
 import apiUserGetInfo from '../models/tinyModels/api-user-getiInfo.model';
 import UserInfoModel from '../models/tinyModels/userInfo.model';
+import LogsModel from '../models/logs.model';
+import Recording from '../models/recordings.model';
+import PostModel from '../models/posts.model';
 
 @Injectable({
   providedIn: 'root',
@@ -40,9 +43,11 @@ export class UsersService {
     // profile_img_src: string;
     // cover_img_src: string;
     instruments: InstrumentsModel[];
-    logCategories:{name:"", color:""}[];
-    bankCategories:{name:"", color:""}[];
+    logCategories:{name:string, color:string}[];
+    bankCategories:{name:string, color:string}[];
   } = { _id: '', username: '', instruments: [], logCategories: [],bankCategories: [], };
+
+  public userFeed:Array<LogsModel|Recording|PostModel> = []
 
   constructor(public _http: HttpClient) {}
 
@@ -69,6 +74,23 @@ export class UsersService {
       };
       // console.log(this.associatedUsers)
       // console.log(res)
+    } else {
+      console.log("wha the gell")
+    }
+  }
+
+  public async getFeed() {
+    const res: any = await this._http
+      .post('http://localhost:666/api/user/feed', {} ,{
+        headers: {
+          'content-type': 'application/json',
+          authorization: localStorage.token,
+        },
+      })
+      .toPromise();
+    if (res.userFeed) {
+      this.userFeed = res.userFeed.sort((a:any,b:any)=>{return(<any>new Date(a.date)-<any>new Date(b.date))})
+      // console.log(res.userFeed)
     } else {
       console.log("wha the gell")
     }

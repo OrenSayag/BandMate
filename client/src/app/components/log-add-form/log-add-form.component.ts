@@ -46,7 +46,7 @@ export class LogAddFormComponent implements OnInit {
     })
 
 
-    public addCategory(e:any){
+    public async addCategory(e:any):Promise<void>{
       console.log(e.value)
       const colorArr = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
 		  '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
@@ -59,13 +59,21 @@ export class LogAddFormComponent implements OnInit {
 		  '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', 
 		  '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
 
-      this._logs.addLogCategory({name:e.value, color:colorArr[Math.floor(Math.random()*colorArr.length)]}, this._users.currUserOtBand._id)
-      e.input.value = ""
+      const color = colorArr[Math.floor(Math.random()*colorArr.length)]
+
+      const res = await this._logs.addLogCategory({name:e.value, color}, this._users.currUserOtBand._id)
+      if(res){
+        this._users.currUserOtBand.logCategories.push({name: e.value, color})
+        e.input.value = ""
+      }
     }
 
-    public delCategory(catName:string){
+    public async delCategory(catName:string){
     
-      this._logs.delLogCategory(catName, this._users.currUserOtBand._id)
+      const res = await this._logs.delLogCategory(catName, this._users.currUserOtBand._id)
+      if(res){
+        this._users.currUserOtBand.logCategories = this._users.currUserOtBand.logCategories.filter(c=>c.name!==catName)
+      }
     }
 
     public handleClickCategory(category:ContentCategory):void{

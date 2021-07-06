@@ -280,16 +280,6 @@ o888bood8P'   `Y8bod8P' o888o o888o `Y8bod8P'
             
 
         -------------------------- BUILD THE BANK
-ooooooooooooo                 .o8            
-8'   888   `8                "888            
-     888       .ooooo.   .oooo888   .ooooo.  
-     888      d88' `88b d88' `888  d88' `88b 
-     888      888   888 888   888  888   888 
-     888      888   888 888   888  888   888 
-    o888o     `Y8bod8P' `Y8bod88P" `Y8bod8P' 
-
-
-
         ------------------ BUILD THE FEED
 
 
@@ -303,7 +293,31 @@ ooooooooooooo                 .o8
             display posts with media conditionals (null || video || photo)
             build the post units (date, type, username, profile_img_src, socialbar, CommentSection, text-content, media-content)
 
+            display feed currectly with relevant endpoint, displaying diffecrent content
+
+            *fixed: add log category need to show immediatly on logs, check for delete log category also
+            fixed: liked content is not indicated on refresh
+
+
         ------------------ BUILD THE FEED
+ooooooooooooo                 .o8            
+8'   888   `8                "888            
+     888       .ooooo.   .oooo888   .ooooo.  
+     888      d88' `88b d88' `888  d88' `88b 
+     888      888   888 888   888  888   888 
+     888      888   888 888   888  888   888 
+    o888o     `Y8bod8P' `Y8bod88P" `Y8bod8P' 
+
+        --------------------- BUILD THE EXPLORE
+
+
+    
+
+
+
+        --------------------- BUILD THE EXPLORE
+
+
 
         _users
 

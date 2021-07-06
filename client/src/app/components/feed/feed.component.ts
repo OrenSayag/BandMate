@@ -15,7 +15,9 @@ export class FeedComponent implements OnInit {
     
     ) { }
     
-    ngOnInit(): void {
+    async ngOnInit(): Promise<void> {
+      await this._users.getFeed()
+      console.log(this._users.userFeed)
     }
     
     public formToggler(){

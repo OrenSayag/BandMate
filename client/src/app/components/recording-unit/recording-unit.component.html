@@ -1,5 +1,11 @@
 <div class="root" *ngIf="!recording.isPrivate || canISeeAndRateIt()">
 
+    <div
+    *ngIf="displayType"
+    class="display-type">
+        Recording
+    </div>
+
     <div class="user-pic">
         {{recording.parentUser.profile_img_src || "some img src" }}
         {{recording.parentUser.username }}
@@ -50,7 +56,7 @@
         <!-- [ngStyle]="{'background-color': recording.likes.includes(_users.userInfo._id) && 'gold' }"> -->
         <!-- [ngStyle]="{'background-color': (like===true) && 'gold' }"> -->
         <button 
-        [ngClass]="like ? 'gold' : ''"
+        [ngClass]="this.recording.likes.includes(this._users.userInfo._id) ? 'gold' : ''"
         mat-raised-button color="primary" (click)="likeRecording(recording._id);"
         >
             <mat-icon>thumb_up</mat-icon>

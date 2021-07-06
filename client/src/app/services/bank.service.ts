@@ -198,7 +198,7 @@ export class BankService {
     }
   }
   
-  public async addBankCategory(newCategory:{name:string,color:string}, bandId:string){
+  public async addBankCategory(newCategory:{name:string,color:string}, bandId:string):Promise<boolean>{
     const res:any = await this._http.post("http://localhost:666/api/user/bankCategories"
     ,{newCategory, bandId},{
       headers: {
@@ -208,14 +208,13 @@ export class BankService {
 
     if(res.ok){
       console.log("added a new bank category")
-      this._users.getUserInfo({bandId: this._users.currUserOtBand._id})
+      // this._users.getUserInfo({bandId: this._users.currUserOtBand._id})
+      return true
     }
-    if(res.fail){
-      console.log(res.fail)
-    }
+      return false
   }
 
-  public async delBankCategory(catName:string, bandId:string){
+  public async delBankCategory(catName:string, bandId:string):Promise<boolean>{
     // console.log(bandId)
     const res:any = await this._http.post("http://localhost:666/api/user/bankCategories/"+catName
     ,{bandId},{
@@ -227,10 +226,9 @@ export class BankService {
 
     if(res.ok){
       console.log("removed this bank category")
-      this._users.getUserInfo({bandId: this._users.currUserOtBand._id})
+      // this._users.getUserInfo({bandId: this._users.currUserOtBand._id})
+      return true
     }
-    if(res.fail){
-      console.log(res.fail)
-    }
+      return false
   }
 }

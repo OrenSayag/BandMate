@@ -22,6 +22,8 @@ export class PostUnitComponent implements AfterViewInit {
   public audioUrl: string = '';
   public blob: Blob = new Blob();
 
+  @Input()
+  public displayType:boolean=false
   
   @Input()
   public post: PostModel = {
@@ -43,7 +45,7 @@ export class PostUnitComponent implements AfterViewInit {
   };
   
   //tools
-  public like:boolean = this.post.likes.includes(this._users.userInfo._id);
+  // public like:boolean = this.post.likes.includes(this._users.userInfo._id);
 
   constructor(
     public _users: UsersService,
@@ -54,7 +56,7 @@ export class PostUnitComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     if (this.post.mediaType !== 'no media') {
       this.streamVideo(this.post.fileSrc);
-      console.log(this.post.fileSrc)
+      // console.log(this.post.fileSrc)
     } 
   }
 
@@ -96,7 +98,12 @@ export class PostUnitComponent implements AfterViewInit {
   public async likePost(id:string):Promise<void>{
     const res = await this._posts.likePost(id)
     if(res){
-      this.like = !this.like
+      if(this.post.likes.includes(this._users.userInfo._id)){
+        this.post.likes = this.post.likes.filter(u=>u!==this._users.userInfo._id)
+      } 
+      else {
+        this.post.likes.push(this._users.userInfo._id)
+      }
     }
   }
 

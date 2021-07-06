@@ -1,5 +1,8 @@
-<p>post-unit works!</p>
 <div class="root">
+
+    <div *ngIf="displayType" class="display-type">
+        Post
+    </div>
 
     <div *ngIf="post.isPrivate" class="is-private">
         <mat-icon>https</mat-icon>
@@ -39,7 +42,7 @@
         </button>
         <!-- [ngStyle]="{'background-color': recording.likes.includes(_users.userInfo._id) && 'gold' }"> -->
         <!-- [ngStyle]="{'background-color': (like===true) && 'gold' }"> -->
-        <button [ngClass]="like ? 'gold' : ''" mat-raised-button color="primary"
+        <button [ngClass]="this.post.likes.includes(this._users.userInfo._id) ? 'gold' : ''" mat-raised-button color="primary"
             (click)="likePost(post._id);">
             <mat-icon>thumb_up</mat-icon>
         </button>

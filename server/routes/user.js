@@ -479,15 +479,15 @@ router.post("/feed", verifyUser, async (req, res) => {
     const userContent = {
       logs: await LogsModel.find({ parentUser: id }).populate({
         path:"parentUser",
-        select: "username isBand"
+        select: "username isBand participants"
       }),
       posts: await PostsModel.find({ parentUser: id }).populate({
         path:"parentUser",
-        select: "username isBand"
+        select: "username isBand participants"
       }),
       recordings: await RecordingsModel.find({ parentUser: id }).populate({
         path:"parentUser",
-        select: "username isBand"
+        select: "username isBand participants"
       }),
     };
 
@@ -495,15 +495,15 @@ router.post("/feed", verifyUser, async (req, res) => {
     for (const band of user.bands) {
       const logs = await LogsModel.find({ parentUser: band }).populate({
         path:"parentUser",
-        select: "username isBand"
+        select: "username isBand participants"
       });
       const posts = await PostsModel.find({ parentUser: band }).populate({
         path:"parentUser",
-        select: "username isBand"
+        select: "username isBand participants"
       });
       const recordings = await RecordingsModel.find({ parentUser: band }).populate({
         path:"parentUser",
-        select: "username isBand"
+        select: "username isBand participants"
       });
       bandContent.logs = logs;
       bandContent.posts = posts;
@@ -514,17 +514,17 @@ router.post("/feed", verifyUser, async (req, res) => {
     const followingContent = {
       logs: await LogsModel.find({ parentUser: { $in: user.following } }).populate({
         path:"parentUser",
-        select: "username isBand"
+        select: "username isBand participants"
       }),
       posts: await PostsModel.find({ parentUser: { $in: user.following } }).populate({
         path:"parentUser",
-        select: "username isBand"
+        select: "username isBand participants"
       }),
       recordings: await RecordingsModel.find({
         parentUser: { $in: user.following },
       }).populate({
         path:"parentUser",
-        select: "username isBand"
+        select: "username isBand participants"
       }),
     };
     // everything should be ordered by date desc.
