@@ -1,11 +1,16 @@
-<app-header
-(slideLeftSidebar)="slideLeftSidebar($event)"
-></app-header>
-<div class="left-side-bar" #leftSideBar
-[ngClass]="leftSidebarTog ? 'open-left-side-bar' : ''"
+<div class="root"
+[ngClass]="leftSidebarTog ? 'ovh' : ''"
 >
-    <app-left-sidebar 
-    ></app-left-sidebar>
+    <app-header
+    (slideLeftSidebar)="slideLeftSidebar($event)"
+    ></app-header>
+    <div class="left-side-bar" #leftSideBar
+    [ngClass]="leftSidebarTog ? 'open-left-side-bar' : ''"
+    >
+        <app-left-sidebar 
+        (slideLeftSidebar)="slideLeftSidebar($event)"
+        ></app-left-sidebar>
+    </div>
+    <app-nav-bar></app-nav-bar>
+    <router-outlet></router-outlet>
 </div>
-<app-nav-bar></app-nav-bar>
-<router-outlet></router-outlet>

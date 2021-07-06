@@ -14,4 +14,8 @@ export class AppComponent {
   ngOnInit(): void {
     // this._logs.getUserLogs()
   }
+
+  public handleClick(e:any):void{
+    console.log(e)
+  }
 }

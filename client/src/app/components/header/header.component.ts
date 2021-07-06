@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from 'src/app/services/users.service';
 
@@ -20,6 +20,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
 
   }
+
 
   public async avatarSwap(bandId?:string):Promise<void>{
     console.log(this._r.url)

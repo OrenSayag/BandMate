@@ -11,6 +11,7 @@ export class MainComponent implements AfterViewInit {
   // @ViewChild('leftSideBar') leftSideBar:any
 
   public leftSidebarTog:boolean = false;
+  // public ovh:boolean = false;
 
   public slideLeftSidebar(e:any):void{
     if(e==="open"){
@@ -20,6 +21,9 @@ export class MainComponent implements AfterViewInit {
       // this.leftSideBar.nativeElemenet.style.left = "0"
     }
     else if(e==="close"){
+      console.log("running")
+      this.leftSidebarTog = false
+
       // this.leftSideBar.nativeElemenet.style.left = "-87vw"
     }
   }
