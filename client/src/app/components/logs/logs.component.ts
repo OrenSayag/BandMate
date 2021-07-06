@@ -1,6 +1,7 @@
 
 import { Component, Input, OnInit } from '@angular/core';
 import LogsModel from 'src/app/models/logs.model';
+import { ExploreService } from 'src/app/services/explore.service';
 import { LogsService } from 'src/app/services/logs.service';
 import { UsersService } from 'src/app/services/users.service';
 
@@ -12,6 +13,15 @@ import { UsersService } from 'src/app/services/users.service';
 export class LogsComponent implements OnInit {
 
   public formTog:Boolean = false;
+
+  public async killLog(e:any){
+    const res = await this._logs.deleteLog(e)
+    if(res){
+      this._users.mainContent.logs = this._users.mainContent.logs.filter(l=>l._id!=e)
+      // this._explore.exploreListContent = this._explore.exploreListContent.filter(p=>p._id!=e)
+      // this._users.mainContent.logs = []
+    }
+  }
   
 
   public formListener(e:boolean):void{
@@ -26,6 +36,7 @@ export class LogsComponent implements OnInit {
   constructor(
     public _users:UsersService,
     public _logs:LogsService,
+    public _explore:ExploreService,
 
 
   ) { }

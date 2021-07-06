@@ -1,0 +1,30 @@
+<p>explore-profile-item works!</p>
+<div class="root">
+    
+
+    <div class="username">
+        {{userOrBand.username}}
+    </div>
+
+    <div class="profile-img">
+        {{userOrBand.profile_img_src || 'profile pic'}}
+    </div>
+
+    <div class="follows">
+        <div class="following">
+            Following {{userOrBand.following?.length}} 
+        </div>
+        <div class="followers">
+             {{userOrBand.followers?.length}} Followers
+        </div>
+    </div>
+
+    <div class="genres">
+        <div
+        *ngFor="let genre of userOrBand.genres"
+        class="genre">
+            {{(genre | castGenre).name}}
+        </div>
+    </div>
+
+</div>

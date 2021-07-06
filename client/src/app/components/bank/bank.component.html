@@ -7,6 +7,7 @@
     <app-recording-unit
     *ngFor="let recording of _users.mainContent.recordings.reverse()"
     [recording]="recording"
+    (killMe)="killRecording($event)"
     ></app-recording-unit>
 
 </div>

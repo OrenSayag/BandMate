@@ -2,8 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import {
   AfterViewInit,
   Component,
+  EventEmitter,
   Input,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 import PostModel from 'src/app/models/posts.model';
@@ -21,6 +23,9 @@ export class PostUnitComponent implements AfterViewInit {
   @ViewChild('mediaCont') mediaCont: any;
   public audioUrl: string = '';
   public blob: Blob = new Blob();
+
+  @Output()
+  public killMe:EventEmitter<string> = new EventEmitter()
 
   @Input()
   public displayType:boolean=false

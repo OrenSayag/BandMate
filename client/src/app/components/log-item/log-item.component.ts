@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import CommentsModel from 'src/app/models/comments.model';
 import LogsModel from 'src/app/models/logs.model';
 import { LogsService } from 'src/app/services/logs.service';
@@ -32,6 +32,9 @@ export class LogItemComponent implements OnInit {
   }
   
   // public like:boolean = this.log.likes.includes(this._users.userInfo._id)
+
+  @Output()
+  public killMe:EventEmitter<string> = new EventEmitter()
   
   
   constructor(
@@ -55,6 +58,13 @@ export class LogItemComponent implements OnInit {
         else {
           this.log.likes.push(this._users.userInfo._id)
         }
+      }
+    }
+
+    public async rateLog(id:string, stars:number):Promise<void>{
+      const res = await this._logs.rateLog(id, stars).catch(err=>console.log(err))
+      if(res){
+        this.log.ratingStars = stars
       }
     }
     

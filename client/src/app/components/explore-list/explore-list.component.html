@@ -1,0 +1,31 @@
+<p>explore-list works!</p>
+<div class="root">
+
+
+    <mat-icon
+  (click)="_r.navigate(['./explore/preList'])"
+    
+    >arrow_back_ios</mat-icon>
+
+    <div class="list">
+
+        <div class="item"
+        *ngFor="let content of _explore.exploreListContent"
+        >
+        <app-explore-profile-item
+        [userOrBand]="(content |castUser)"
+        *ngIf="(content |castUser).username"
+        ></app-explore-profile-item>
+
+
+        <app-recording-unit
+        (killMe)="killRecording(content._id)"
+        *ngIf="(content |castRecording).type=='recording'"
+        [recording]="(content |castRecording)"
+        ></app-recording-unit>
+        </div>
+
+
+    </div>
+
+</div>

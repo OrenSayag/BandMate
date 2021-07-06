@@ -4,10 +4,10 @@
 (successfulPost)="formListener($event)"
 ></app-add-post-form>
 
-<div class="list">
+<div *ngIf="_users.userInfo.userFeed" class="list">
 
     <div
-    *ngFor="let content of _users.userFeed.reverse()"
+    *ngFor="let content of _users.userInfo.userFeed.reverse()"
     class="content-unit">
 
     <app-log-item
@@ -28,6 +28,7 @@
     [displayType]="true"
     *ngIf="content.type==='post'"
     [post]="content | castPost"
+    (killMe)="killPost($event)"
     >   
     </app-post-unit>
 

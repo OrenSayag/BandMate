@@ -1,5 +1,8 @@
 import InstrumentsModel from "../instruments.model";
+import LogsModel from "../logs.model";
 import ParticipantsModel from "../participants.model";
+import PostModel from "../posts.model";
+import Recording from "../recordings.model";
 import UsersModel from "../users.model";
 
 
@@ -16,5 +19,5 @@ export default interface UserInfoModel{
     profile_img_src:string,
     cover_img_src:string,
     bio:string,
-
+    userFeed:Array<LogsModel|Recording|PostModel>
 }

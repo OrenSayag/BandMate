@@ -1,0 +1,17 @@
+.left-side-bar{
+    position: absolute;
+    top: 0;
+    left: -87vw;
+    border: 1px solid pink;
+    background-color: gray;
+    height: 100vh;
+    width: 87vw;
+    box-sizing: border-box;
+    transition: left 250ms;
+    z-index: 10;
+}
+
+.open-left-side-bar{
+    left: 0;
+    
+}

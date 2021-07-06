@@ -1,0 +1,17 @@
+<div class="root">
+    <mat-icon
+    (click)="_r.navigate(['./explore'])"
+      
+      >arrow_back_ios</mat-icon>
+    <app-explore-content-type-cell
+    [name]="'all'"
+    [imgSrc]="'some_src'"
+    (click)="handleContentTypeClick('somename', true)"
+    ></app-explore-content-type-cell>
+    <app-explore-content-type-cell
+    *ngFor="let type of _explore.contentTypes"
+    [name]="type.name"
+    [imgSrc]="type.img_src"
+    (click)="handleContentTypeClick(type.name)"
+    ></app-explore-content-type-cell>
+</div>

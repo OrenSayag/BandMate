@@ -190,10 +190,10 @@ export class BankService {
       .toPromise();
 
     if (res.ok) {
-      console.log('succesfully deleted comment from recording');
+      console.log('succesfully deleted recording');
       return true
     } else {
-      console.log('failed to delete comment recording');
+      console.log('failed to delete recording');
       return false
     }
   }

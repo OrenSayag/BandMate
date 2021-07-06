@@ -21,10 +21,6 @@ import { BurgerMenuComponent } from './components/burger-menu/burger-menu.compon
 import { ProfileBarComponent } from './components/profile-bar/profile-bar.component';
 import { GenreFormBarComponent } from './components/genre-form-bar/genre-form-bar.component';
 import { ExploreComponent } from './components/explore/explore.component';
-import { ExploreBtnColComponent } from './components/explore-btn-col/explore-btn-col.component';
-import { ExploreBtnStackComponent } from './components/explore-btn-stack/explore-btn-stack.component';
-import { ExploreBtnComponent } from './components/explore-btn/explore-btn.component';
-import { ExploreUserItemComponent } from './components/explore-user-item/explore-user-item.component';
 import { FeedComponent } from './components/feed/feed.component';
 import { AddPostFormComponent } from './components/add-post-form/add-post-form.component';
 import { PostUnitComponent } from './components/post-unit/post-unit.component';
@@ -62,6 +58,17 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import { CastToLogPipe } from './pipes/cast-to-log.pipe';
 import { CastToRecordingPipe } from './pipes/cast-to-recording.pipe';
 import { CastToPostPipe } from './pipes/cast-to-post.pipe';
+import { ExplorePreComponent } from './components/explore-pre/explore-pre.component';
+import { SearchExploreComponent } from './components/search-explore/search-explore.component';
+import { ExploreGenreCellComponent } from './components/explore-genre-cell/explore-genre-cell.component';
+import { ExploreContentTypeCellComponent } from './components/explore-content-type-cell/explore-content-type-cell.component';
+import { ExploreListComponent } from './components/explore-list/explore-list.component';
+import { ExploreProfileItemComponent } from './components/explore-profile-item/explore-profile-item.component';
+import { ExploreContentItemComponent } from './components/explore-content-item/explore-content-item.component';
+import { ExplorePreListComponent } from './components/explore-pre-list/explore-pre-list.component';
+import { CastToUsersPipe } from './pipes/cast-to-user.pipe';
+import { CastToGenrePipe } from './pipes/cast-to-genre.pipe';
+import { LeftSidebarComponent } from './components/left-sidebar/left-sidebar.component';
 
 
 
@@ -94,10 +101,6 @@ export function tokenGetter() {
     ProfileBarComponent,
     GenreFormBarComponent,
     ExploreComponent,
-    ExploreBtnColComponent,
-    ExploreBtnStackComponent,
-    ExploreBtnComponent,
-    ExploreUserItemComponent,
     FeedComponent,
     AddPostFormComponent,
     PostUnitComponent,
@@ -118,6 +121,17 @@ export function tokenGetter() {
     CastToLogPipe,
     CastToRecordingPipe,
     CastToPostPipe,
+    ExplorePreComponent,
+    SearchExploreComponent,
+    ExploreGenreCellComponent,
+    ExploreContentTypeCellComponent,
+    ExploreListComponent,
+    ExploreProfileItemComponent,
+    ExploreContentItemComponent,
+    ExplorePreListComponent,
+    CastToUsersPipe,
+    CastToGenrePipe,
+    LeftSidebarComponent
   ],
   imports: [
     BrowserModule,

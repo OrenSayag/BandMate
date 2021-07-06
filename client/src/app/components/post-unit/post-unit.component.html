@@ -51,7 +51,7 @@
         [contentId]="post._id" *ngIf="commentsTog"></app-comment-section>
     <mat-icon *ngIf="canISeeAndRateIt()" mat-button [matMenuTriggerFor]="beforeMenu">more_vert</mat-icon>
     <mat-menu #beforeMenu="matMenu" xPosition="before">
-        <button (click)="_posts.delPost(post._id)" mat-menu-item>Delete</button>
+        <button (click)="killMe.emit(post._id)" mat-menu-item>Delete</button>
     </mat-menu>
 
 

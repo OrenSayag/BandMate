@@ -87,7 +87,7 @@
     <mat-icon *ngIf="canISeeAndRateIt()" mat-button [matMenuTriggerFor]="beforeMenu">more_vert</mat-icon>
     <mat-menu #beforeMenu="matMenu" xPosition="before">
         <button 
-        (click)="_bank.delRecording(recording._id)"
+        (click)="killMe.emit(recording._id)"
         mat-menu-item>Delete</button>
     </mat-menu>
  

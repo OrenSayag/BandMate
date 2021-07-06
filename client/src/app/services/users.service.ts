@@ -35,6 +35,7 @@ export class UsersService {
     profile_img_src: '',
     cover_img_src: '',
     bio: '',
+    userFeed: []
   };
 
   public currUserOtBand: {
@@ -81,7 +82,9 @@ export class UsersService {
 
   public async getFeed() {
     const res: any = await this._http
-      .post('http://localhost:666/api/user/feed', {} ,{
+      .post('http://localhost:666/api/user/feed', {
+        bandId:this.currUserOtBand._id
+      } ,{
         headers: {
           'content-type': 'application/json',
           authorization: localStorage.token,
@@ -89,8 +92,9 @@ export class UsersService {
       })
       .toPromise();
     if (res.userFeed) {
-      this.userFeed = res.userFeed.sort((a:any,b:any)=>{return(<any>new Date(a.date)-<any>new Date(b.date))})
       // console.log(res.userFeed)
+      this.userInfo.userFeed = res.userFeed.sort((a:any,b:any)=>{return(<any>new Date(a.date)-<any>new Date(b.date))})
+      console.log(this.userFeed)
     } else {
       console.log("wha the gell")
     }

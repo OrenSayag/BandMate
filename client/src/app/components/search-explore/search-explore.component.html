@@ -1,0 +1,53 @@
+<p>search-explore works!</p>
+
+<div class="root">
+
+  <mat-icon
+  (click)="_r.navigate(['./explore'])"
+  >arrow_back_ios</mat-icon>
+  
+
+    <mat-form-field appearance="fill">
+        <mat-icon>search</mat-icon>
+        <!-- <mat-label>Search</mat-label> -->
+        <input 
+        (change)="handleSearch($event)"
+        autocomplete="off"
+        matInput>
+      </mat-form-field>
+
+      <mat-selection-list #shoes [multiple]="false">
+        <mat-list-option *ngFor="let result of _explore.searchResults.bands" [value]="result">
+          {{result.username}}
+          <div class="test">
+            Band
+          </div>
+        </mat-list-option>
+        <mat-list-option *ngFor="let result of _explore.searchResults.users" [value]="result">
+          {{result.username}}
+          <div class="test">
+            User
+          </div>
+        </mat-list-option>
+        <!-- <mat-list-option *ngFor="let result of _explore.searchResults.logs" [value]="result">
+          {{result.title}}
+          <div class="test">
+            Log
+          </div>
+        </mat-list-option>
+        <mat-list-option *ngFor="let result of _explore.searchResults.recordings" [value]="result">
+          {{result.title}}
+          <div class="test">
+            Recording
+          </div>
+        </mat-list-option>
+        <mat-list-option *ngFor="let result of _explore.searchResults.posts" [value]="result">
+          {{result.content}}
+          <div class="test">
+            Post
+          </div>
+        </mat-list-option> -->
+      </mat-selection-list>
+
+
+</div>

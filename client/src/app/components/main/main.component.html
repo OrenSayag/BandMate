@@ -1,3 +1,11 @@
-<app-header></app-header>
+<app-header
+(slideLeftSidebar)="slideLeftSidebar($event)"
+></app-header>
+<div class="left-side-bar" #leftSideBar
+[ngClass]="leftSidebarTog ? 'open-left-side-bar' : ''"
+>
+    <app-left-sidebar 
+    ></app-left-sidebar>
+</div>
 <app-nav-bar></app-nav-bar>
 <router-outlet></router-outlet>

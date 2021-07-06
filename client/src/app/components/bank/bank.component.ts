@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BankService } from 'src/app/services/bank.service';
+import { ExploreService } from 'src/app/services/explore.service';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -10,6 +11,15 @@ import { UsersService } from 'src/app/services/users.service';
 export class BankComponent implements OnInit {
 
   public formTog:Boolean = false;
+
+  public async killRecording(e:any){
+    const res = await this._bank.delRecording(e)
+    if(res){
+      this._users.mainContent.recordings = this._users.mainContent.recordings.filter(r=>r._id!=e)
+      // this._explore.exploreListContent = this._explore.exploreListContent.filter(c=>c._id!=e)
+      // this._users.mainContent.logs = []
+    }
+  }
   
 
   public formListener(e:boolean):void{
@@ -24,6 +34,7 @@ export class BankComponent implements OnInit {
   constructor(
     public _users:UsersService,
     public _bank:BankService,
+    public _explore:ExploreService,
 
   ) { }
 

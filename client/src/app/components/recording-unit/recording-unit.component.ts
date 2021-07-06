@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import Recording from 'src/app/models/recordings.model';
 import { BankService } from 'src/app/services/bank.service';
@@ -22,6 +22,9 @@ export class RecordingUnitComponent implements AfterViewInit {
   
   @Input()
   public displayType:boolean = false
+
+  @Output()
+  public killMe:EventEmitter<string> = new EventEmitter()
   
   @Input()
   public recording:Recording = {

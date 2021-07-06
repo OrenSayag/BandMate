@@ -150,10 +150,10 @@ export class PostsService {
       .toPromise();
 
     if (res.ok) {
-      console.log('succesfully deleted comment from post');
+      console.log('succesfully deleted post');
       return true
     } else {
-      console.log('failed to delete comment post');
+      console.log('failed to delete post');
       return false
     }
   }
