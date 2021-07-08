@@ -38,4 +38,9 @@ export class LeftSidebarComponent implements OnInit {
     this.panelOpenState = !this.panelOpenState
   }
 
+  public logout():void{
+    localStorage.removeItem("token")
+    this._r.navigateByUrl('/login')
+  }
+
 }

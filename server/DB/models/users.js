@@ -11,7 +11,12 @@ const Participant = new Schema({
     role:{
         type:String,
         default: "member"
-    }
+    },
+    instruments: [{
+        type: ObjectId,
+        ref:"instruments",
+        // required:true,
+    }]
 })
 
 const ContentCategory = new Schema({

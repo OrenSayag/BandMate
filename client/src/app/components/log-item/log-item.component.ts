@@ -72,6 +72,7 @@ export class LogItemComponent implements OnInit {
       // check if token holder is log owner or a participant
     const logParentUser:string = this.log.parentUser._id
     const participantsOfLog:{userId:string}[] = this.log.parentUser.participants
+    // console.log(participantsOfLog)
     const tokenHolder:string = this._users.userInfo._id
     const isParticipant = participantsOfLog.some(p=>p.userId===tokenHolder)
     // console.log(logParentUser)

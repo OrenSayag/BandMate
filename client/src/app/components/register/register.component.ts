@@ -34,6 +34,30 @@ export class RegisterComponent implements OnInit {
   }
 
   public async register() {
+    if(!this.myForm.valid){
+      console.log("running")
+      this.errorMessage="Missing Some Info"
+      return
+    }
+    if(!this.myForm.controls.isBand&&
+      ((this.myForm.controls.fname.value.length===0)||
+      this.myForm.controls.lname.value.length===0)
+      ){
+        this.errorMessage="Missing Some Info"
+        return
+      }
+    if(this.chosenGenres.length===0){
+      this.errorMessage="Missing Genres"
+      return
+    }
+    if(this.chosenInstruments.length===0){
+      this.errorMessage="Missing Instruments"
+      return
+    }
+
+    console.log(this.chosenGenres.length)
+    console.log(this.chosenInstruments.length)
+
     const res = await this._auth.register(
       this.myForm.controls.isBand.value,
       this.myForm.controls.fname.value,
@@ -55,37 +79,43 @@ export class RegisterComponent implements OnInit {
     }
   }
   
- public validatorDynamics(){
-  this.myForm.get('isBand')?.valueChanges
-  .subscribe(value => {
-    console.log(value)
-    if(!value) {
-      this.myForm.get('fname')?.setValidators(Validators.required)
-      this.myForm.get('lname')?.setValidators(Validators.required)
-    } else {
-      this.myForm.get('fname')?.clearValidators();
-      this.myForm.get('lname')?.clearValidators();
-    }
-          this.myForm.controls['fname'].updateValueAndValidity();
-    this.myForm.controls['lname'].updateValueAndValidity();
-  }
-);
+//  public validatorDynamics(){
+//   this.myForm.controls.isBand.valueChanges
+//   .subscribe(value => {
+//     console.log(value)
+//     if(value) {
+//       this.myForm.get('fname')?.setValidators(Validators.required)
+//       this.myForm.get('lname')?.setValidators(Validators.required)
+//     } else {
+//       this.myForm.get('fname')?.clearValidators();
+//       this.myForm.get('lname')?.clearValidators();
+//     }
+//     this.myForm.controls['fname'].updateValueAndValidity();
+//     this.myForm.controls['lname'].updateValueAndValidity();
+//     this.myForm.updateValueAndValidity()
+//   }
+// );
 
- } 
+//  } 
 
   myForm = this.fb.group({
     isBand: [false],
-    fname: ["", [Validators.required]],
-    lname: ["", [Validators.required]],
-    userName: ["", [Validators.required, 
+    fname: ["", []],
+    lname: ["", []],
+    userName: ["", [, 
       Validators.pattern(/^(?=[a-zA-Z0-9._]{4,10}$)(?!.*[_.]{2})[^_.].*[^_.]$/)]],
-    mail: ["", [Validators.required, 
+    mail: ["", [, 
       Validators.pattern(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]],
-    password: ["", [Validators.required, 
+    password: ["", [, 
       Validators.pattern(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/)]],
   })
 
   public addItem(item:string, array:string[]){
+    if(array.some(i=>i===item)){
+      array = array.filter(i=>i!==item)
+      console.log(array)
+      return
+    }
     array.push(item)
     console.log(array)
   }

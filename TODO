@@ -353,6 +353,23 @@ o888bood8P'   `Y8bod8P' o888o o888o `Y8bod8P'
     click navs = start with left sidebar, continue as needed thoruout
     futher deveoopment
 
+
+    build basic html and ts
+
+    client:
+        the profile img upload
+        first uploafd the image, saves it's fileId,
+        then updating the user
+
+    stream the img upon init of profile,
+    copy from post unit
+
+
+
+
+
+    --------------------------- BUILD THE PROFILE PAGE
+
 ooooooooooooo                 .o8            
 8'   888   `8                "888            
      888       .ooooo.   .oooo888   .ooooo.  
@@ -362,14 +379,26 @@ ooooooooooooo                 .o8
     o888o     `Y8bod8P' `Y8bod88P" `Y8bod8P' 
 
 
-
-    fix: get params from url on profile init to determine some display
-
-    build basic html and ts
+------------------------------- BUILD THE PROFILE IMG COMPONENT
 
 
+    create c : profile-img
+    ts:
+        @input src
+        foo:
+            stream
+        init:
+            stream
+    html:
+        .root>.div
 
-    --------------------------- BUILD THE PROFILE PAGE
+        implement in leftsidebar, profile, logs, comments, recordings, posts,
+        header, for testing.
+    
+
+
+------------------------------- BUILD THE PROFILE IMG COMPONENT
+
 
         _users
 
@@ -468,8 +497,18 @@ ooooooooooooo                 .o8
     BUG CATCHER:
         - when adding a new recording, reopening the form results in empty
         radios.
+        - when signing up, not checking the checkboxes still grants accesss.
+        - FEED posts are not added upon successful req to post
+
 
     FOR THE FUTURE:
+
+        APP:
+            talk security with Yosi:
+                limit filesize thorugh server
+                limit over req on server
+
+
         API:
             Explroe:Add genre tagging to content, so you can filter it out in explore
             Explore: Add lots of likes and comments randomly so can build and test the top data features. 
@@ -480,6 +519,11 @@ ooooooooooooo                 .o8
 
         Client:
 
+            upload default profile_img_src && cover_img_src and default it to new users,
+            so streaming of those imgs will flow SMOOTHLY.
+            Validate that when updating, we delete the previous
+            file_src EXCEPT when the file src is our default profile&cover.
+            IMPORTANT!
 
             when in explore, avatarSwapping on header leads to profile of selected avatar (with back arrow ofc)
 
@@ -493,6 +537,12 @@ ooooooooooooo                 .o8
             stats
 
             LAZY LOADING
+
+            add edit option on participant so you could add an instrument to it when logged as a band,
+            and it will be displayed on the participant list on the band's profile
+                opt: add also to user's profile when dispaying the list of bands, indicating what instrument he plays in that band
+            
+            
 
             make sure that every username is clicked to it's profile (go component-component)
 

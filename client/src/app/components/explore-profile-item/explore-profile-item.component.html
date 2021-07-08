@@ -1,8 +1,9 @@
-<p>explore-profile-item works!</p>
 <div class="root">
     
 
-    <div class="username">
+    <div class="username"
+    (click)="_r.navigateByUrl('/explore/profile/'+userOrBand.username)"
+    >
         {{userOrBand.username}}
     </div>
 

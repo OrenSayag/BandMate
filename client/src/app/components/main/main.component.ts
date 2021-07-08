@@ -21,7 +21,7 @@ export class MainComponent implements AfterViewInit {
       // this.leftSideBar.nativeElemenet.style.left = "0"
     }
     else if(e==="close"){
-      console.log("running")
+      // console.log("running")
       this.leftSidebarTog = false
 
       // this.leftSideBar.nativeElemenet.style.left = "-87vw"

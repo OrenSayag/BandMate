@@ -19,7 +19,7 @@
         {{recording.title}}
     </div>
 
-    <div *ngIf="!recording.isPrivate || canISeeAndRateIt()" class="ratingStars">
+    <div *ngIf="canISeeAndRateIt()" class="ratingStars">
         {{ recording.ratingStars }}
 
     <mat-icon (click)="rateRecording(recording._id, 0)">cancel</mat-icon>

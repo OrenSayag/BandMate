@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import UsersModel from 'src/app/models/users.model';
 
 @Component({
@@ -22,7 +23,9 @@ export class ExploreProfileItemComponent implements OnInit {
     followers: []
   };
 
-  constructor() { }
+  constructor(
+    public _r:Router
+  ) { }
 
   ngOnInit(): void {
   }

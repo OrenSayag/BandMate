@@ -44,6 +44,14 @@ export class ExploreService {
     following:0,
   }
 
+  public profileContentMixed:Array<LogsModel|Recording|PostModel> = []
+  public profileContentLogs:Array<LogsModel|Recording|PostModel> = []
+  public profileContentRecordings:Array<LogsModel|Recording|PostModel> = []
+  public profileContentPosts:Array<LogsModel|Recording|PostModel> = []
+
+  
+
+
   public chosenGenre:{name:string, id:string}|string = {name:"",id:""}
   public allGenres:boolean = true
 
@@ -75,8 +83,6 @@ export class ExploreService {
   constructor(
     public _http:HttpClient,
     public _ar:ActivatedRoute,
-
-
   ) { }
 
     public async getProfile(username:string):Promise<void>{
@@ -89,6 +95,34 @@ export class ExploreService {
       }
     }
 
+    public async getProfileContent(username:string):Promise<boolean>{
+      const res:any = await this._http.get("http://localhost:666/api/user/profile/content/"+username).toPromise()
+      if(res.ok){
+        this.profileContentMixed = res.profileContentMixed
+        this.profileContentLogs = res.profileContent.logs
+        this.profileContentRecordings = res.profileContent.recordings
+        this.profileContentPosts = res.profileContent.posts
+        console.log(this.profileContentMixed)
+        return true
+      }
+      return false
+    }
+
+    public async killContent(id:string):Promise<boolean>{
+      const res:any = await this._http.delete("http://localhost:666/api/explore/killContent/"+id,
+      {
+        headers: {
+          authorization: localStorage.token
+        }
+      }
+      ).toPromise()
+      if(res.ok){
+        console.log(res.ok)
+        return true
+      }
+      console.log("Failed to delete content")
+      return false
+    }
 
 
     public async searchExplore(value:string):Promise<void>{
@@ -129,6 +163,7 @@ export class ExploreService {
           }
         )
     }
+
 
 
 }

@@ -116,6 +116,11 @@ router.delete("/:id" ,async (req, res) => {
       return res.status(400).send({ fail: "This post is not yours to delete" });
     }
 
+    if(post.fileSrc){
+      await FsFilesModel.findByIdAndDelete(post.fileSrc)
+      await FsChunksModel.find({files_id:await mongoose.Types.ObjectId(post.fileSrc)})
+    }
+
 
     // if(post.parentUser!==userId){
     //   return res.status(400).send({fail:"This isn't your post to delete."})

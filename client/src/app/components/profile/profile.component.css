@@ -1,5 +1,15 @@
+.root{
+    color: white;
+    /* z-index: -10; */
+    /* background-color: rgb(48,48,48) */
+}
+
 .active{
     display: initial;
+}
+
+.top * {
+    /* z-index:10; */
 }
 
 .hidden {
@@ -14,4 +24,26 @@
     height: 50px;
     width: 50px;
     border-radius: 50%;
+}
+
+.profile-img{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    
+}
+
+.cover{
+    height: 200px;
+    width: 100vw;
+    position:absolute;
+    z-index: -10
+    /* background-color: gray; */
+}
+
+.cover * {
+}
+
+.edit-cover-img{
+    color: yellow
 }

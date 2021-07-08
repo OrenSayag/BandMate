@@ -101,7 +101,7 @@ export class AddPostFormComponent implements OnInit {
       mediaType = "no media"
     }
 
-    console.log("[post form] mediaType: " + mediaType)
+    // console.log("[post form] mediaType: " + mediaType)
 
     //form validation
     if(!this.myForm.controls.content.value){

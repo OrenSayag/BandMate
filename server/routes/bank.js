@@ -31,7 +31,7 @@ const ObjectID = require('mongodb').ObjectID;
 router.get("/streamVideo/:fileId", async (req, res) => {
   const { fileId } = req.params
 
-  console.log(fileId)
+  // console.log(fileId)
 
   res.set('content-type', 'video/mp4');
   res.set('accept-ranges', 'bytes');

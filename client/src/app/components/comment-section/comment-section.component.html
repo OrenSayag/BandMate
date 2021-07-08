@@ -1,4 +1,3 @@
-<p>comment-section works!</p>
 <div class="root">
     <div class="list">
         <div class="comment" *ngFor="let comment of comments">
@@ -21,7 +20,7 @@
                 <mat-icon
                 (click)="delComment(comment._id)"
                 >delete</mat-icon>
-                <p>{{comment | json}}</p>
+                <!-- <p>{{comment | json}}</p> -->
 
             </div>
         </div>

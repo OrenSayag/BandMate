@@ -1,6 +1,6 @@
 <form class="example-form" [formGroup]="myForm" (ngSubmit)="register()">
 
-    <mat-radio-group aria-label="Select an option" formControlName="isBand" (change)="validatorDynamics()">
+    <mat-radio-group aria-label="Select an option" formControlName="isBand" >
         <mat-radio-button [value]="false">User</mat-radio-button>
         <mat-radio-button [value]="true">Band</mat-radio-button>
     </mat-radio-group>

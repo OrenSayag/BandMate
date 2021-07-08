@@ -14,7 +14,7 @@ export default interface UserInfoModel{
     instruments:InstrumentsModel[],
     isBand:boolean,
     mail?:string,
-    participants?:ParticipantsModel[],
+    participants:ParticipantsModel[],
     username:string,
     profile_img_src:string,
     cover_img_src:string,

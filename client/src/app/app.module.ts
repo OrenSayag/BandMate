@@ -70,6 +70,7 @@ import { CastToUsersPipe } from './pipes/cast-to-user.pipe';
 import { CastToGenrePipe } from './pipes/cast-to-genre.pipe';
 import { LeftSidebarComponent } from './components/left-sidebar/left-sidebar.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { ProfileImgComponent } from './componenets/profile-img/profile-img.component';
 
 
 
@@ -134,7 +135,8 @@ export function tokenGetter() {
     CastToUsersPipe,
     CastToGenrePipe,
     LeftSidebarComponent,
-    ProfileComponent
+    ProfileComponent,
+    ProfileImgComponent
   ],
   imports: [
     BrowserModule,

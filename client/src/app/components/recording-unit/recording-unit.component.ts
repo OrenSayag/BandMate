@@ -77,7 +77,7 @@ export class RecordingUnitComponent implements AfterViewInit {
   // console.log(participantsOfLog)
   // console.log(tokenHolder)
   // console.log(isParticipant)
-  return tokenHolder===recordingParentUser || isParticipant
+  return (tokenHolder===recordingParentUser) || isParticipant
 }
 
 public commentToggler():void {

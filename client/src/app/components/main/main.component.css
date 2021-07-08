@@ -7,12 +7,13 @@
     height: 100vh;
     width: 87vw;
     box-sizing: border-box;
-    transition: left 250ms;
+    transition: transform 250ms;
     z-index: 10;
 }
 
 .open-left-side-bar{
-    left: 0;
+    /* left: 0; */
+    transform: translateX(87vw);
     
 }
 

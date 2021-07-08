@@ -1,68 +1,239 @@
-<p>profile works!</p>
 <div class="root">
 
+    <div #coverImgCont class="cover">
+        <div class="div"></div>
 
-    <div class="top">
+    </div>
 
-        
+    <div class="top" #top>
+
+        <div class="cover-input">
+            <input type="file" #coverUploadInput (change)="handleCoverFileInputChange()" class="hidden">
+            <mat-icon (click)="coverImgUploadOpen()" class="edit-cover-img"
+                *ngIf="profileOwner===_users.userInfo.username">edit</mat-icon>
+        </div>
+
         <div class="profic-pic-and-title">
-            <div class="profile-pic-cont">
+            <div class="profile-pic-cont" #profilePicCont>
                 <input type="file" #imgUploadInput class="img-upload-input hidden"
-                (change)="handleProfileFileInputChange()"
-                >
-                    <mat-icon
-                    (click)="profileImgUploadOpen()"
-                    class="edit-profile-img"
-                    >edit</mat-icon>
-                    <!-- {{_explore.profile.profile_img_src || 'some_src'}} -->
-                    <img [src]="_explore.profile.profile_img_src || 'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png'" alt="">
+                    (change)="handleProfileFileInputChange()">
+                <mat-icon (click)="profileImgUploadOpen()" class="edit-profile-img"
+                    *ngIf="profileOwner===_users.userInfo.username">edit</mat-icon>
+
+                <!-- {{_explore.profile.profile_img_src || 'some_src'}} -->
+                <div #profilePicRealCont class="profile-pic-real-cont">
+                    <img class="profile-img"
+                        [src]="'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png'"
+                        alt="">
 
                 </div>
-                
-                <div class="title">
-                    {{_explore.profile.username}}
-                </div>
-                
+
             </div>
-            
-            <div class="social-btns"
-        *ngIf="profileOwner!==_users.userInfo.username"
-            >
-                <button mat-raised-button color="primary"
-                (click)="_users.followToggler(_explore.profile._id)"
-                >
-            {{_users.userInfo.following.includes(_explore.profile._id) ? 'Following' : 'Follow'}}
+
+            <div class="title">
+                {{_explore.profile.username}}
+            </div>
+
+        </div>
+
+        <!-- {{amIInThisBand | json}}
+        {{_explore.profile._id | json}}
+        {{_users.userInfo.bands | json}} -->
+
+        <div class="social-btns" *ngIf="profileOwner!==_users.userInfo.username">
+            <button mat-raised-button color="primary" (click)="_users.followToggler(_explore.profile._id)">
+                {{_users.userInfo.following.includes(_explore.profile._id) ? 'Following' : 'Follow'}}
             </button>
-                <button mat-raised-button color="primary">Message</button>
-                <button 
-                *ngIf="amIInThisBand"
-                mat-raised-button color="primary">Request To Join</button>
-    
+            <button mat-raised-button color="primary">Message</button>
+            <button *ngIf="!amIInThisBand && !(_users.userInfo.isBand&&_explore.profile.isBand)" [ngClass]="amIInThisBand ? 'hidden':'active'" mat-raised-button color="primary">Request To Join</button>
+
+        </div>
+        <div class="count-data">
+            <div class="logs">
+                Logs
+                {{_explore.profileCountData.logs}}
             </div>
-            <div class="count-data">
-                <div class="logs">
-                    Logs
-                    {{_explore.profileCountData.logs}}
-                </div>
-                <div class="recordings">
-                    Recordings
-                    {{_explore.profileCountData.recordings}}
-                </div>
-                <div class="posts">
-                    Posts
-                    {{_explore.profileCountData.posts}}
-                </div>
-                <div class="followers">
-                    Followers
-                    {{_explore.profileCountData.followers}}
-                </div>
-                <div class="following">
-                    Following
-                    {{_explore.profileCountData.following}}
-                </div>
+            <div class="recordings">
+                Recordings
+                {{_explore.profileCountData.recordings}}
             </div>
+            <div class="posts">
+                Posts
+                {{_explore.profileCountData.posts}}
+            </div>
+            <div class="followers">
+                Followers
+                {{_explore.profileCountData.followers}}
+            </div>
+            <div class="following">
+                Following
+                {{_explore.profileCountData.following}}
+            </div>
+        </div>
 
 
     </div>
+
+    <div class="bands-or-participants">
+
+        <div class="title">
+            <h4>{{_explore.profile.isBand ? 'Participants' : 'Bands'}}</h4>
+        </div>
+
+        <div *ngIf="(_explore.profile.isBand && _explore.profile.participants.length===0) ||
+         (!_explore.profile.isBand && _explore.profile.bands.length===0)" class="none">
+            None yet! {{_explore.profile.isBand ? 'Add some participants!' : 'Join a band!'}}
+        </div>
+
+
+        <mat-selection-list [multiple]="false" class="list">
+
+            <mat-list-option *ngFor="let band of _explore.profile.bands">
+                {{band.username}}
+                {{band.profile_img_src}}
+            </mat-list-option>
+
+            <mat-list-option *ngFor="let participant of _explore.profile.participants">
+                {{participant.userId.username}}
+                {{participant.userId.profile_img_src}}
+
+            </mat-list-option>
+        </mat-selection-list>
+
+    </div>
+
+    <div class="content">
+
+        <div class="toggle-btns">
+
+            <button 
+            (click)="filterContent('all')"
+            mat-raised-button class="all" color="primary">All</button>
+            <button 
+            (click)="filterContent('logs')"
+            mat-raised-button class="logs" color="primary">Logs</button>
+            <button 
+            (click)="filterContent('recordings')"
+            mat-raised-button class="recordings" color="primary">Recordings</button>
+            <button 
+            (click)="filterContent('posts')"
+            mat-raised-button class="posts" color="primary">Posts</button>
+
+
+        </div>
+
+        <div 
+        *ngIf="contentFilter==='all'"
+        class="list">
+
+            <div class="content-unit"
+            *ngFor="let content of _explore.profileContentMixed"
+            >
+
+                <app-log-item
+                
+                (killMe)="killContent($event)"
+                [displayType]="true" *ngIf="content.type==='log'" [log]="content | castLog">
+                </app-log-item>
+
+                <app-recording-unit
+                
+                (killMe)="killContent($event)"
+                [displayType]="true" *ngIf="content.type==='recording'"
+                    [recording]="content | castRecording">
+                </app-recording-unit>
+
+                <app-post-unit
+                
+                (killMe)="killContent($event)"
+                [displayType]="true" *ngIf="content.type==='post'" [post]="content | castPost"
+                    (killMe)="killContent($event)">
+                </app-post-unit>
+
+
+            </div>
+
+        </div>
+
+        <div 
+        *ngIf="contentFilter==='logs'"
+        class="list">
+
+            <div class="content-unit"
+            *ngFor="let content of _explore.profileContentLogs"
+            >
+
+                <app-log-item
+                (killMe)="killContent($event)"
+                [displayType]="true" *ngIf="content.type==='log'" [log]="content | castLog">
+                </app-log-item>
+
+                <!-- <app-recording-unit [displayType]="true" *ngIf="content.type==='recording'"
+                    [recording]="content | castRecording">
+                </app-recording-unit>
+
+                <app-post-unit [displayType]="true" *ngIf="content.type==='post'" [post]="content | castPost"
+                    (killMe)="killContent($event)">
+                </app-post-unit> -->
+
+
+            </div>
+
+        </div>
+
+        <div 
+        *ngIf="contentFilter==='recordings'"
+        class="list">
+
+            <div class="content-unit"
+            *ngFor="let content of _explore.profileContentRecordings"
+            >
+
+                <!-- <app-log-item [displayType]="true" *ngIf="content.type==='log'" [log]="content | castLog">
+                </app-log-item> -->
+
+                <app-recording-unit [displayType]="true" *ngIf="content.type==='recording'"
+                    [recording]="content | castRecording"
+                    (killMe)="killContent($event)">
+                    >
+                </app-recording-unit>
+<!-- 
+                <app-post-unit [displayType]="true" *ngIf="content.type==='post'" [post]="content | castPost"
+                    (killMe)="killContent($event)">
+                </app-post-unit> -->
+
+
+            </div>
+
+        </div>
+
+        <div 
+        *ngIf="contentFilter==='posts'"
+        class="list">
+
+            <div class="content-unit"
+            *ngFor="let content of _explore.profileContentPosts"
+            >
+
+                <!-- <app-log-item [displayType]="true" *ngIf="content.type==='log'" [log]="content | castLog">
+                </app-log-item>
+
+                <app-recording-unit [displayType]="true" *ngIf="content.type==='recording'"
+                    [recording]="content | castRecording">
+                </app-recording-unit> -->
+
+                <app-post-unit [displayType]="true" *ngIf="content.type==='post'" [post]="content | castPost"
+                    (killMe)="killContent($event)">
+                </app-post-unit>
+
+
+            </div>
+
+        </div>
+
+
+
+    </div>
+
 
 </div>
