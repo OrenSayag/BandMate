@@ -7,17 +7,19 @@ import UsersModel from "../users.model";
 
 
 export default interface UserInfoModel{
-    bands?: UsersModel[],
+    bands: UsersModel[],
     fname:string,
     lname:string,
     _id:string,
     instruments:InstrumentsModel[],
     isBand:boolean,
-    mail:string,
+    mail?:string,
     participants?:ParticipantsModel[],
     username:string,
     profile_img_src:string,
     cover_img_src:string,
     bio:string,
-    userFeed:Array<LogsModel|Recording|PostModel>
+    userFeed:Array<LogsModel|Recording|PostModel>,
+    following: string[],
+    followers: string[],
 }

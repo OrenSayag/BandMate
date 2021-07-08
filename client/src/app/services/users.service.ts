@@ -35,7 +35,9 @@ export class UsersService {
     profile_img_src: '',
     cover_img_src: '',
     bio: '',
-    userFeed: []
+    userFeed: [],
+    following: [],
+    followers: [],
   };
 
   public currUserOtBand: {
@@ -116,6 +118,32 @@ export class UsersService {
     if (res.ok) {
       this.userInfo = res.ok;
       // console.log(this.userInfo)
+    }
+  }
+
+  public async followToggler(toFollowId:string):Promise<boolean>{
+    const res:any = await this._http.put('http://localhost:666/api/user/follow/'+toFollowId,
+    {},
+    {
+      headers: {
+        authorization: localStorage.token
+      }
+    }
+    ).toPromise()
+    if(res.ok){
+      // console.log(res.proof)
+      if(this.userInfo.following.includes(toFollowId)){
+
+        this.userInfo.following = this.userInfo.following.filter(f=>f!==toFollowId)
+      } else {
+
+        this.userInfo.following.push(toFollowId)
+      }
+      
+      return true
+    }
+    else {
+      return false
     }
   }
 }

@@ -1,4 +1,7 @@
 import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { ExploreService } from 'src/app/services/explore.service';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-left-sidebar',
@@ -7,8 +10,12 @@ import { Component, ElementRef, EventEmitter, HostListener, OnInit, Output, View
 })
 export class LeftSidebarComponent implements OnInit {
 
-  constructor(
+  public panelOpenState:boolean = false
 
+  constructor(
+    public _users:UsersService,
+    public _r:Router,
+    public _explore:ExploreService,
   ) { }
 
   @Output()
@@ -25,6 +32,10 @@ export class LeftSidebarComponent implements OnInit {
         console.log("clicked outside")
         this.slideLeftSidebar.emit("close")
       }
+  }
+
+  public panelToggler():void{
+    this.panelOpenState = !this.panelOpenState
   }
 
 }

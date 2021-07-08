@@ -75,7 +75,7 @@ export class AddPostFormComponent implements OnInit {
   public async postPost():Promise<void>{
     if (this.fileInput.nativeElement.files.length > 1) {
       this.errorDivMessage = "Choose a single file"
-      setTimeout(() => {
+    setTimeout(() => {
         this.errorDivMessage = ""
       }, 2000)
       return

@@ -300,6 +300,59 @@ o888bood8P'   `Y8bod8P' o888o o888o `Y8bod8P'
 
 
         ------------------ BUILD THE FEED
+
+        --------------------- BUILD THE EXPLORE
+        components:
+
+        explore-pre (like spotify mobile search page)
+            search input - upon focus, opens the <search component> just like spotify
+            pattern: category>buttons
+        explore-content(like spotify search>click):
+            back btn
+            title
+            list
+        
+        ExplorePre(=> SearchExplore)
+            ExploreGenreCell(ngFor by all genres, one cell for 'all')
+            => ExplorePreList
+                ExploreContentTypeCell(@Inputs: name, imageSrc; (click)=>navigate to relevant route
+                , one cell for 'all' also)
+
+        ExploreList
+            depends on type: ExploreProfileItem, ExploreContentItem
+
+        setup search endpoint
+
+        connect search to service and to components and display search list upon changes
+        on input on /explore/search
+        
+        set up the endpoint to filter by cat and content-type
+
+        align service with server
+
+        connect components to foo and test
+
+        done
+            
+        fixed: add deleting of content logs/bank/posts
+        --------------------- BUILD THE EXPLORE
+        ----------------------- BUILD THE LEFT MODULE - SIDEBAR
+        Sketch
+        Create Component: left-SIDEBAR
+        implement button in header, togging leftSidebarTog in main (output)
+        implement lsb in main, css transition
+        fill with goodness (links)
+        ----------------------- BUILD THE LEFT MODULE - SIDEBAR
+    --------------------------- BUILD THE PROFILE PAGE
+    the profile is in the /explore.
+    it displays profile pic, following followers,
+    sketched.
+
+    route
+
+    click navs = start with left sidebar, continue as needed thoruout
+    futher deveoopment
+
 ooooooooooooo                 .o8            
 8'   888   `8                "888            
      888       .ooooo.   .oooo888   .ooooo.  
@@ -308,16 +361,15 @@ ooooooooooooo                 .o8
      888      888   888 888   888  888   888 
     o888o     `Y8bod8P' `Y8bod88P" `Y8bod8P' 
 
-        --------------------- BUILD THE EXPLORE
 
 
-    
+    fix: get params from url on profile init to determine some display
+
+    build basic html and ts
 
 
 
-        --------------------- BUILD THE EXPLORE
-
-
+    --------------------------- BUILD THE PROFILE PAGE
 
         _users
 
@@ -428,17 +480,35 @@ ooooooooooooo                 .o8
 
         Client:
 
-            Implement 'fake update' on logs (when rating/comenting), instead of fetching
-            all data again, upon change endpoint res.ok return true and only then 
-            change manually the data to the same as sent to foo
+
+            when in explore, avatarSwapping on header leads to profile of selected avatar (with back arrow ofc)
 
             Delete log-list component
 
             metronome
 
+            opt: On add forms, include genre addition option
+            to recordings
+
             stats
 
             LAZY LOADING
+
+            make sure that every username is clicked to it's profile (go component-component)
+
+            when deleting recordings and posts,
+            also users deleting their pictues,
+            make sure that the files attatched are deleted aswell
+
+            properly route explore pages, so that when refreshing the page
+            content will be fetched from the server based on query params
+            and not service state (which ofc will reset to the defaults ruining our experience)
+
+            placeholders for loading content
+
+            VALIDATE: validate that when a band is following different people,
+            it shows on the feed differently than when the user isn't following those people 
+            himself, upon avatar swapping (header)
 
             FIX: comment section closes when updating content - find solution
 

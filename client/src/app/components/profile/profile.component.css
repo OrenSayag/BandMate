@@ -1,0 +1,17 @@
+.active{
+    display: initial;
+}
+
+.hidden {
+    display: none;
+}
+
+.img-upload-input {
+    display:hidden;
+}
+
+.profile-pic-cont img{ 
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}

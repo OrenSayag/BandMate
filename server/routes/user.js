@@ -32,10 +32,10 @@ router.get("/", (req, res) => {
 });
 
 // get users info
-router.get("/info/:id", async (req, res) => {
-  const { id } = req.params;
+router.get("/info/:username", async (req, res) => {
+  const { username } = req.params;
   try {
-    const user = await UsersModel.find({ _id: id });
+    const user = await UsersModel.find({ username });
     const publicUserInfo = {
       profile_img_src: user[0].profile_img_src,
       username: user[0].username,
@@ -48,8 +48,24 @@ router.get("/info/:id", async (req, res) => {
       bio: user[0].bio,
       isBand: user[0].isBand,
       participants: user[0].participants,
+      _id:user[0]._id
     };
-    return res.status(200).send({ publicUserInfo });
+    const profileOwnerId = user[0]._id
+    const numOfLogs = await LogsModel.count({parentUser:profileOwnerId})
+    const numOfRecordings = await RecordingsModel.count({parentUser:profileOwnerId})
+    const numOfPosts = await PostsModel.count({parentUser:profileOwnerId})
+    const numOfFollowers = publicUserInfo.followers.length
+    const numOfFollowing = publicUserInfo.following.length
+
+    const profileCountData = {
+      logs: numOfLogs,
+      recordings: numOfRecordings,
+      posts: numOfPosts,
+      followers: numOfFollowers,
+      following: numOfFollowing,
+    }
+
+    return res.status(200).send({ ok:"scuessfully fetched this user info" ,publicUserInfo, profileCountData });
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -465,13 +481,30 @@ router.post("/personalInfo", verifyUser, async (req, res) => {
 // get the user's feed
 router.post("/feed", verifyUser, async (req, res) => {
   const { id } = req.userInfo;
-  const { filter } = req.body;
+  const { filter, bandId } = req.body;
 
   // console.log(req.userInfo.username);
 
   try {
-    let user = await UsersModel.find({ _id: id });
-    user = user[0];
+    let user = await UsersModel.findById( id );
+
+    if (bandId) {
+      const band = await UsersModel.findById(bandId);
+      // for (const p of band.participants) {
+      //   myParticipants.push(p.userId)
+      // }
+      if (!band.participants.some((p) => p.userId == id) && band._id != id) {
+        return res
+          .status(400)
+          .send({ fail: "You're not in this band brother." });
+      } 
+      else {
+        user = await UsersModel.findById(bandId)
+        // .populate("participants.userId").populate("bands").populate("instruments");
+      }
+    }
+
+    // console.log(user)
 
     // here I need to implement functions that get:
     // content is: posts, logs, recordings
@@ -510,6 +543,34 @@ router.post("/feed", verifyUser, async (req, res) => {
       bandContent.recordings = recordings;
     }
 
+    const participantContent = {logs:[],posts:[],recordings:[]};
+    for (const participant of user.participants) {
+      const logs = await LogsModel.find({ parentUser: participant }).populate({
+        path:"parentUser",
+        select: "username isBand participants"
+      });
+      const posts = await PostsModel.find({ parentUser: participant }).populate({
+        path:"parentUser",
+        select: "username isBand participants"
+      });
+      const recordings = await RecordingsModel.find({ parentUser: participant }).populate({
+        path:"parentUser",
+        select: "username isBand participants"
+      });
+      // participantContent.logs = [];
+      // participantContent.posts = [];
+      // participantContent.recordings = [];
+      participantContent.logs = logs || [];
+      participantContent.posts = posts || [];
+      participantContent.recordings = recordings || [];
+    }
+
+    // console.log(participantContent)
+    // console.log(participantContent.logs.length)
+    // console.log(participantContent.posts.length)
+    // console.log(participantContent.recordings.length)
+    
+    
     // - all the people who the user is follwing's content that is not private
     const followingContent = {
       logs: await LogsModel.find({ parentUser: { $in: user.following } }).populate({
@@ -537,10 +598,14 @@ router.post("/feed", verifyUser, async (req, res) => {
       followingContent.recordings,
       bandContent.logs,
       bandContent.posts,
-      bandContent.recordings
-    );
-    hugeFeed.sort((a, b) => a.date - b.date);
-
+      bandContent.recordings,
+      participantContent.logs,
+      participantContent.posts,
+      participantContent.recordings,
+      );
+      hugeFeed.sort((a, b) => a.date - b.date);
+      // console.log(hugeFeed[hugeFeed.length-3])
+      
     let organizedFeed = {
       logs: [
         ...userContent.logs.sort((a, b) => a.date - b.date),
@@ -598,7 +663,8 @@ router.put('/follow/:toFollowId', verifyUser ,async (req, res)=>{
         }
       })
     }
-    return res.status(200).send({ok:await UsersModel.findById(id)})
+    const proof = await UsersModel.findById(id)
+    return res.status(200).send({ok:"Successfuly un/followed user",proof:proof.following})
   } catch (error) {
     console.log(error)
     return res.status(500).send(error)

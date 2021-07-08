@@ -69,6 +69,8 @@ import { ExplorePreListComponent } from './components/explore-pre-list/explore-p
 import { CastToUsersPipe } from './pipes/cast-to-user.pipe';
 import { CastToGenrePipe } from './pipes/cast-to-genre.pipe';
 import { LeftSidebarComponent } from './components/left-sidebar/left-sidebar.component';
+import { ProfileComponent } from './components/profile/profile.component';
+
 
 
 
@@ -131,7 +133,8 @@ export function tokenGetter() {
     ExplorePreListComponent,
     CastToUsersPipe,
     CastToGenrePipe,
-    LeftSidebarComponent
+    LeftSidebarComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

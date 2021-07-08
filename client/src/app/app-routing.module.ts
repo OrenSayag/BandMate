@@ -9,6 +9,7 @@ import { FeedComponent } from './components/feed/feed.component';
 import { LoginComponent } from './components/login/login.component';
 import { LogsComponent } from './components/logs/logs.component';
 import { MainComponent } from './components/main/main.component';
+import { ProfileComponent } from './components/profile/profile.component';
 import { RegisterComponent } from './components/register/register.component';
 import { SearchExploreComponent } from './components/search-explore/search-explore.component';
 import { TokenBodyGuardGuard } from './guards/token.guard';
@@ -21,6 +22,7 @@ const routes: Routes = [
     {path:"logs", component:LogsComponent},
     {path:"bank", component:BankComponent},
     {path:"feed", component:FeedComponent},
+    {path:"explore/profile/:username", component:ProfileComponent},
     {path:"explore", component:ExploreComponent,
     children:[
       {path:"list", component:ExploreListComponent},

@@ -1,4 +1,65 @@
-<p>left-sidebar works!</p>
-<div class="root" >
+<div class="root">
+
+    <div class="profile-header"
+    (click)="_r.navigateByUrl('/explore/profile/'+_users.userInfo.username);slideLeftSidebar.emit('close')"
+    >
+
+        <div class="img-cont">
+            <!-- {{_users.userInfo.profile_img_src || 'some_src'}} -->
+            <img [src]="_users.userInfo.profile_img_src || 'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png'"
+                alt="">
+
+        </div>
+
+        <div class="img-cont">
+            {{_users.userInfo.username}}
+        </div>
+
+    </div>
+
+    <div class="button-list">
+
+        <mat-selection-list [multiple]="false">
+            <!-- <mat-list-option>
+                My Bands
+            </mat-list-option> -->
+
+            <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        My Bands
+                    </mat-panel-title>
+                    <!-- <mat-panel-description>
+                      hello
+                    </mat-panel-description> -->
+                </mat-expansion-panel-header>
+                <mat-list-option
+                *ngFor="let band of _users.userInfo.bands"
+    (click)="_r.navigateByUrl('/explore/profile/'+band.username);slideLeftSidebar.emit('close')"
+                >
+                    {{band.username}}
+                    {{band.profile_img_src || 'some_src'}}
+                </mat-list-option>
+            </mat-expansion-panel>
+
+
+            <mat-list-option>
+                Metronome
+            </mat-list-option>
+
+
+
+            <!-- <mat-list-option>
+              Settings
+            </mat-list-option> -->
+            <!-- <mat-list-option>
+              Goals
+            </mat-list-option> -->
+            <!-- <mat-list-option>
+              Stats
+            </mat-list-option> -->
+        </mat-selection-list>
+
+    </div>
 
 </div>

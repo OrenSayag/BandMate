@@ -3,6 +3,8 @@ const router = require("express").Router();
 const mongoose = require("mongoose");
 const { privateGuard } = require("../toolFunctions");
 const RecordingsModel = require("../DB/models/recordings");
+const FsFilesModel = require("../DB/models/fs.files");
+const FsChunksModel = require("../DB/models/fs.chunks");
 const multer = require("multer")
 
 const mongodb = require('mongodb');
@@ -425,11 +427,16 @@ router.delete("/:recordingId" ,async (req, res) => {
     }
 
 
+
+
     const parentUser = await UsersModel.findById(recording.parentUser)
     if((recording.parentUser!=userId && !parentUser.participants.some(p=>p.userId==userId))){
 
       return res.status(400).send({ fail: "This recording is not yours to delete" });
     }
+
+    await FsFilesModel.findByIdAndDelete(recording.fileSrc)
+    await FsChunksModel.find({files_id:await mongoose.Types.ObjectId(recording.fileSrc)})
 
     await RecordingsModel.findByIdAndDelete(recordingId)
 

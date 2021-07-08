@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { LogsService } from './services/logs.service';
+import { UsersService } from './services/users.service';
 
 @Component({
   selector: 'app-root',
@@ -9,10 +10,11 @@ import { LogsService } from './services/logs.service';
 export class AppComponent {
   title = 'client';
 
-  constructor(public _logs:LogsService) { }
+  constructor(public _users:UsersService) { }
 
   ngOnInit(): void {
-    // this._logs.getUserLogs()
+    this._users.getTokenHolderInfo()
+
   }
 
   public handleClick(e:any):void{

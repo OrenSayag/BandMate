@@ -1,0 +1,68 @@
+<p>profile works!</p>
+<div class="root">
+
+
+    <div class="top">
+
+        
+        <div class="profic-pic-and-title">
+            <div class="profile-pic-cont">
+                <input type="file" #imgUploadInput class="img-upload-input hidden"
+                (change)="handleProfileFileInputChange()"
+                >
+                    <mat-icon
+                    (click)="profileImgUploadOpen()"
+                    class="edit-profile-img"
+                    >edit</mat-icon>
+                    <!-- {{_explore.profile.profile_img_src || 'some_src'}} -->
+                    <img [src]="_explore.profile.profile_img_src || 'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png'" alt="">
+
+                </div>
+                
+                <div class="title">
+                    {{_explore.profile.username}}
+                </div>
+                
+            </div>
+            
+            <div class="social-btns"
+        *ngIf="profileOwner!==_users.userInfo.username"
+            >
+                <button mat-raised-button color="primary"
+                (click)="_users.followToggler(_explore.profile._id)"
+                >
+            {{_users.userInfo.following.includes(_explore.profile._id) ? 'Following' : 'Follow'}}
+            </button>
+                <button mat-raised-button color="primary">Message</button>
+                <button 
+                *ngIf="amIInThisBand"
+                mat-raised-button color="primary">Request To Join</button>
+    
+            </div>
+            <div class="count-data">
+                <div class="logs">
+                    Logs
+                    {{_explore.profileCountData.logs}}
+                </div>
+                <div class="recordings">
+                    Recordings
+                    {{_explore.profileCountData.recordings}}
+                </div>
+                <div class="posts">
+                    Posts
+                    {{_explore.profileCountData.posts}}
+                </div>
+                <div class="followers">
+                    Followers
+                    {{_explore.profileCountData.followers}}
+                </div>
+                <div class="following">
+                    Following
+                    {{_explore.profileCountData.following}}
+                </div>
+            </div>
+
+
+    </div>
+
+</div>
