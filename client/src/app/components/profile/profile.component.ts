@@ -7,6 +7,7 @@ import LogsModel from 'src/app/models/logs.model';
 import PostModel from 'src/app/models/posts.model';
 import Recording from 'src/app/models/recordings.model';
 import { ExploreService } from 'src/app/services/explore.service';
+import { MessagesService } from 'src/app/services/messages.service';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -21,6 +22,8 @@ export class ProfileComponent implements OnInit {
   public contentFilter: string = 'all';
 
   public profileOwner: string = '';
+
+  public loading:boolean = true;
 
   @ViewChild('imgUploadInput') profileImgUploadInput: any;
   @ViewChild('coverUploadInput') coverImgUploadInput: any;
@@ -44,6 +47,7 @@ export class ProfileComponent implements OnInit {
     public _ar: ActivatedRoute,
     public _explore: ExploreService,
     public _http: HttpClient,
+    public _messages: MessagesService,
   ) {}
 
 
@@ -51,6 +55,7 @@ export class ProfileComponent implements OnInit {
     
     await this._users.getTokenHolderInfo();
     this._ar.params.subscribe(async (parameter) => {
+      this.loading = true
       this.profileOwner = parameter.username;
       await this._explore.getProfile(this.profileOwner);
       this.streamProfileImg(
@@ -60,9 +65,19 @@ export class ProfileComponent implements OnInit {
         this._explore.profile.cover_img_src || '60e6c300056bb06118c22c52'
       );
       await this._explore.getProfileContent(this.profileOwner)
-      this.amIInThisBand = this._users.userInfo.bands.some(
+      this.amIInThisBand = 
+      (this._users.userInfo.bands.some(
         (b) => b._id == this._explore.profile._id
-      );
+      )) || (this._users.userInfo.participants.some(
+        (p) => p.userId._id == this._explore.profile._id
+      ))
+      console.log(this.amIInThisBand)
+      await new Promise((resolve,reject)=>{
+        setTimeout(() => {
+          resolve("")
+        }, 500)
+      })
+      this.loading = false;
     });
     console.log(this.profileOwner);
     
@@ -248,5 +263,37 @@ export class ProfileComponent implements OnInit {
       this._explore.profileContentPosts = this._explore.profileContentPosts.filter(c=>c._id!==e)
     }
   }
+
+  public async sendJoinReq():Promise<void>{
+    let content = ""
+    if(this._users.userInfo.isBand){
+      content = `Hey ${this._explore.profile.username}!
+      We would like you to join our band!`
+    } else {
+      content = `Hey ${this._explore.profile.username}!
+      I would like to join your band!`
+    }
+    const res = await this._messages.sendMessage(
+      this._explore.profile._id,
+      content,
+      true
+    )
+    if(res){
+      if(this.joinReqExists()){
+        this._users.userInfo.joinReqsWithUsers
+        .push(this._explore.profile._id)
+      } else {
+        this._users.userInfo.joinReqsWithUsers =
+        this._users.userInfo.joinReqsWithUsers
+        .filter(u=>u!==this._explore.profile._id)
+      }
+    }
+  }
+
+  public joinReqExists():boolean{
+    return this._users.userInfo.joinReqsWithUsers
+    .some(u=>u===this._explore.profile._id)
+  }
+
 
 }

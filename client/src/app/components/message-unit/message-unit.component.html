@@ -1,0 +1,78 @@
+<div *ngIf="message.isJoinReq" class="root-joinReq">
+    <!-- {{message | json}} -->
+
+    <!-- <h2>HEY I'M A JOIN REQUEST</h2> -->
+
+    <div class="content">
+        {{message.content}}
+    </div>
+
+    <div class="pending" *ngIf="message.status==='pending'">
+
+        <div *ngIf="message.from._id!==_users.userInfo._id" class="reciever">
+            <button (click)="_messages.respondJoinReq('approve', message._id)" mat-raised-button color="primary">
+                Approve
+            </button>
+            <button (click)="_messages.respondJoinReq('reject', message._id)" mat-raised-button color="primary">
+                Reject
+            </button>
+        </div>
+
+        <div *ngIf="message.from._id===_users.userInfo._id" class="sender">
+            <button (click)="_messages.respondJoinReq('cancel', message._id)" mat-raised-button color="primary">
+                Cancel
+            </button>
+        </div>
+
+    </div>
+
+    <div class="closed" *ngIf="message.status!=='pending'">
+
+        <div *ngIf="message.status==='approved'" class="approved">
+            
+            {{  message.from._id === _users.userInfo._id ?
+                (_users.userInfo.isBand ? (message.to.username + 'approved your join request. Welcome to the band!'):(message.to.username + ' agreed to join you band. Go and throw a party!'))
+                :
+                (_users.userInfo.isBand ? ('You approved ' + message.from.username + ' into your band. Rock on!'):('You agreed to join ' + message.to.username + ' . Drink wisely!'))
+            }}
+        </div>
+        <div *ngIf="message.status==='rejected'" class="rejected">
+            {{  message.from._id === _users.userInfo._id ?
+                (_users.userInfo.isBand ? (message.to.username + 'rejected your join request.'):(message.to.username + ' refused to join you band.'))
+                :
+                (_users.userInfo.isBand ? ('You rejected ' + message.from.username + ' request to join your band.'):('You refused to join ' + message.from.username + '.'))
+            }}
+            
+        </div>
+        <div *ngIf="message.status==='canceled'" class="canceled">
+            {{'You canceled this join request.'}}
+        </div>
+
+        <div class="date">
+        {{message.date | date: 'HH:mm'}}
+
+        </div>
+
+    </div>
+
+</div>
+
+<div *ngIf="!message.isJoinReq" class="root-noraml"
+    [ngClass]="message.from._id===_users.userInfo._id ? 'left' : 'right'">
+    <!-- {{message | json}} -->
+
+    <!-- if typed "group message", add username with random color to the body -->
+
+    <div *ngIf="message.type==='group message' && message.from._id!=='_users.userInfo._id'" class="username">
+        {{message.from.username}}
+    </div>
+
+    <div class="content">
+        {{message.content}}
+    </div>
+
+    <div class="date">
+        {{message.date | date: 'HH:mm'}}
+    </div>
+
+</div>

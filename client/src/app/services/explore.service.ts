@@ -28,6 +28,7 @@ export class ExploreService {
     userFeed: [],
     following: [],
     followers: [],
+    joinReqsWithUsers: []
   }
 
   public profileCountData:{

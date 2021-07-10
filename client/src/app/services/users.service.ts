@@ -7,6 +7,7 @@ import UserInfoModel from '../models/tinyModels/userInfo.model';
 import LogsModel from '../models/logs.model';
 import Recording from '../models/recordings.model';
 import PostModel from '../models/posts.model';
+import { ExploreService } from './explore.service';
 
 @Injectable({
   providedIn: 'root',
@@ -38,6 +39,7 @@ export class UsersService {
     userFeed: [],
     following: [],
     followers: [],
+    joinReqsWithUsers: []
   };
 
   public currUserOtBand: {
@@ -52,7 +54,10 @@ export class UsersService {
 
   public userFeed:Array<LogsModel|Recording|PostModel> = []
 
-  constructor(public _http: HttpClient) {}
+  constructor(
+    public _http: HttpClient,
+    public _explore: ExploreService,
+    ) {}
 
   public async getUserInfo(body: apiUserGetInfo) {
     const res: any = await this._http
@@ -135,9 +140,15 @@ export class UsersService {
       if(this.userInfo.following.includes(toFollowId)){
 
         this.userInfo.following = this.userInfo.following.filter(f=>f!==toFollowId)
+        // this._explore.profile.followers = this._explore.profile.followers
+        // .filter(f=>f!==this.userInfo._id)
+        this._explore.profileCountData.following -= 1
       } else {
-
+        
         this.userInfo.following.push(toFollowId)
+        this._explore.profileCountData.following += 1
+        // this._explore.profile.following
+        // .push(this.userInfo._id)
       }
       
       return true

@@ -12,6 +12,8 @@ export class FeedComponent implements OnInit {
 
   public formTog:Boolean = false;
 
+  public loading:boolean = true;
+
   public async killPost(e:any){
     const res = await this._posts.delPost(e)
     if(res){
@@ -31,6 +33,13 @@ export class FeedComponent implements OnInit {
     async ngOnInit(): Promise<void> {
       await this._users.getFeed()
       console.log(this._users.userInfo.userFeed)
+      await new Promise((resolve, reject)=>{
+        setTimeout(() => {
+          resolve("")
+        }, 500)
+        
+      })
+      this.loading = false;
     }
     
     public formToggler(){

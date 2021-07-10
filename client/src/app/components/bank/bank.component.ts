@@ -10,6 +10,8 @@ import { UsersService } from 'src/app/services/users.service';
 })
 export class BankComponent implements OnInit {
 
+  public loading:boolean = true
+
   public formTog:Boolean = false;
 
   public async killRecording(e:any){
@@ -38,7 +40,14 @@ export class BankComponent implements OnInit {
 
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    await new Promise((resolve, reject)=>{
+      setTimeout(() => {
+        resolve("")
+      }, 500)
+      
+    })
+    this.loading = false;
   }
 
   public formToggler(){

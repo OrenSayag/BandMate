@@ -1,10 +1,18 @@
-<app-add-content-button (click)="formToggler()" ></app-add-content-button>
-<app-log-add-form *ngIf="formTog"
-(successfulLog)="formListener($event)"
-></app-log-add-form>
-<div class="list">
-    <app-log-item
-    [log]="log"
-    (killMe)="killLog($event)"
-    *ngFor="let log of _users.mainContent.logs.reverse()"></app-log-item>
+<mat-spinner
+[ngClass]="loading ? 'active' : 'hidden'"
+></mat-spinner>
+<div class="root"
+[ngClass]="!loading ? 'active' : 'hidden'"
+>
+
+    <app-add-content-button (click)="formToggler()" ></app-add-content-button>
+    <app-log-add-form *ngIf="formTog"
+    (successfulLog)="formListener($event)"
+    ></app-log-add-form>
+    <div class="list">
+        <app-log-item
+        [log]="log"
+        (killMe)="killLog($event)"
+        *ngFor="let log of _users.mainContent.logs.reverse()"></app-log-item>
+    </div>
 </div>

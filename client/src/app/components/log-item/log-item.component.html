@@ -48,7 +48,10 @@
         {{ log.title }}
     </div>
     <div class="user-pic">
-        {{log.parentUser.profile_img_src || "some img src" }}
+        <!-- {{log.parentUser.profile_img_src || "some img src" }} -->
+        <app-profile-img
+        [src]="log.parentUser.profile_img_src"
+        ></app-profile-img>
         {{log.parentUser.username }}
     </div>
 

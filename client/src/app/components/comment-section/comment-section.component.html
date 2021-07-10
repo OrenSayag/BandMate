@@ -2,7 +2,10 @@
     <div class="list">
         <div class="comment" *ngFor="let comment of comments">
             <div class="profile-pic">
-                {{comment.userId.profile_img_src || 'somr src'}}
+                <!-- {{comment.userId.profile_img_src || 'somr src'}} -->
+                <app-profile-img
+                [src]="comment.userId.profile_img_src"
+                ></app-profile-img>
             </div>
             <div class="username">
                 {{comment.userId.username}}
@@ -28,6 +31,9 @@
 
 
     <div class="input">
+        <app-profile-img [src]="_users.userInfo.profile_img_src"
+        >
+        </app-profile-img>
         <mat-form-field [formGroup]="myForm">
 
             <input matInput placeholder="" value="" formControlName="commentInput">

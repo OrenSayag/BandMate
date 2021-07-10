@@ -8,3 +8,10 @@ body {
     background-color: rgb(48,48,48);
     color: white;
 }
+
+.active {
+    display: initial
+}
+.hidden {
+    display: none
+}

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import CommentsModel from '../models/comments.model';
+import { UsersService } from './users.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,8 @@ import CommentsModel from '../models/comments.model';
 export class PostsService {
 
   constructor(
-    public _http:HttpClient
+    public _http:HttpClient,
+    public _users:UsersService,
   ) { }
 
   public async postPost(
@@ -39,6 +41,23 @@ export class PostsService {
 
     if (res.ok) {
       console.log('succesfully added post');
+      this._users.userInfo.userFeed.push({
+        fileSrc,
+        content,
+        parentUser: {
+          profile_img_src: this._users.userInfo.profile_img_src,
+          _id: this._users.userInfo._id,
+          participants: [],
+          username: ""
+        },
+        date: new Date(),
+        comments: [],
+        likes: [],
+        isPrivate,
+        type: "post",
+        mediaType,
+        _id: res._id
+      })
       return true
     } else {
       console.log('failed to add post');

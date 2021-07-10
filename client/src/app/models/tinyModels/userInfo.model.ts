@@ -22,4 +22,5 @@ export default interface UserInfoModel{
     userFeed:Array<LogsModel|Recording|PostModel>,
     following: string[],
     followers: string[],
+    joinReqsWithUsers: string[]
 }

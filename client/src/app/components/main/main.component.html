@@ -1,15 +1,11 @@
-<div class="root"
-[ngClass]="leftSidebarTog ? 'ovh' : ''"
->
-    <app-header
-    (slideLeftSidebar)="slideLeftSidebar($event)"
-    ></app-header>
-    <div class="left-side-bar" #leftSideBar
-    [ngClass]="leftSidebarTog ? 'open-left-side-bar' : ''"
-    >
-        <app-left-sidebar 
-        (slideLeftSidebar)="slideLeftSidebar($event)"
-        ></app-left-sidebar>
+<div class="root" [ngClass]="(leftSidebarTog || messagesMainTog) ? 'ovh' : ''">
+    <app-header (slideLeftSidebar)="slideLeftSidebar($event)" (slideMessagaesMain)="slideMessagesMain($event)">
+    </app-header>
+    <div class="left-side-bar" [ngClass]="leftSidebarTog ? 'open-left-side-bar' : ''">
+        <app-left-sidebar (slideLeftSidebar)="slideLeftSidebar($event)"></app-left-sidebar>
+    </div>
+    <div class="messages-main" [ngClass]="messagesMainTog ? 'open-messages-main' : ''" #messagesMain>
+        <app-messages-main (slideMessagaesMain)="slideMessagesMain($event)"></app-messages-main>
     </div>
     <app-nav-bar></app-nav-bar>
     <router-outlet></router-outlet>

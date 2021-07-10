@@ -12,3 +12,7 @@
 .user-bands-bar{
     display: flex;
 }
+
+.root {
+    display: flex;
+}

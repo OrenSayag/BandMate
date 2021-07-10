@@ -1,24 +1,26 @@
 <div class="root">
 
     <div (click)="slideLeftSidebar.emit('open')" class="left-side-bar-tog">
-        <mat-icon>burger</mat-icon>
+        <mat-icon>menu</mat-icon>
     </div>
 
 
     <div class="user-bands-bar">
-        <app-profile-img [src]="_users.userInfo.profile_img_src">
+        <app-profile-img [src]="_users.userInfo.profile_img_src" (click)="avatarSwap('',_users.userInfo.username)">
         </app-profile-img>
 
-        <div class="avatar" (click)="avatarSwap()">
-            <!-- (click)="_users.getUserInfo({})" -->
-            <!-- <img [src]="_users.userInfo.profile_img_src || 'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png'" alt=""> -->
-        </div>
-        <div *ngFor="let userOrBand of _users.userInfo.bands" class="avatar" (click)="avatarSwap(userOrBand._id)">
+        <!-- <div class="avatar" (click)="avatarSwap('',_users.userInfo.username)">
+    </div> -->
+        <div *ngFor="let userOrBand of _users.userInfo.bands" class="avatar"
+            (click)="avatarSwap(userOrBand._id, userOrBand.username)">
             <!-- (click)="_users.getUserInfo({bandId:userOrBand._id})" -->
             <app-profile-img [src]="userOrBand.profile_img_src || ''">
-            {{userOrBand.username}}
-            <!-- {{userOrBand._id}} -->
+                {{userOrBand.username}}
+                <!-- {{userOrBand._id}} -->
             </app-profile-img>
         </div>
+    </div>
+    <div (click)="slideMessagaesMain.emit('open')" class="messages-main-tog">
+        <mat-icon>inbox</mat-icon>
     </div>
 </div>

@@ -1,0 +1,17 @@
+.root{
+        position: absolute;
+        top: 0;
+        /* right: -100vw; */
+        border: 1px solid pink;
+        background-color: gray;
+        height: 100vh;
+        width: 100vw;
+        /* height: 0vh; */
+        /* width: 0vw; */
+        box-sizing: border-box;
+        transition: transform 250ms;
+        z-index: 10;
+        /* display:none; */
+        display: grid;
+        grid-template-rows: 300px auto 200px;
+}

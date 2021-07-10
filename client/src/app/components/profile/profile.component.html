@@ -1,4 +1,8 @@
-<div class="root">
+<mat-spinner
+[ngClass]="loading ? 'active' : 'hidden'"
+></mat-spinner>
+
+<div [ngClass]="!loading ? 'active' : 'hidden'" class="root">
 
     <div #coverImgCont class="cover">
         <div class="div"></div>
@@ -44,8 +48,15 @@
             <button mat-raised-button color="primary" (click)="_users.followToggler(_explore.profile._id)">
                 {{_users.userInfo.following.includes(_explore.profile._id) ? 'Following' : 'Follow'}}
             </button>
-            <button mat-raised-button color="primary">Message</button>
-            <button *ngIf="!amIInThisBand && !(_users.userInfo.isBand&&_explore.profile.isBand)" [ngClass]="amIInThisBand ? 'hidden':'active'" mat-raised-button color="primary">Request To Join</button>
+            <button mat-raised-button 
+            (click)="_r.navigateByUrl('/messages/conversation/'+_explore.profile._id)"
+            color="primary">Message</button>
+            <button 
+            (click)="!joinReqExists() ? sendJoinReq() : ''"
+            *ngIf="!amIInThisBand && !(_users.userInfo.isBand&&_explore.profile.isBand)" 
+            [ngClass]="amIInThisBand ? 'hidden':'active'" mat-raised-button color="primary">
+            {{!joinReqExists() ? 'Request To Join' : 'Pending Join Request'}}
+        </button>
 
         </div>
         <div class="count-data">

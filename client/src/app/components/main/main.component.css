@@ -1,3 +1,12 @@
+.root{
+    overflow-x: hidden;
+    width: 100vw;
+    position: relative;
+    height: 100%;
+}
+
+
+
 .left-side-bar{
     position: absolute;
     top: 0;
@@ -11,10 +20,33 @@
     z-index: 10;
 }
 
+.messages-main{
+    position: absolute;
+    top: 0;
+    right: -100vw;
+    border: 1px solid pink;
+    background-color: gray;
+    height: 100vh;
+    width: 100vw;
+    /* height: 0vh; */
+    /* width: 0vw; */
+    box-sizing: border-box;
+    transition: transform 250ms;
+    z-index: 10;
+    /* display:none; */
+}
+
+
 .open-left-side-bar{
     /* left: 0; */
     transform: translateX(87vw);
-    
+
+}
+
+.open-messages-main{
+    /* left: 0; */
+    transform: translateX(-100vw);
+    /* display: flex; */
 }
 
 .ovh {

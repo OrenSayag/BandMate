@@ -1,39 +1,48 @@
-<app-add-content-button (click)="formToggler()" ></app-add-content-button>
 
-<app-add-post-form *ngIf="formTog"
-(successfulPost)="formListener($event)"
-></app-add-post-form>
+<mat-spinner
+[ngClass]="loading ? 'active' : 'hidden'"
+></mat-spinner>
+<div class="root"
+[ngClass]="!loading ? 'active' : 'hidden'"
+>
 
-<div *ngIf="_users.userInfo.userFeed" class="list">
-
-    <div
-    *ngFor="let content of _users.userInfo.userFeed.reverse()"
-    class="content-unit">
-
-    <app-log-item
-    [displayType]="true"
-    *ngIf="content.type==='log'"
-    [log]="content | castLog"
-    >   
-    </app-log-item>
-
-    <app-recording-unit
-    [displayType]="true"
-    *ngIf="content.type==='recording'"
-    [recording]="content | castRecording"
-    >   
-    </app-recording-unit>
-
-    <app-post-unit
-    [displayType]="true"
-    *ngIf="content.type==='post'"
-    [post]="content | castPost"
-    (killMe)="killPost($event)"
-    >   
-    </app-post-unit>
-
-
-    </div>
+    <app-add-content-button (click)="formToggler()" ></app-add-content-button>
+    
+    <app-add-post-form *ngIf="formTog"
+    (successfulPost)="formListener($event)"
+    ></app-add-post-form>
+    
+    <div *ngIf="_users.userInfo.userFeed" class="list">
+    
+        <div
+        *ngFor="let content of _users.userInfo.userFeed.reverse()"
+        class="content-unit">
+    
+        <app-log-item
+        [displayType]="true"
+        *ngIf="content.type==='log'"
+        [log]="content | castLog"
+        >   
+        </app-log-item>
+    
+        <app-recording-unit
+        [displayType]="true"
+        *ngIf="content.type==='recording'"
+        [recording]="content | castRecording"
+        >   
+        </app-recording-unit>
+    
+        <app-post-unit
+        [displayType]="true"
+        *ngIf="content.type==='post'"
+        [post]="content | castPost"
+        (killMe)="killPost($event)"
+        >   
+        </app-post-unit>
+    
+    
+        </div>
+</div>
 
 
 </div>

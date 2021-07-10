@@ -7,7 +7,10 @@
     </div>
 
     <div class="user-pic">
-        {{recording.parentUser.profile_img_src || "some img src" }}
+        <!-- {{recording.parentUser.profile_img_src || "some img src" }} -->
+        <app-profile-img
+        [src]="recording.parentUser.profile_img_src"
+        ></app-profile-img>
         {{recording.parentUser.username }}
     </div>
     

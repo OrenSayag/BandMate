@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { JwtModule } from "@auth0/angular-jwt";
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -71,6 +72,14 @@ import { CastToGenrePipe } from './pipes/cast-to-genre.pipe';
 import { LeftSidebarComponent } from './components/left-sidebar/left-sidebar.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ProfileImgComponent } from './componenets/profile-img/profile-img.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MessagesMainComponent } from './components/messages-main/messages-main.component';
+import { MessagesRouterComponent } from './components/messages-router/messages-router.component';
+import { MgroupInfoComponent } from './components/mgroup-info/mgroup-info.component';
+import { GroupInfoComponent } from './components/group-info/group-info.component';
+import { NewGroupComponent } from './components/new-group/new-group.component';
+import { ConversationPreviewComponent } from './components/conversation-preview/conversation-preview.component';
+import { MessageUnitComponent } from './components/message-unit/message-unit.component';
 
 
 
@@ -136,7 +145,14 @@ export function tokenGetter() {
     CastToGenrePipe,
     LeftSidebarComponent,
     ProfileComponent,
-    ProfileImgComponent
+    ProfileImgComponent,
+    MessagesMainComponent,
+    MessagesRouterComponent,
+    MgroupInfoComponent,
+    GroupInfoComponent,
+    NewGroupComponent,
+    ConversationPreviewComponent,
+    MessageUnitComponent
   ],
   imports: [
     BrowserModule,
@@ -158,6 +174,8 @@ export function tokenGetter() {
     MatButtonModule,
     MatCardModule,
     MatExpansionModule,
+    MatProgressSpinnerModule,
+    FormsModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,

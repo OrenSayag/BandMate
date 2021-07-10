@@ -14,6 +14,8 @@ export class LogsComponent implements OnInit {
 
   public formTog:Boolean = false;
 
+  public loading:boolean = true
+
   public async killLog(e:any){
     const res = await this._logs.deleteLog(e)
     if(res){
@@ -41,9 +43,16 @@ export class LogsComponent implements OnInit {
 
   ) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     // console.log(this._users.userInfo)
     // this._logs.getUserLogs()
+    await new Promise((resolve, reject)=>{
+      setTimeout(() => {
+        resolve("")
+      }, 500)
+      
+    })
+    this.loading = false;
   }
 
   public formToggler(){

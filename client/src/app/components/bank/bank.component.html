@@ -1,13 +1,21 @@
-<p>bank works!</p>
-<app-add-content-button (click)="formToggler()" ></app-add-content-button>
-<app-add-recording-form [ngClass]="formTog ? 'active' : 'hidden'"
-(successfulpost)="formListener($event)"
-></app-add-recording-form>
-<div class="list">
-    <app-recording-unit
-    *ngFor="let recording of _users.mainContent.recordings.reverse()"
-    [recording]="recording"
-    (killMe)="killRecording($event)"
-    ></app-recording-unit>
 
+<mat-spinner
+[ngClass]="loading ? 'active' : 'hidden'"
+></mat-spinner>
+<div class="root"
+[ngClass]="!loading ? 'active' : 'hidden'"
+>
+
+    <app-add-content-button (click)="formToggler()" ></app-add-content-button>
+    <app-add-recording-form [ngClass]="formTog ? 'active' : 'hidden'"
+    (successfulpost)="formListener($event)"
+    ></app-add-recording-form>
+    <div class="list">
+        <app-recording-unit
+        *ngFor="let recording of _users.mainContent.recordings.reverse()"
+        [recording]="recording"
+        (killMe)="killRecording($event)"
+        ></app-recording-unit>
+    
+    </div>
 </div>

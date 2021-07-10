@@ -16,6 +16,8 @@ export class ProfileImgComponent implements OnInit {
 
   public blob:any
 
+  public loading:boolean = true
+
   constructor(
     public _http:HttpClient,
     public _users:UsersService,
@@ -30,6 +32,7 @@ export class ProfileImgComponent implements OnInit {
       
     })
     await this.streamProfileImg(this.src || '60e6b8c1056bb06118c223b2')
+    this.loading=false
   }
 
   public async streamProfileImg(fileId: string) {

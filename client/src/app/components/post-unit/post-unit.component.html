@@ -21,7 +21,11 @@
     </div>
 
     <div class="profile-img">
-        {{post.parentUser.profile_img_src || 'some_src'}}
+        <!-- {{post.parentUser.profile_img_src || 'some_src'}} -->
+        <app-profile-img
+        [src]="post.parentUser.profile_img_src"
+        ></app-profile-img>
+
     </div>
 
     <div class="content">

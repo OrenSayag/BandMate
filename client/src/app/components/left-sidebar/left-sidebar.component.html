@@ -11,7 +11,7 @@
                 >
             </app-profile-img>
             {{_users.userInfo.username}}
-            {{_users.userInfo.profile_img_src}}
+            <!-- {{_users.userInfo.profile_img_src}} -->
         </div>
 
     </div>
@@ -54,7 +54,7 @@
                 (click)="_r.navigateByUrl('/explore/profile/'+participants.userId.username);slideLeftSidebar.emit('close')"
                 >
                     {{participants.userId.username}}
-                    {{participants.userId.profile_img_src || 'some_src'}}
+                    <!-- {{participants.userId.profile_img_src || 'some_src'}} -->
                 </mat-list-option>
             </mat-expansion-panel>
 
