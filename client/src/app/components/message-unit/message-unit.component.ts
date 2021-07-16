@@ -16,11 +16,13 @@ export class MessageUnitComponent implements OnInit {
     isJoinReq: false,
     from: {
       _id: "",
-      username: ""
+      username: "",
+      profile_img_src: "",
     },
     to: {
       _id: "",
-      username: ""
+      username: "",
+      profile_img_src: "",
     },
     status: "",
     date: new Date(),

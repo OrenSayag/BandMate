@@ -15,3 +15,7 @@
         display: grid;
         grid-template-rows: 300px auto 200px;
 }
+
+.main{
+        overflow-y:scroll
+}

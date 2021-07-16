@@ -1,105 +1,184 @@
-<form class="example-form" [formGroup]="myForm" (ngSubmit)="register()">
+<div class="root">
 
-    <mat-radio-group aria-label="Select an option" formControlName="isBand" >
-        <mat-radio-button [value]="false">User</mat-radio-button>
-        <mat-radio-button [value]="true">Band</mat-radio-button>
-    </mat-radio-group>
+    <div class="upload-image" flex="50">
 
-    <mat-form-field *ngIf="!myForm.controls.isBand.value" class="example-full-width" appearance="fill">
-        <mat-label>First Name:</mat-label>
-        <input formControlName="fname" matInput placeholder="" value="">
-    </mat-form-field>
-
-    <div class="error-div" *ngIf="myForm.controls.fname.dirty && myForm.controls.fname.errors?.required">
-        {{"Missing First Name"}}
-    </div>
-
-    <mat-form-field *ngIf="!myForm.controls.isBand.value" class="example-full-width" appearance="fill">
-        <mat-label>Last Name:</mat-label>
-        <input formControlName="lname" matInput placeholder="">
-    </mat-form-field>
-
-    <div class="error-div" *ngIf="myForm.controls.lname.dirty && myForm.controls.lname.errors?.required">
-        {{"Missing Last Name"}}
-    </div>
-
-    <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Username:</mat-label>
-        <input formControlName="userName" matInput placeholder="" value="">
-    </mat-form-field>
-
-    <div class="error-div" *ngIf="myForm.controls.userName.dirty && myForm.controls.userName.errors?.required">
-        {{"Missing User Name"}}
-    </div>
-
-    <div class="error-div" *ngIf="myForm.controls.userName.dirty && myForm.controls.userName.errors?.pattern">
-        {{"Invalid userName. Rules: 4-10 characters, no _ or . at the beginning or end, no double special characters
-        (._), allowed characters: - . , a-z, A-Z, 0-9"}}
-    </div>
-
-    <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Mail:</mat-label>
-        <input formControlName="mail" matInput placeholder="">
-    </mat-form-field>
-
-    <div class="error-div" *ngIf="myForm.controls.mail.dirty && myForm.controls.mail.errors?.required">
-        {{"Missing Mail"}}
-    </div>
-
-    <div class="error-div" *ngIf="myForm.controls.mail.dirty && myForm.controls.mail.errors?.pattern">
-        {{"Invalid Mail Format"}}
-    </div>
-
-    <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Password</mat-label>
-        <input formControlName="password" matInput placeholder="" value="">
-    </mat-form-field>
-
-    <div class="error-div" *ngIf="myForm.controls.password.dirty && myForm.controls.password.errors?.required">
-        {{"Missing Password"}}
-    </div>
-
-    <div class="error-div" *ngIf="myForm.controls.password.dirty && myForm.controls.password.errors?.pattern">
-        {{"Weak Password. Rules: Minimum 8 character password, upper and lower case letters and a number"}}
-    </div>
-
-    <div class="instruments-form">
-        <div class="title">
-            What instruments do you play?
+        <div class="cont">
+            <img class="profile-img" #profileImg
+            (click)="clickFileInput()"
+                [src]="'https://www.worldfuturecouncil.org/wp-content/uploads/2020/06/blank-profile-picture-973460_1280-1.png'"
+                alt="">
+            <input type="file" #fileInput autocomplete="off" (change)="handleFileInputChange($event)" class="hidden">
+            <!-- <mat-icon (click)="clickFileInput()">edit</mat-icon> -->
         </div>
-        <div class="cb-cont">
-            <mat-checkbox
-             *ngFor="let instrument of _instruments.instrumentsCatalog" class="example-margin" 
-             (change)="addItem(instrument._id, chosenInstruments)"
-            >
-           {{instrument.name}}
-       </mat-checkbox>
-        </div>
+
+        <!-- {{_users.userInfo.profile_img_src | json}} -->
+
     </div>
-    <div class="genres-form">
-        <div class="title">
-            What genres do you play?
+    <form [formGroup]="myForm" (ngSubmit)="register()">
+
+
+        <mat-radio-group class="hidden" aria-label="Select an option" formControlName="isBand">
+            <mat-radio-button [value]="false">User</mat-radio-button>
+            <mat-radio-button [value]="true">Band</mat-radio-button>
+        </mat-radio-group>
+
+        <div class="tabs">
+            <mat-grid-list cols="1">
+
+                <mat-tab-group mat-stretch-tabs disableRipple colspan="1" (selectedTabChange)="clickTab($event)">
+                    <mat-tab label="User">
+                    </mat-tab>
+                    <mat-tab label="Band">
+                    </mat-tab>
+                </mat-tab-group>
+            </mat-grid-list>
         </div>
-        <div class="cb-cont">
-            <mat-checkbox
-             *ngFor="let genre of _genres.genresCatalog" class="example-margin" 
-             (change)="addItem(genre._id, chosenGenres)"
-            >
-           {{genre.name}}
-       </mat-checkbox>
+
+
+
+
+        <div class="fname"
+        *ngIf="!myForm.controls.isBand.value"
+        >
+            <mat-form-field  class="example-full-width" appearance="fill">
+                <mat-label>First Name</mat-label>
+                <input autocomplete="off" formControlName="fname" matInput placeholder="" value="">
+            </mat-form-field>
+
+            <div class="error-div" *ngIf="myForm.controls.fname.dirty && myForm.controls.fname.errors?.required">
+                {{"Missing First Name"}}
+            </div>
         </div>
+
+
+        <div class="lname"
+        *ngIf="!myForm.controls.isBand.value"
+        >
+            <mat-form-field  class="example-full-width" appearance="fill">
+                <mat-label>Last Name</mat-label>
+                <input autocomplete="off" formControlName="lname" matInput placeholder="">
+            </mat-form-field>
+
+            <div class="error-div" *ngIf="myForm.controls.lname.dirty && myForm.controls.lname.errors?.required">
+                {{"Missing Last Name"}}
+            </div>
+        </div>
+
+        <div class="username">
+
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Username</mat-label>
+                <input autocomplete="off" formControlName="userName" matInput placeholder="" value="">
+            </mat-form-field>
+
+            <div class="error-div" *ngIf="myForm.controls.userName.dirty && myForm.controls.userName.errors?.required">
+                {{"Missing Username"}}
+            </div>
+
+            <div class="error-div" *ngIf="myForm.controls.userName.dirty && myForm.controls.userName.errors?.pattern">
+                Invalid username. <br/>
+                Rules: <br/>
+                4-10 characters, <br/>No _ or . at the beginning or end, <br/>No double special
+                characters
+                (._), <br/>Allowed characters: - . , a-z, A-Z, 0-9
+            </div>
+        </div>
+
+        <!-- {{this.myForm.controls.fname.value.length | json}}
+        {{this.myForm.controls.lname.value.length | json}} -->
+
+        <div class="mail">
+
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Mail</mat-label>
+                <input autocomplete="off" formControlName="mail" matInput placeholder="">
+            </mat-form-field>
+
+            <div class="error-div" *ngIf="myForm.controls.mail.dirty && myForm.controls.mail.errors?.required">
+                {{"Missing Mail"}}
+            </div>
+
+            <div class="error-div" *ngIf="myForm.controls.mail.dirty && myForm.controls.mail.errors?.pattern">
+                {{"Invalid Mail Format"}}
+            </div>
+        </div>
+
+        <div class="password">
+
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Password</mat-label>
+                <input autocomplete="off" formControlName="password" type="password" matInput placeholder="" value="">
+            </mat-form-field>
+
+            <div class="error-div" *ngIf="myForm.controls.password.dirty && myForm.controls.password.errors?.required">
+                {{"Missing Password"}}
+            </div>
+
+            <div class="error-div" *ngIf="myForm.controls.password.dirty && myForm.controls.password.errors?.pattern">
+                Weak Password. <br/>Rules: Minimum 8 character password, <br/>upper and lower case letters and a number
+            </div>
+        </div>
+
+        <div class="repeat-password">
+
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Repeat Password</mat-label>
+                <input autocomplete="off" formControlName="repeatPassword" type="password" matInput placeholder="" value="">
+            </mat-form-field>
+
+            <div class="error-div" *ngIf="myForm.controls.repeatPassword.dirty && myForm.controls.repeatPassword.errors?.required">
+                {{"Missing Repeat Password"}}
+            </div>
+
+        </div>
+
+
+
+        <div class="instruments">
+            <div class="title">
+                What instruments do you play?
+            </div>
+            <div class="cb-cont">
+                <mat-checkbox *ngFor="let instrument of _instruments.instrumentsCatalog" class="example-margin"
+                    (change)="handleInstrumentChange(instrument._id)">
+                    {{instrument.name}}
+                </mat-checkbox>
+            </div>
+        </div>
+
+        <div class="genres">
+            <div class="title">
+                What genres do you play?
+            </div>
+            <div class="cb-cont">
+                <mat-checkbox *ngFor="let genre of _genres.genresCatalog" class="example-margin"
+                    (change)="handleGenreChange(genre._id)">
+                    {{genre.name}}
+                </mat-checkbox>
+            </div>
+        </div>
+
+
+        <input class="hidden" #submit type="submit">
+
+        
+        <button
+        class="register-btn"
+        (click)="submitForm()"
+        mat-raised-button color="primary">Register</button>
+
+        <div class="error-div-submit">
+            {{errorMessage}}
+        </div>
+
+        <!-- <p>{{_genres.genresCatalog | json}}</p> -->
+        <!-- <p>{{myForm.valid | json}}</p> -->
+        <!-- <p>{{myForm.controls.mail.errors | json}}</p> -->
+        <!-- <p>{{myForm.controls.password.errors | json}}</p> -->
+    </form>
+
+    <div class="footer">
+        <p>Already have an account? <span (click)="_r.navigateByUrl('/login')">Login</span></p>
+
     </div>
-
-    <input type="submit">
-
-    <div class="error-message">
-        {{errorMessage}}
-    </div>
-
-    <!-- <p>{{_genres.genresCatalog | json}}</p> -->
-    <!-- <p>{{myForm.valid | json}}</p> -->
-    <!-- <p>{{myForm.controls.mail.errors | json}}</p> -->
-    <!-- <p>{{myForm.controls.password.errors | json}}</p> -->
-
-    <p>Already have an account? <span (click)="_r.navigateByUrl('/login')">Login</span></p>
-</form>
+</div>

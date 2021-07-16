@@ -6,6 +6,8 @@ const bcrypt = require("bcrypt");
 const UsersModel = require("../DB/models/users");
 const instrumentModel = require("../DB/models/instruments");
 const GenresModel = require("../DB/models/genres");
+const upload = require("../middleware/upload");
+
 
 // mongoose.set('debug', true);
 
@@ -49,7 +51,9 @@ router.post("/register", async (req, res) => {
     password,
     instruments,
     genres,
+    profile_img_src
   } = req.body;
+
 
   if (isBand === undefined || !password || !mail || !userName) {
     return res.status(401).send({ fail: "Missing Some Info" });
@@ -129,6 +133,7 @@ router.post("/register", async (req, res) => {
         instruments,
         genres,
         isBand,
+        profile_img_src
       });
     } else {
       await UsersModel.create({
@@ -138,11 +143,13 @@ router.post("/register", async (req, res) => {
         instruments,
         genres,
         isBand,
+        profile_img_src
       });
     }
 
     return res.status(200).send({ok:"new user created"})
   } catch (error) {
+    console.log(error)
     return res.status(500).send({ error });
   }
 });
@@ -166,14 +173,14 @@ router.post("/login", async (req, res) => {
     ;
 
     if (goose.length === 0) {
-      return res.status(401).send({ failAndDisplay: "no such user or mail" });
+      return res.status(401).send({ failAndDisplay: "No such user or mail" });
     }
 
     const hashed_pass = goose[0].hashedPass;
 
     const verifyPass = await bcrypt.compareSync(password, hashed_pass);
     if (!verifyPass) {
-      return res.status(401).send({ failAndDisplay: "worng password" });
+      return res.status(401).send({ failAndDisplay: "Wrong password" });
     }
 
 
@@ -208,6 +215,27 @@ router.post("/login", async (req, res) => {
       console.log(error)
     return res.sendStatus(500)
   }
+});
+
+
+// upload file
+router.post("/uploadProfilePicture", async (req, res) => {
+  try{
+  await upload(req, res);
+    
+  console.log("runningn");
+  console.log(req.file.id)
+  if (req.file == undefined) {
+    return res.send({fail:`You must select a file.`});
+  }
+
+  return res.send({ok:`File ${req.file.id} has been uploaded.`,
+                   fileId: req.file.id
+});
+} catch (error) {
+  console.log(error);
+  return res.send({fail:`Error when trying upload image: ${error}`});
+}
 });
 
 router.get("/", (req, res) => {

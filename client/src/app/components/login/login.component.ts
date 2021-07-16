@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -9,6 +9,8 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+
+  @ViewChild('submit') submit:any
 
   public errorMessage:string = ""
 
@@ -33,6 +35,10 @@ export class LoginComponent implements OnInit {
     mailOrUsername: ["", [Validators.required]],
     password: ["", [Validators.required]],
   })
+
+  public submitForm(){
+    this.submit.nativeElement.click()
+  }
 
 
 

@@ -295,5 +295,9 @@ export class ProfileComponent implements OnInit {
     .some(u=>u===this._explore.profile._id)
   }
 
+  public doIFollowYou():boolean{
+    return this._users.userInfo.following.some(f=>f._id===this._explore.profile._id)
+  }
+
 
 }

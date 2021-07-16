@@ -52,9 +52,10 @@ router.post("/" ,async (req, res) => {
         fileSrc
     })
 
-    await post.save()
+    let _id = await post.save()
+    _id = _id._id
 
-    return res.status(201).send({ok:"successfully added a post"})
+    return res.status(201).send({ok:"successfully added a post", _id})
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

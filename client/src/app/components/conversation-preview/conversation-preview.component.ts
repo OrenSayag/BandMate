@@ -1,15 +1,38 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import MessageUnitModel from 'src/app/models/message-unit.model';
+import { UsersService } from 'src/app/services/users.service';
 
 @Component({
   selector: 'app-conversation-preview',
   templateUrl: './conversation-preview.component.html',
-  styleUrls: ['./conversation-preview.component.css']
+  styleUrls: ['./conversation-preview.component.css'],
 })
 export class ConversationPreviewComponent implements OnInit {
+  @Input()
+  public preview: MessageUnitModel = {
+    content: '',
+    isJoinReq: false,
+    from: {
+      username: '',
+      _id: '',
+      profile_img_src: ''
+    },
+    to: {
+      username: '',
+      _id: '',
+      profile_img_src: ''
+    },
+    status: '',
+    date: new Date(),
+    type: '',
+    _id: '',
+  };
 
-  constructor() { }
+  constructor(
+    public _users:UsersService,
+    public _r:Router,
+  ) {}
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

@@ -1,40 +1,64 @@
+<div class="root">
 
-    <form class="example-form" [formGroup]="loginForm" (ngSubmit)="login()">
-    
-    
+
+<div class="title">
+    Bandmate
+</div>
+
+
+
+<form class="example-form" [formGroup]="loginForm" (ngSubmit)="login()">
+
+
+    <div class="username">
         <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Username/mail</mat-label>
-            <input formControlName="mailOrUsername" matInput placeholder="" value="">
+            <input
+            autocomplete="off"
+            formControlName="mailOrUsername" matInput placeholder="" value="">
         </mat-form-field>
-    
         <div class="error-div" *ngIf="loginForm.controls.mailOrUsername.dirty && loginForm.controls.mailOrUsername.errors?.required">
             {{"Missing username/mail"}}
         </div>
-     
+    </div>
+
+ 
+    <div class="password">
         <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Password:</mat-label>
-            <input formControlName="password" matInput placeholder="">
+            <input
+            autocomplete="off"
+            type="password"
+            formControlName="password" matInput placeholder="">
         </mat-form-field>
-    
-        <div class="error-div"
-        *ngIf="loginForm.controls.password.dirty && loginForm.controls.password.errors?.required"
-        >
-            {{"Missing password"}}
-        </div>
-    
-    
-        <input type="submit">
-    
-        <div class="error-message">
-            {{errorMessage}}
-        </div>
+    </div>
 
+    <div class="error-div"
+    *ngIf="loginForm.controls.password.dirty && loginForm.controls.password.errors?.required"
+    >
+        {{"Missing password"}}
+    </div>
+    
+    
+    <input class="hidden" #submit type="submit">
+    
+    <button
+    class="register-btn"
+    (click)="submitForm()"
+    mat-raised-button color="primary">Register</button>
+    
+    
+    <div class="error-message">
+        {{errorMessage}}
+    </div>
+    
+    <!-- <p>{{loginForm.value | json}}</p> -->
+    <!-- <p>{{myForm.valid | json}}</p> -->
+    <!-- <p>{{myForm.controls.mail.errors | json}}</p> -->
+    <!-- <p>{{myForm.controls.password.errors | json}}</p> -->
+    
+</form>
+<div class="footer">
     <p>Don't have an account yet? <span (click)="_r.navigateByUrl('/register')">Register</span></p>
-
-    
-        <!-- <p>{{loginForm.value | json}}</p> -->
-        <!-- <p>{{myForm.valid | json}}</p> -->
-        <!-- <p>{{myForm.controls.mail.errors | json}}</p> -->
-        <!-- <p>{{myForm.controls.password.errors | json}}</p> -->
-    
-    </form>
+</div>
+</div>

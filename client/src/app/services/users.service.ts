@@ -8,6 +8,7 @@ import LogsModel from '../models/logs.model';
 import Recording from '../models/recordings.model';
 import PostModel from '../models/posts.model';
 import { ExploreService } from './explore.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root',
@@ -57,6 +58,8 @@ export class UsersService {
   constructor(
     public _http: HttpClient,
     public _explore: ExploreService,
+    public jwtHelper: JwtHelperService,
+
     ) {}
 
   public async getUserInfo(body: apiUserGetInfo) {
@@ -112,6 +115,15 @@ export class UsersService {
   }
 
   public async getTokenHolderInfo() {
+    if(!localStorage.token){
+      return
+    }
+    // console.log(this.jwtHelper.decodeToken(localStorage.token))
+    
+    if(this.jwtHelper.isTokenExpired(localStorage.token)){
+      // console.log(this.jwtHelper.isTokenExpired(localStorage.token))
+      return
+    }
     const res: any = await this._http
       .get('http://localhost:666/api/user/tokenHolderInfo', {
         headers: {
@@ -137,15 +149,15 @@ export class UsersService {
     ).toPromise()
     if(res.ok){
       // console.log(res.proof)
-      if(this.userInfo.following.includes(toFollowId)){
+      if(this.userInfo.following.some(f=>f._id===toFollowId)){
 
-        this.userInfo.following = this.userInfo.following.filter(f=>f!==toFollowId)
+        this.userInfo.following = this.userInfo.following.filter(f=>f._id!==toFollowId)
         // this._explore.profile.followers = this._explore.profile.followers
         // .filter(f=>f!==this.userInfo._id)
         this._explore.profileCountData.following -= 1
       } else {
         
-        this.userInfo.following.push(toFollowId)
+        this.userInfo.following.push(res.dataPack)
         this._explore.profileCountData.following += 1
         // this._explore.profile.following
         // .push(this.userInfo._id)

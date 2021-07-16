@@ -25,7 +25,11 @@ const groupConversations = new Schema({
     type:{
         type: String,
         default: "group-conversation"
+    },
+    group_profile_img_src: {
+        type:String,
     }
+    
 })
 
 const GroupConversationsModel = mongoose.model("groupConversations", groupConversations)

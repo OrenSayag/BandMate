@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
+import { MessagesService } from 'src/app/services/messages.service';
 
 @Component({
   selector: 'app-messages-main',
@@ -13,11 +14,12 @@ export class MessagesMainComponent implements OnInit {
 
   constructor(
     public _r:Router,
+    public _messages:MessagesService,
 
   ) { }
 
   ngOnInit(): void {
-    
+    this._messages.getPreview()
   }
 
   

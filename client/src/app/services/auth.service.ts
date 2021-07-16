@@ -15,14 +15,14 @@ export class AuthService {
     ) { }
 
   public async register(isBand:Boolean, fname:string, lname:string, userName:string,
-     mail:string, password:string, instruments?:string[], genres?:string[]){
+     mail:string, password:string, instruments:string[], genres:string[], profile_img_src?:string){
        try {
          const res:any = await this._http.post("http://localhost:666/api/auth/register", {
-           isBand, fname, lname, userName, mail, password, instruments, genres
+           isBand, fname, lname, userName, mail, password, instruments, genres, profile_img_src
          }, {
            headers: {"content-type":"application/json"}
          }).toPromise()
-         if(res.ok){
+         if(res.ok==="new user created"){
           //  console.log(res)
            setTimeout(() => {
              this._r.navigateByUrl("/login")
@@ -43,7 +43,7 @@ export class AuthService {
            headers: {"content-type":"application/json"}
          }).toPromise()
          if(res.ok){
-           console.log(res.ok)
+          //  console.log(res.ok)
            localStorage.token = res.ok
            setTimeout(() => {
              this._r.navigateByUrl("/logs")

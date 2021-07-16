@@ -1,14 +1,29 @@
 <div class="root">
     <div
+    [ngClass]="_r.url==='/logs' ? 'chosen' : ''"
     [routerLink]="'/logs'"
-    class="nabvar-btn">Log</div>
-    <div
+    class="nabvar-btn">
+<!-- logz -->
+<mat-icon>description</mat-icon>
+</div>
+<div
+[ngClass]="_r.url==='/bank' ? 'chosen' : ''"
     [routerLink]="'/bank'"
-    class="nabvar-btn">Bank</div>
-    <div
+    class="nabvar-btn">
+    <!-- bank -->
+    <mat-icon>account_balance</mat-icon>
+</div>
+<div
+[ngClass]="_r.url==='/feed' ? 'chosen' : ''"
     [routerLink]="'/feed'"
-    class="nabvar-btn">Feed</div>
-    <div
+    class="nabvar-btn">
+    <mat-icon>home</mat-icon>
+</div>
+<div
+[ngClass]="_r.url==='/explore' ? 'chosen' : ''"
     [routerLink]="'/explore'"
-    class="nabvar-btn">Explore</div>
+    class="nabvar-btn">
+    <mat-icon>explore</mat-icon>
+</div>
+
 </div>

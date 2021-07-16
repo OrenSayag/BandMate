@@ -8,13 +8,18 @@
         <div class="title">
             Messages
         </div>
-        <mat-icon>group_add</mat-icon>
+        <!-- <mat-icon
+        (click)="_r.navigateByUrl('/messages/newGroup')"
+        >group_add</mat-icon> -->
     </div>
 
     <div class="list">
 
         <!-- *ngFor="let " -->
-        <app-conversation-preview></app-conversation-preview>
+        <app-conversation-preview
+        [preview]="preview"
+        *ngFor="let preview of _messages.preview"
+        ></app-conversation-preview>
 
     </div>
 </div>

@@ -1,1 +1,69 @@
-<p>new-group works!</p>
+<div class="root">
+    
+    <div class="header">
+        <mat-icon
+        (click)="_location.back()"
+        >
+            ios_arrow_back
+        </mat-icon>
+        <div class="title">
+            <h1>
+                New Group
+            </h1>
+            <p>Choose members based on users you follow</p>
+        </div>
+
+
+    </div>
+
+    <div class="input">
+
+        <mat-form-field>
+            <input 
+            [(ngModel)]="groupName"
+            placeholder="Enter Group's name"
+            type="text" matInput autocomplete="off" />
+        </mat-form-field>
+
+    </div>
+
+    <div class="list">
+
+        <div
+        *ngFor="let following of _users.userInfo.following"
+        class="potent-member-unit"
+        [ngClass]="chosenMembers.includes(following._id) ?
+                    'selected' : ''
+        "
+        (click)="togSelectMember(following._id)"
+        >
+
+            <div class="profile-img">
+                <app-profile-img
+                [src]="following.profile_img_src"
+                ></app-profile-img>
+            </div>
+
+            <div class="username">
+                {{following.username}}
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="error-div">
+        {{errorDivMessage}}
+    </div>
+
+    <!-- <p>{{chosenMembers | json}}</p>
+     -->
+
+     <button mat-raised-button color="primary"
+     (click)="createGroup()"
+     >
+        Create Group
+    </button>
+
+
+</div>

@@ -46,7 +46,7 @@
 
         <div class="social-btns" *ngIf="profileOwner!==_users.userInfo.username">
             <button mat-raised-button color="primary" (click)="_users.followToggler(_explore.profile._id)">
-                {{_users.userInfo.following.includes(_explore.profile._id) ? 'Following' : 'Follow'}}
+                {{doIFollowYou() ? 'Following' : 'Follow'}}
             </button>
             <button mat-raised-button 
             (click)="_r.navigateByUrl('/messages/conversation/'+_explore.profile._id)"

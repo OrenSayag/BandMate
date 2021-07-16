@@ -5,10 +5,14 @@ export default interface MessageUnitModel{
         from: {
             username: string,
             _id: string,
+            profile_img_src:string,
+            
         };
         to: {
             username: string,
             _id: string,
+            profile_img_src:string,
+            
         };
         status: string;
         date: Date;

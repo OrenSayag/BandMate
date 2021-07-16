@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UsersService } from 'src/app/services/users.service';
 
 @Component({
@@ -59,6 +59,12 @@ export class MainComponent implements AfterViewInit {
     
     ngAfterViewInit(): void {
       this._users.getUserInfo({})
+
+      const url = this._r.url.split('/')[1]
+      if(url==='messages'){
+        this.messagesMainTog = true
+      }
+
     }
     
 }

@@ -1,0 +1,17 @@
+<div class="root">
+    <mat-icon
+    (click)="_location.back()"
+    >ios_arrow_back</mat-icon>
+
+    <div class="metronome">
+    
+        <button
+        (click)="tog()"
+        >{{metronomeOn ? 'Stop' : 'Start'}}</button>
+
+
+    </div>
+
+    {{metronomeOn |json}}
+
+</div>

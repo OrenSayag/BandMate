@@ -370,18 +370,7 @@ o888bood8P'   `Y8bod8P' o888o o888o `Y8bod8P'
 
     --------------------------- BUILD THE PROFILE PAGE
 
-ooooooooooooo                 .o8            
-8'   888   `8                "888            
-     888       .ooooo.   .oooo888   .ooooo.  
-     888      d88' `88b d88' `888  d88' `88b 
-     888      888   888 888   888  888   888 
-     888      888   888 888   888  888   888 
-    o888o     `Y8bod8P' `Y8bod88P" `Y8bod8P' 
-
-
 ------------------------------- BUILD THE PROFILE IMG COMPONENT
-
-
     create c : profile-img
     ts:
         @input src
@@ -394,10 +383,120 @@ ooooooooooooo                 .o8
 
         implement in leftsidebar, profile, logs, comments, recordings, posts,
         header, for testing.
-    
-
-
 ------------------------------- BUILD THE PROFILE IMG COMPONENT
+
+------------------------------------- BUILD THE MESSAGING
+
+    create messages-main
+    include in main html,
+        style to look like leftnavbar
+        style and create vars to slide like it also, from the left
+
+        sketch it
+        html:
+            .header
+                mt-icon(back)
+                .title
+                mt-icon(group)
+
+        for groupMessages:
+            add group_img_src to models,
+            update api createNewGroup to recieve
+            img_src
+
+        create api and align with messages service:
+            sendMessage(opt to include JoinBandReq parameter)
+            delMessage
+            getConversations(include group conversations)
+            respondReq
+            createGroup
+            deleteGroup
+            makeAdmin
+            removeAdmin
+            leaveGroup
+            addMember
+            routing:
+                Conversation, NewGroup, GroupInfo,
+                are children 
+            
+            Conversation
+                onInit gets the specific coversation with this
+        
+            MessagesMain
+                get thy messages (_messages.conversations)
+                and display them in divs, (click) = routing to conversation/:
+
+            API
+                deleteConversation (later...)
+                getGroupInfo
+
+            Models
+                GroupInfo(name, group_img_src, members{username, _id, profile_img_src})
+                ConversationsPreview:{
+                    usernameOrGroupname:string,
+                    profile_img_src:string,
+                    last_message_preview:{
+                        content:string,
+                        sentOn:string
+                    },
+                }[]
+                Conversation:{
+                    profile_img_src:string,
+                    username:string,
+                    groupConversation:boolean,
+                    messages:{
+                        userId:string,
+                        content:string,
+                        isJoinReq:string,
+                        from:string,
+                        to:string,
+                    }[],
+                }
+                GroupInfo:{
+                    groupName:string,
+                    members:{
+                        profile_img_src:string,
+                        username:string,
+                    },
+                    admins:{
+                        profile_img_src:string,
+                        username:string,
+                    },
+                    group_profile_img:string,
+                },
+
+
+                Fix get  preview endpoint
+                Dsiplay and route
+
+
+                //// *** Disabled group chats for now,
+                         because socket won't be currently included and ux isn't worth the hit
+------------------------------------- BUILD THE MESSAGING
+ooooooooooooo                 .o8            
+8'   888   `8                "888            
+     888       .ooooo.   .oooo888   .ooooo.  
+     888      d88' `88b d88' `888  d88' `88b 
+     888      888   888 888   888  888   888 
+     888      888   888 888   888  888   888 
+    o888o     `Y8bod8P' `Y8bod88P" `Y8bod8P' 
+
+
+------------------------------------- BUILD THE METRONOME
+
+    1. generate component
+    2.  route
+    3. build logic
+    4. connect to add-recordings
+
+
+------------------------------------- BUILD THE METRONOME
+
+                
+
+
+
+
 
 
         _users
@@ -519,6 +618,9 @@ ooooooooooooo                 .o8
 
         Client:
 
+            profile - add admin's possibility to delete participants
+            or make more admins
+
             upload default profile_img_src && cover_img_src and default it to new users,
             so streaming of those imgs will flow SMOOTHLY.
             Validate that when updating, we delete the previous
@@ -528,6 +630,7 @@ ooooooooooooo                 .o8
             when in explore, avatarSwapping on header leads to profile of selected avatar (with back arrow ofc)
 
             Delete log-list component
+            Delete messages-router component
 
             metronome
 
@@ -542,7 +645,7 @@ ooooooooooooo                 .o8
             and it will be displayed on the participant list on the band's profile
                 opt: add also to user's profile when dispaying the list of bands, indicating what instrument he plays in that band
             
-            
+            all inputs - autocomplete - off
 
             make sure that every username is clicked to it's profile (go component-component)
 

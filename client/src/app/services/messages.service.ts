@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import MessageUnitModel from '../models/message-unit.model';
+import { ExploreService } from './explore.service';
 import { UsersService } from './users.service';
 
 @Injectable({
@@ -21,14 +22,7 @@ export class MessagesService {
     messages: [],
   };
 
-  public preview: {
-    usernameOrGroupname: string;
-    profile_img_src: string;
-    last_message_preview: {
-      content: string;
-      sentOn: string;
-    };
-  }[] = [];
+  public preview: MessageUnitModel[] = [];
 
   public groupInfo: {
     name: string;
@@ -50,7 +44,10 @@ export class MessagesService {
     admins: [],
   };
 
-  constructor(public _http: HttpClient, public _users: UsersService) {}
+  constructor(public _http: HttpClient, 
+    public _users: UsersService,
+    public _explore: ExploreService,
+    ) {}
 
   public async sendMessage(
     to: string,
@@ -81,10 +78,12 @@ export class MessagesService {
         from: {
           _id: this._users.userInfo._id,
           username: this._users.userInfo.username,
+          profile_img_src: this._users.userInfo.profile_img_src
         },
         to:{
           username: "",
-          _id: res._id
+          _id: res._id,
+          profile_img_src: this._explore.profile.profile_img_src
         },
         status: '',
         date: new Date(),
@@ -117,7 +116,7 @@ export class MessagesService {
 
   public async getConversation(withId: string): Promise<boolean> {
     const res: any = await this._http
-      .get('http://localhost:666/api/messages/conversation/' + withId, {
+      .post('http://localhost:666/api/messages/conversation/' + withId, {} ,{
         headers: {
           authorization: localStorage.token,
         },
@@ -223,7 +222,8 @@ export class MessagesService {
       .toPromise();
     if (res.ok) {
       console.log(res.ok);
-      return true;
+      console.log(res)
+      return res.groupId;
     }
     console.log(res.fail);
     return false;

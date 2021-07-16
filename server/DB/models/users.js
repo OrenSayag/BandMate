@@ -82,6 +82,10 @@ const users = new Schema({
     logCategories: [ContentCategory],
     bankCategories: [ContentCategory],
     isAdmin: Boolean,
+    joinReqsWithUsers:[{
+        type: ObjectId,
+        ref:"users"
+    }]
 })
 
 const UsersModel = mongoose.model("users", users, "users")

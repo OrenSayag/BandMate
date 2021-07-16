@@ -543,18 +543,21 @@ router.post("/feed", verifyUser, async (req, res) => {
       logs:
         (await LogsModel.find({ parentUser: id }).populate({
           path: "parentUser",
-          select: "username isBand participants",
+          select: "username isBand participants profile_img_src",
         })) || [],
+        
       posts:
         (await PostsModel.find({ parentUser: id }).populate({
           path: "parentUser",
-          select: "username isBand participants",
+          select: "username isBand participants profile_img_src",
         })) || [],
+        
       recordings:
         (await RecordingsModel.find({ parentUser: id }).populate({
           path: "parentUser",
-          select: "username isBand participants",
+          select: "username isBand participants profile_img_src",
         })) || [],
+        
     };
 
     const bandContent = {
@@ -565,18 +568,21 @@ router.post("/feed", verifyUser, async (req, res) => {
     for (const band of user.bands) {
       const logs = await LogsModel.find({ parentUser: band }).populate({
         path: "parentUser",
-        select: "username isBand participants",
+        select: "username isBand participants profile_img_src",
       });
+      
       const posts = await PostsModel.find({ parentUser: band }).populate({
         path: "parentUser",
-        select: "username isBand participants",
+        select: "username isBand participants profile_img_src",
       });
+      
       const recordings = await RecordingsModel.find({
         parentUser: band,
       }).populate({
         path: "parentUser",
-        select: "username isBand participants",
+        select: "username isBand participants profile_img_src",
       });
+      
       bandContent.logs = logs;
       bandContent.posts = posts;
       bandContent.recordings = recordings;
@@ -586,20 +592,23 @@ router.post("/feed", verifyUser, async (req, res) => {
     for (const participant of user.participants) {
       const logs = await LogsModel.find({ parentUser: participant }).populate({
         path: "parentUser",
-        select: "username isBand participants",
+        select: "username isBand participants profile_img_src",
       });
+      
       const posts = await PostsModel.find({ parentUser: participant }).populate(
         {
           path: "parentUser",
-          select: "username isBand participants",
+          select: "username isBand participants profile_img_src",
         }
       );
+      
       const recordings = await RecordingsModel.find({
         parentUser: participant,
       }).populate({
         path: "parentUser",
-        select: "username isBand participants",
+        select: "username isBand participants profile_img_src",
       });
+      
       // participantContent.logs = [];
       // participantContent.posts = [];
       // participantContent.recordings = [];
@@ -612,26 +621,38 @@ router.post("/feed", verifyUser, async (req, res) => {
     // console.log(participantContent.logs.length)
     // console.log(participantContent.posts.length)
     // console.log(participantContent.recordings.length)
+
+    const userBands = []
+    for (const band of user.bands) {
+      userBands.push(band.toString())
+    }
+    // console.log(user.following)
+    // console.log(userBands)
+    user.following = user.following.filter(f=>!userBands.includes(f.toString()))
+    // console.log(user.following)
     // - all the people who the user is follwing's content that is not private
     const followingContent = {
       logs: await LogsModel.find({
         parentUser: { $in: user.following },
       }).populate({
         path: "parentUser",
-        select: "username isBand participants",
+        select: "username isBand participants profile_img_src",
       }),
+      
       posts: await PostsModel.find({
         parentUser: { $in: user.following },
       }).populate({
         path: "parentUser",
-        select: "username isBand participants",
+        select: "username isBand participants profile_img_src",
       }),
+      
       recordings: await RecordingsModel.find({
         parentUser: { $in: user.following },
       }).populate({
         path: "parentUser",
-        select: "username isBand participants",
+        select: "username isBand participants profile_img_src",
       }),
+      
     };
     // everything should be ordered by date desc.
     let hugeFeed = [].concat(
@@ -709,9 +730,14 @@ router.put("/follow/:toFollowId", verifyUser, async (req, res) => {
       });
     }
     const proof = await UsersModel.findById(id);
+    const dataPack = {
+      username: toFollowUser.username,
+      _id: toFollowUser._id,
+      profile_img_src: toFollowUser.profile_img_src,
+    }
     return res
       .status(200)
-      .send({ ok: "Successfuly un/followed user", proof: proof.following });
+      .send({ ok: "Successfuly un/followed user", proof: proof.following, dataPack });
   } catch (error) {
     console.log(error);
     return res.status(500).send(error);
@@ -736,7 +762,15 @@ router.get("/tokenHolderInfo", verifyUser, async (req, res) => {
       .populate({
         path: "participants.userId",
         select: "username profile_img_src _id",
-      });
+      })
+      .populate({
+        path: "following",
+        select: "username profile_img_src _id",
+      })
+      .populate({
+        path: "followers",
+        select: "username profile_img_src _id",
+      })
     return res.status(200).send({ ok: userInfo });
   } catch (error) {
     console.log(error);
@@ -758,7 +792,7 @@ router.post("/updateProfileImg", verifyUser, async (req, res) => {
 
     if (cover_img_src) {
       await FsFilesModel.findByIdAndDelete(user.cover_img_src);
-      await FsChunksModel.find({
+      await FsChunksModel.remove({
         files_id: await mongoose.Types.ObjectId(user.cover_img_src),
       });
 
@@ -769,7 +803,7 @@ router.post("/updateProfileImg", verifyUser, async (req, res) => {
       });
     } else {
       await FsFilesModel.findByIdAndDelete(user.profile_img_src);
-      await FsChunksModel.find({
+      await FsChunksModel.remove({
         files_id: await mongoose.Types.ObjectId(user.profile_img_src),
       });
 
@@ -817,7 +851,14 @@ router.get("/profile/content/:username", async (req, res) => {
       })
       .populate({
         path:"parentUser",
-        select: "participants _id username profile_img_src"
+        select: "participants _id username profile_img_src",
+        // populate: {
+        //   path:"comments.userId",
+        //   select:"_id username profile_img_src"
+        // }
+      })
+      .populate({
+        path:"comments.userId"
       })
       // .populate("parentUser.participants")
       .sort({"date":"desc"})
@@ -835,7 +876,10 @@ router.get("/profile/content/:username", async (req, res) => {
       })
       .populate({
         path:"parentUser",
-        select: "participants _id username profile_img_src"
+        select: "participants _id username profile_img_src",
+      })
+      .populate({
+        path:"comments.userId"
       })
       .sort({"date":"desc"})
       ,
@@ -852,7 +896,10 @@ router.get("/profile/content/:username", async (req, res) => {
       })
       .populate({
         path:"parentUser",
-        select: "participants _id username profile_img_src"
+        select: "participants _id username profile_img_src",
+      })
+      .populate({
+        path:"comments.userId"
       })
       .sort({"date":"desc"})
       ,

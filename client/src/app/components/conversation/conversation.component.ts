@@ -23,6 +23,7 @@ export class ConversationComponent implements OnInit {
   ngOnInit(): void {
     this._ar.params.subscribe(async (parameter) => {
       await this._messages.getConversation(parameter.id)
+      
     });
   }
 

@@ -80,6 +80,12 @@ import { GroupInfoComponent } from './components/group-info/group-info.component
 import { NewGroupComponent } from './components/new-group/new-group.component';
 import { ConversationPreviewComponent } from './components/conversation-preview/conversation-preview.component';
 import { MessageUnitComponent } from './components/message-unit/message-unit.component';
+import { MetronomeComponent } from './components/metronome/metronome.component';
+import { FlexModule } from '@angular/flex-layout';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatGridListModule} from '@angular/material/grid-list';
+import { MatDividerModule } from '@angular/material/divider';
+
 
 
 
@@ -152,7 +158,8 @@ export function tokenGetter() {
     GroupInfoComponent,
     NewGroupComponent,
     ConversationPreviewComponent,
-    MessageUnitComponent
+    MessageUnitComponent,
+    MetronomeComponent
   ],
   imports: [
     BrowserModule,
@@ -176,6 +183,10 @@ export function tokenGetter() {
     MatExpansionModule,
     MatProgressSpinnerModule,
     FormsModule,
+    FlexModule,
+    MatTabsModule,
+    MatGridListModule,
+    MatDividerModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,

@@ -20,7 +20,15 @@ export default interface UserInfoModel{
     cover_img_src:string,
     bio:string,
     userFeed:Array<LogsModel|Recording|PostModel>,
-    following: string[],
-    followers: string[],
+    following: {
+        _id:string,
+        username:string,
+        profile_img_src:string,
+    }[],
+    followers: {
+        _id:string,
+        username:string,
+        profile_img_src:string,
+    }[],
     joinReqsWithUsers: string[]
 }

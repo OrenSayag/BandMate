@@ -1,8 +1,129 @@
 form {
-    background-color: rgb(48,48,48);
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    /* border: 1px solid pink; */
+}
+
+form>div
+{
+    width: 90%;
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    flex-direction: column;
+    /* border: hotpink 1px solid; */
+    max-width: 800px;
+
 }
 
 *{
     color: white
+}
+
+.profile-img{
+    border-radius: 50%;
+    /* height: 50px; */
+    width: 50vw;
+    height: 50vw;
+    max-width: 400px;
+    max-height: 400px;
+    margin-bottom: 30px;
+    /* width: 50px; */
+    /* position: relative; */
+}
+
+.root {
+    display: grid;
+    grid-template-rows: 30% auto;
+    /* border: 1px solid yellow; */
+    min-height: 100%;
+    padding-top: 30px;
+    /* padding-bottom: 200px; */
+}
+
+.upload-image,
+.upload-image .cont
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    /* border: 1px solid white; */
+}
+.upload-image .cont
+{
+    position: relative;
+    width: 50vw;
+    /* border: 1px solid white; */
+}
+.cont mat-icon{
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+mat-tab-group
+
+{
+    width:100%;
+    margin-bottom: 30px;
+    /* border: 1px solid white; */
+}
+mat-grid-list{
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.instruments,
+.genres {
+    /* border: 1px solid white; */
+    margin: 10px 0;
+    padding: 15px;
+    box-sizing: border-box;
+    border-radius: 3px;
+    background-color: rgb(58, 58, 58);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 800px;
+}
+
+.cb-cont{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.register-btn{
+    margin: 10px 0;
+}
+
+.footer{
+    /* border: 1px solid white; */
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: rgb(70,70,70);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.error-div{
+    margin-bottom: 15px;
+}
+
+.error-div-submit{
+    margin-top: 20px;
+    margin-bottom: 100px;
+}
+
+.footer span{
+    text-decoration: underline;
 }

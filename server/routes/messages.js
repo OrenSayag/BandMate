@@ -28,7 +28,7 @@ router.post("/", async (req, res) => {
   }
   try {
     //  check if we're talking join req, if not, continue normally on sending the messaeg
-    if (isJoinReq) {
+    if (isJoinReq === true) {
       console.log("is join req");
       const fromWho = await UsersModel.findById(id);
       const toWho = await UsersModel.findById(to);
@@ -48,7 +48,7 @@ router.post("/", async (req, res) => {
         console.log(band);
         console.log(to);
 
-        if (band.participants.some((p) => p.username == to)) {
+        if (band.participants.some((p) => p.userId == to)) {
           return res
             .status(400)
             .send({ fail: "This user is already in your band" });
@@ -57,7 +57,7 @@ router.post("/", async (req, res) => {
         const band = await UsersModel.findById(to);
         console.log(band);
         console.log(to);
-        if (band.participants.some((p) => p.username == id)) {
+        if (band.participants.some((p) => p.userId == id)) {
           return res.status(400).send({ fail: "You are already in this band" });
         }
       }
@@ -99,9 +99,20 @@ router.post("/", async (req, res) => {
 
       console.log(newMessage);
 
-      await newMessage.save();
+      let _id = await newMessage.save();
+      _id = _id._id
+      // in order to display different things on client's req btn on profile
+      fromWho.joinReqsWithUsers.push(await mongoose.Types.ObjectId(to))
+      await UsersModel.findByIdAndUpdate(to, {
+        $push: {
+          joinReqsWithUsers: id
+        }
+      })
+      
 
-      return res.sendStatus(201);
+      await fromWho.save()
+
+      return res.status(201).send({ok:"successfully sent a join request", _id});
     }
 
     if (
@@ -138,9 +149,10 @@ router.post("/", async (req, res) => {
       });
     }
 
-    await newMessage.save();
-
-    return res.sendStatus(201);
+    let _id = await newMessage.save();
+    _id = _id._id
+    console.log(_id)
+    return res.status(201).send({ok:"successfully sent message"});
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -148,9 +160,23 @@ router.post("/", async (req, res) => {
 });
 
 // get user's conversations
-router.get("/", async (req, res) => {
+router.get("/preview", async (req, res) => {
   const { id } = req.userInfo;
   try {
+
+    
+
+    // let preview = await MessagesModel.find({
+    //   $or: [
+    //     {from: id},
+    //     {to: id},
+    //   ],
+    // })
+    // // .limit(1)
+    // .sort("-date")
+
+    
+
     const userGroups = await GroupConversationsModel.find({ userIds: id });
     const userGroupsIds = [];
     for (const group of userGroups) {
@@ -166,15 +192,15 @@ router.get("/", async (req, res) => {
       // $or: [{ from: id }, { to: id }}}],
     }).sort("date").populate({
       path:"to",
-      select: "username"
+      select: "username profile_img_src"
     }).populate({
       path:"from",
-      select: "username"
+      select: "username profile_img_src"
     });
 
-    // console.log(conversation)
+    // // console.log(conversation)
 
-    // organize coversations by contact name, and by groups
+    // // organize coversations by contact name, and by groups
     let conversations = {};
     for (const message of conversation) {
       // if (message.type == "group message") {
@@ -203,7 +229,7 @@ router.get("/", async (req, res) => {
         }
       }
 
-      // settle group conversations
+    //   // settle group conversations
       const groupConversation = await MessagesModel.find({
         to: {$in: userGroupsIds}
       }).populate({
@@ -221,7 +247,124 @@ router.get("/", async (req, res) => {
 
     // }
 
-    return res.status(200).send({ conversations });
+    const preview = []
+    for (let contact in conversations) {
+      // if (Object.hasOwnProperty.call(object, contact)) {
+      //   const element = object[contact];
+        
+      // }
+      conversations[contact] = conversations[contact][conversations[contact].length-1]
+      preview.push(conversations[contact])
+    }
+
+
+    
+
+    return res.status(200).send({ preview, ok:"successfully fetched conversations preview" });
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
+// get a specific conversation
+router.post("/conversation/:withId", async (req, res) => {
+  const { id } = req.userInfo;
+  const { withId } = req.params;
+  // const { isGroup } = req.body;
+  try {
+
+    if(await GroupConversationsModel.findById(withId)){
+      const group = await GroupConversationsModel.findById(withId)
+      if(!group){
+        return res.status(400).send({fail:"No such group"})
+      }
+      console.log(group)
+      if(!group.userIds.some(async(m)=>m!=await mongoose.Types.ObjectId(id))){
+        return res.status(400).send({fail:"You are not in this group"})
+      }
+
+      
+      // get all messages of this group
+      const conversation = await MessagesModel.find({to:withId})
+      .populate({
+        path:"from",
+        select: "username _id"
+      })
+
+      conversation.username = group.name
+      conversation.group_profile_img_src = group.group_profile_img_src
+      conversation.groupConversation = true;
+      
+      return res.status(200).send({ok:"Here are this group's messages", conversation})
+    }
+
+    const withUser = await UsersModel.findById(withId)
+    if(!withUser){
+      return res.status(400).send({fail:"No such user"})
+    }
+
+    const conversation = {}
+
+    conversation.username = withUser.username
+    conversation._id = withUser._id
+    conversation.profile_img_src = withUser.profile_img_src
+    conversation.groupConversation = false;
+
+    conversation.messages = await MessagesModel.find({
+      $or: [
+        {$and: [
+          {from: id},
+          {to: withId}
+        ]},
+        {$and: [
+          {to: id},
+          {from: withId}
+        ]},
+      ]
+    })
+    .populate({
+      path:"to",
+      select: "username _id"
+    })
+    .populate({
+      path:"from",
+      select: "username _id"
+    })
+
+    return res.status(200).send({ conversation, ok:"Successfuly fetched conversation with this profile" });
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
+// get a group's info
+router.get("/group/info/:groupId", async (req, res) => {
+  const { id } = req.userInfo;
+  const { groupId } = req.params;
+  try {
+
+    const group = await GroupConversationsModel.findById(groupId)
+    .populate({
+      path: "userIds",
+      select: "profile_img_src username _id"
+    })
+    .populate({
+      path: "admins",
+      select: "profile_img_src username _id"
+    })
+
+    if(!group){
+      return res.status(400).send({fail:"No such group"})
+    }
+
+    const groupInfo = {}
+    groupInfo.groupName = group.name
+    groupInfo.members = group.userIds
+    groupInfo.group_profile_img_src = group.group_profile_img_src
+
+    return res.status(200).send({ groupInfo, ok:"Successfuly fetched this group's info" });
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -230,9 +373,10 @@ router.get("/", async (req, res) => {
 
 // reply to a join request
 router.put("/replyJoinRequest/:messageId", async (req, res) => {
-  const { id, isBand } = req.userInfo;
+  const { id } = req.userInfo;
   const { messageId } = req.params;
-  const { bandId, toBeAddedUserId, answer } = req.body;
+  // const { bandId, toBeAddedUserId, answer } = req.body;
+  const { answer } = req.body;
 
   try {
     // validate message exists,
@@ -256,7 +400,23 @@ router.put("/replyJoinRequest/:messageId", async (req, res) => {
     if (message.from == id) {
       message.status = "canceled";
       await message.save();
-      return res.sendStatus(200);
+      // await UsersModel.findByIdAndUpdate(id, {
+      //   $pull: {
+      //     joinReqsWithUsers: message.to,
+      //     joinReqsWithUsers: message.from,
+      //   }
+      // })
+      await UsersModel.findByIdAndUpdate(message.to, {
+        $pull: {
+          joinReqsWithUsers: mongoose.Types.ObjectId(id)
+        }
+      })
+      await UsersModel.findByIdAndUpdate(message.from, {
+        $pull: {
+          joinReqsWithUsers: mongoose.Types.ObjectId(message.to)
+        }
+      })
+      return res.status(200).send({ok:"successfully canceled join req"});
     }
 
     if (message.to != id) {
@@ -328,7 +488,24 @@ router.put("/replyJoinRequest/:messageId", async (req, res) => {
           .send({ fail: "Invalid answer: approve or reject" });
     }
 
-    return res.sendStatus(200);
+    await UsersModel.findByIdAndUpdate(id, {
+      $pull: {
+        joinReqsWithUsers: mongoose.Types.ObjectId(message.to),
+        joinReqsWithUsers: mongoose.Types.ObjectId(message.from),
+      }
+    })
+    await UsersModel.findByIdAndUpdate(message.to, {
+      $pull: {
+        joinReqsWithUsers: mongoose.Types.ObjectId(id)
+      }
+    })
+    await UsersModel.findByIdAndUpdate(message.from, {
+      $pull: {
+        joinReqsWithUsers: mongoose.Types.ObjectId(id)
+      }
+    })
+
+    return res.status(200).send({ok:"successfully approved/rejected this join request"});
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -349,7 +526,7 @@ router.delete("/:id", async (req, res) => {
 
     await MessagesModel.findByIdAndRemove({ _id: id });
 
-    return res.sendStatus(200);
+    return res.status(200).send({ok:"successfully deleted this message"});
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -373,9 +550,9 @@ router.post("/group", async (req, res) => {
       admins: [id],
     });
 
-    await group.save();
-
-    return res.sendStatus(201);
+    let groupId = await group.save();
+    groupId = groupId._id
+    return res.status(201).send({ok:"successfully created this group", groupId});
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -400,7 +577,7 @@ router.delete("/group/:groupId", async (req, res) => {
         .send({ fail: "You are not an admin is this group" });
     }
     await GroupConversationsModel.findByIdAndDelete(groupId);
-    return res.sendStatus(200);
+    return res.status(200).send({ok:"successfuly deleted this group"});
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
@@ -439,15 +616,16 @@ router.put("/group/admin/:toBeAdminned", async (req, res) => {
         admins: mongoose.Types.ObjectId(toBeAdminned),
       },
     });
-    return res.sendStatus(201);
+    return res.status(201).send({ok:"this user is now an admin in this group"});
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
   }
 });
 
+
 // admin removes himself from being an admin
-router.delete("/group/admin/removeSelf", async (req, res) => {
+router.post("/group/admin/removeSelf", async (req, res) => {
   const { id } = req.userInfo;
   let { groupId } = req.body;
   if (!groupId) {
@@ -474,7 +652,81 @@ router.delete("/group/admin/removeSelf", async (req, res) => {
         admins: mongoose.Types.ObjectId(id),
       },
     });
-    return res.sendStatus(200);
+    return res.status(200).send({ok:"successfuly unadminned you"});
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
+
+// member leaves group
+router.post("/group/leave", async (req, res) => {
+  const { id } = req.userInfo;
+  let { groupId } = req.body;
+  if (!groupId) {
+    return res.status(400).send({ fail: "Missing groupId" });
+  }
+  try {
+    let group = await GroupConversationsModel.findById(groupId);
+    if (!group) {
+      return res.status(400).send({ fail: "No such group" });
+    }
+    if (!group.userIds.some((member) => member == id)) {
+      return res.status(400).send({ fail: "You are not in this group" });
+    }
+
+    await GroupConversationsModel.findByIdAndUpdate(groupId, {
+      $pull: {
+        userIds: mongoose.Types.ObjectId(id),
+        admins: mongoose.Types.ObjectId(id),
+      },
+    });
+
+    // if group is left with no admin, and there are any members in this group,
+    // make the first found member an admin
+
+    group = await GroupConversationsModel.findById(groupId)
+
+    if((group.admins.length===0) && (group.userIds.length!==0)){
+      await GroupConversationsModel.findByIdAndUpdate(groupId, {
+        $push: {
+          admins: group.userIds[0]
+        }
+      })
+    }
+
+    return res.status(200).send({ok:"successfully removed you from this group"});
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+});
+
+// admin adds a member to the group
+router.post("/group/addMember/:toBeAdded", async (req, res) => {
+  const { id } = req.userInfo;
+  let { groupId } = req.body;
+  let { toBeAdded } = req.params;
+  if (!groupId) {
+    return res.status(400).send({ fail: "Missing groupId" });
+  }
+  try {
+    let group = await GroupConversationsModel.findById(groupId);
+    if (!group) {
+      return res.status(400).send({ fail: "No such group" });
+    }
+    if (!group.admins.some((member) => member == id)) {
+      return res.status(400).send({ fail: "You are not an admin in this group" });
+    }
+
+    await GroupConversationsModel.findByIdAndUpdate(groupId, {
+      $push: {
+        userIds: mongoose.Types.ObjectId(toBeAdded),
+      },
+    });
+
+    return res.status(200).send({ok:"successfully added this user to this group"});
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

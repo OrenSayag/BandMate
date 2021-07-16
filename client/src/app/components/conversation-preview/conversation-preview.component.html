@@ -1,1 +1,40 @@
-<p>conversation-preview works!</p>
+<div class="root"
+(click)="_r.navigateByUrl('/messages/conversation/'+(
+    preview.from._id===_users.userInfo._id ?
+        preview.to._id :
+        preview.from._id
+))"
+>
+
+    <div class="profile-img">
+        <app-profile-img [src]="
+        preview.from._id===_users.userInfo._id ?
+        preview.to.profile_img_src :
+        preview.from.profile_img_src
+        "></app-profile-img>
+    </div>
+
+    <div class="username">
+        {{
+        preview.from._id===_users.userInfo._id ?
+        preview.to.username :
+        preview.from.username
+        }}
+    </div>
+
+    <div class="content">
+        {{preview.content}}
+    </div>
+
+    <div
+    *ngIf="['approved','rejected','canceled'].includes(preview.status)"
+    class="status">
+        {{preview.status}}
+    </div>
+
+    <div class="date">
+        {{preview.date |date: 'dd/MM'}}
+    </div>
+
+
+</div>

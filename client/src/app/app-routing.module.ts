@@ -12,6 +12,7 @@ import { LoginComponent } from './components/login/login.component';
 import { LogsComponent } from './components/logs/logs.component';
 import { MainComponent } from './components/main/main.component';
 import { MessagesMainComponent } from './components/messages-main/messages-main.component';
+import { MetronomeComponent } from './components/metronome/metronome.component';
 import { NewGroupComponent } from './components/new-group/new-group.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { RegisterComponent } from './components/register/register.component';
@@ -21,12 +22,13 @@ import { TokenBodyGuardGuard } from './guards/token.guard';
 const routes: Routes = [
   {path:"register", pathMatch: "full", component:RegisterComponent},
   {path:"login", pathMatch: "full", component:LoginComponent},
+  {path:"messages/conversation/:id", component:ConversationComponent},
+  {path:"messages/newGroup", component:NewGroupComponent},
+  {path:"messages/groupInfo/:group_id", component:GroupInfoComponent},
+  {path:"metronome", component:MetronomeComponent},
   {path:"", component:MainComponent, canActivate: [TokenBodyGuardGuard], 
   children:[
-    {path:"messages/conversation/:id", component:ConversationComponent},
-    {path:"messages/newGroup", component:NewGroupComponent},
-    {path:"messages/groupInfo/:group_id", component:GroupInfoComponent},
-    {path:"messages", component:MessagesMainComponent},
+    {path:"messages", pathMatch:"full" ,component:MessagesMainComponent},
     {path:"logs", component:LogsComponent},
     {path:"bank", component:BankComponent},
     {path:"feed", component:FeedComponent},

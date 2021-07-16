@@ -1,18 +1,35 @@
-<mat-spinner
+<div class="spinner-root"
 [ngClass]="loading ? 'active' : 'hidden'"
-></mat-spinner>
-<div class="root"
-[ngClass]="!loading ? 'active' : 'hidden'"
 >
 
-    <app-add-content-button (click)="formToggler()" ></app-add-content-button>
-    <app-log-add-form *ngIf="formTog"
-    (successfulLog)="formListener($event)"
-    ></app-log-add-form>
-    <div class="list">
-        <app-log-item
-        [log]="log"
-        (killMe)="killLog($event)"
-        *ngFor="let log of _users.mainContent.logs.reverse()"></app-log-item>
-    </div>
+    <mat-spinner
+   
+    ></mat-spinner>
 </div>
+    <div class="root"
+    [ngClass]="!loading ? 'active' : 'hidden'"
+    >
+    
+        <div class="add-content-btn">
+            <svg class="right-bell" height="90px" viewBox="0 0 100 100">
+                <path fill="CornFlowerBlue" d="M0,0
+                100,0
+                C50,20 50,80 0,100 Z" />
+              </svg>
+            <svg class="left-bell" height="90px" viewBox="0 0 100 100">
+                <path fill="red" d="M0,0
+                100,0
+                C50,20 50,80 0,100 Z" />
+              </svg>
+            <app-add-content-button (click)="formToggler()" ></app-add-content-button>
+        </div>
+        <app-log-add-form *ngIf="formTog"
+        (successfulLog)="formListener($event)"
+        ></app-log-add-form>
+        <div class="list">
+            <app-log-item
+            [log]="log"
+            (killMe)="killLog($event)"
+            *ngFor="let log of _users.mainContent.logs.reverse()"></app-log-item>
+        </div>
+    </div>

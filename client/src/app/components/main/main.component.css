@@ -6,6 +6,12 @@
 }
 
 
+/* .root::-webkit-scrollbar{
+    height: 0;
+    width: 0;
+} */
+
+
 
 .left-side-bar{
     position: absolute;
@@ -52,4 +58,13 @@
 .ovh {
     overflow-y: hidden;
     height: 100vh;
+}
+
+.navbar{
+    position: fixed;
+    /* border: 1px solid white; */
+    bottom: 0;
+    width: 100%;
+    z-index: 10;
+
 }
