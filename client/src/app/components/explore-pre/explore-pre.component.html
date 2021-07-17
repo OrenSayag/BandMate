@@ -1,27 +1,26 @@
-
 <div class="root">
 
-    <mat-form-field appearance="fill">
-        <mat-icon>search</mat-icon>
-        <mat-label>Search</mat-label>
-        <input 
-        (focus)="handleFocus()"
-        matInput>
-      </mat-form-field>
+  <mat-form-field class="search-cont" appearance="fill">
 
-      <h2>Choose a category</h2>
+    <mat-label>
+      <mat-icon>search</mat-icon>
+    </mat-label>
+    <input (focus)="handleFocus()" matInput>
+  </mat-form-field>
 
-      <app-explore-genre-cell
-      [name]="'All'"
-      [imgSrc]="'some_src'"
-      (click)="handleGenreClick('someid', 'somename', true)"
-      ></app-explore-genre-cell>
-      <app-explore-genre-cell
-      *ngFor="let genre of this._genres.genresCatalog"
-      [name]="genre.name"
-      [imgSrc]="genre.img_src"
-      (click)="handleGenreClick(genre._id, genre.name)"
-      ></app-explore-genre-cell>
+  <div class="main">
+    <h2 class="title">Choose a category</h2>
+
+    <div class="list">
+
+      <app-explore-genre-cell [name]="'All'" [imgSrc]="'#A799B7'" (click)="handleGenreClick('someid', 'somename', true)">
+      </app-explore-genre-cell>
+      <app-explore-genre-cell *ngFor="let genre of this._genres.genresCatalog" [name]="genre.name" [imgSrc]="genre.img_src"
+        (click)="handleGenreClick(genre._id, genre.name)"></app-explore-genre-cell>
+    </div>
+  
+  </div>
+
 
 
 

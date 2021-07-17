@@ -1,19 +1,23 @@
-<div class="root">
+<div class="root"
+(click)="_r.navigateByUrl('/explore/profile/'+userOrBand.username)"
+>
     
 
     <div class="username"
-    (click)="_r.navigateByUrl('/explore/profile/'+userOrBand.username)"
     >
         {{userOrBand.username}}
     </div>
 
     <div class="profile-img">
-        {{userOrBand.profile_img_src || 'profile pic'}}
+        <app-profile-img
+        [src]="userOrBand.profile_img_src || ''"
+        ></app-profile-img>
+        <!-- {{userOrBand.profile_img_src || 'profile pic'}} -->
     </div>
 
     <div class="follows">
         <div class="following">
-            Following {{userOrBand.following?.length}} 
+            {{userOrBand.following?.length}} Following
         </div>
         <div class="followers">
              {{userOrBand.followers?.length}} Followers
@@ -25,6 +29,23 @@
         *ngFor="let genre of userOrBand.genres"
         class="genre">
             {{(genre | castGenre).name}}
+        </div>
+    </div>
+
+    <!-- {{userOrBand |json}} -->
+    <div  class="instruments">
+        <div 
+        *ngFor="let instrument of userOrBand.instruments"
+        class="instrument">
+        <div class="img">
+            <app-profile-img
+            size="30px"
+            [src]="(instrument | castInstrument).img_src"
+            ></app-profile-img>
+        </div>
+        <div class="name">
+            {{(instrument | castInstrument ).name}}
+        </div>
         </div>
     </div>
 

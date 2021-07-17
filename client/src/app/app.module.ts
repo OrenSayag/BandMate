@@ -86,6 +86,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { MatDividerModule } from '@angular/material/divider';
 import { TextFieldModule } from '@angular/cdk/text-field';
+import { CastToInstrumentPipe } from './pipes/cast-to-instrument.pipe';
 
 
 
@@ -150,6 +151,7 @@ export function tokenGetter() {
     ExplorePreListComponent,
     CastToUsersPipe,
     CastToGenrePipe,
+    CastToInstrumentPipe,
     LeftSidebarComponent,
     ProfileComponent,
     ProfileImgComponent,

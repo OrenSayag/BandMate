@@ -73,13 +73,17 @@ router.post("/", async (req, res) => {
         case "bands":
           content = await UsersModel.find({
             isBand: true,
-          }).populate("genres");
+          }).populate("genres")
+          .populate("instruments")
+          ;
           // .populate("instruments")
           break;
         case "users":
           content = await UsersModel.find({
             isBand: false,
-          }).populate("genres");
+          }).populate("genres")
+          .populate("instruments")
+          ;
           // .populate("instruments")
           break;
         case "recordings":
@@ -87,14 +91,21 @@ router.post("/", async (req, res) => {
             isPrivate: false,
           })
             .populate("parentUser")
-            .populate("parentUser.participants");
+            .populate("parentUser.participants")
+            .populate("instruments")
+
+            ;
           break;
         case "all":
-          const users = await UsersModel.find({}).populate("genres");
+          const users = await UsersModel.find({}).populate("genres")
+          .populate("instruments")
+          ;
           // .populate("instruments")
           const recordings = await RecordingsModel.find({})
             .populate("parentUser")
-            .populate("parentUser.participants");
+            .populate("parentUser.participants")
+            .populate("instruments")
+            ;
           content = users.concat(recordings);
           break;
         default:
@@ -107,14 +118,18 @@ router.post("/", async (req, res) => {
           content = await UsersModel.find({
             isBand: true,
             genres: genreId,
-          }).populate("genres");
+          }).populate("genres")
+          .populate("instruments")
+          ;
           // .populate("instruments")
           break;
         case "users":
           content = await UsersModel.find({
             isBand: false,
             genres: genreId,
-          }).populate("genres");
+          }).populate("genres")
+          .populate("instruments")
+          ;
           // .populate("instruments")
           break;
         case "recordings":
@@ -123,18 +138,24 @@ router.post("/", async (req, res) => {
             genres: genreId,
           })
             .populate("parentUser")
-            .populate("parentUser.participants");
+            .populate("parentUser.participants")
+            .populate("instruments");
           break;
         case "all":
           const users = await UsersModel.find({
             genres: genreId,
-          }).populate("genres");
+          }).populate("genres")
+          .populate("instruments")
+          ;
           // .populate("instruments")
           const recordings = await RecordingsModel.find({
             genres: genreId,
           })
             .populate("parentUser")
-            .populate("parentUser.participants");
+            .populate("parentUser.participants")
+            .populate("instruments")
+            
+            ;
           content = users.concat(recordings);
           break;
 

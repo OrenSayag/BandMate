@@ -9,6 +9,7 @@ import { ExploreService } from 'src/app/services/explore.service';
 })
 export class SearchExploreComponent implements OnInit {
 
+  public loading = false
 
   constructor(
     public _explore:ExploreService,
@@ -22,9 +23,28 @@ export class SearchExploreComponent implements OnInit {
 
 
 
-  public handleSearch(event:any){
+  public async handleSearch(event:any){
     console.log("running")
+    this.loading = true
+    await new Promise((resolve, reject)=>{
+      setTimeout(() => {
+        resolve("")
+      }, 400)
+      
+    })
+    if(event.target.value===""){
+      this._explore.searchResults = {
+        logs: [],
+        recordings:[],
+        posts: [],
+        users: [],
+        bands: [],
+      }
+      this.loading = false
+      return
+    }
     this._explore.searchExplore(event.target.value)
+    this.loading = false
   }
 
 }

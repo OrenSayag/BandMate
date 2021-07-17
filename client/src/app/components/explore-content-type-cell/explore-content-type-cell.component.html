@@ -1,7 +1,9 @@
-<div class="root">
+<div class="root"
+[ngStyle]="{'background-color': imgSrc}"
+>
 
     <div class="name">{{name | titlecase}}</div>
-    <div class="img-src">{{imgSrc || 'some_src'}}</div>
+    <!-- <div class="img-src">{{imgSrc || 'some_src'}}</div> -->
 
 
 </div>

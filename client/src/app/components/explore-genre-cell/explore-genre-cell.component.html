@@ -1,9 +1,11 @@
-<div class="root">
+<div
+[ngStyle]="{'background-color':imgSrc}"
+class="root">
     <div class="name">
         {{name}}
     </div>
 
-    <div class="img-src">
+    <!-- <div class="img-src">
         {{imgSrc || 'some_src'}}
-    </div>
+    </div> -->
 </div>

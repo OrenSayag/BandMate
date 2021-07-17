@@ -20,7 +20,7 @@
     <mat-icon>home</mat-icon>
 </div>
 <div
-[ngClass]="_r.url==='/explore' ? 'chosen' : ''"
+[ngClass]="_r.url.split('/')[1]==='explore' ? 'chosen' : ''"
     [routerLink]="'/explore'"
     class="nabvar-btn">
     <mat-icon>explore</mat-icon>

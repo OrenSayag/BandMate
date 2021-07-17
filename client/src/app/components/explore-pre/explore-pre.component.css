@@ -1,4 +1,39 @@
 .root {
-    background-color: rgb(48,48,48);
-    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    width: 100vw;
+    box-sizing: border-box;
+    max-width: 800px;
+    
+    
 }
+
+.search-cont{
+    margin-top: 20px;
+    width: 100%;
+}
+
+.main{
+    /* border: 1px solid white; */
+    width: 100%;
+
+    }
+
+.title {
+    font-weight: 100;
+    font-size: 23px;
+
+}
+
+.list{
+    display: grid;
+    grid-template-columns: 50% auto;
+    gap: 12px;
+    padding: 7px;
+    margin-bottom: 10vh;
+}
+
+
+

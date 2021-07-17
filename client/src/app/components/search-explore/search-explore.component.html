@@ -1,5 +1,3 @@
-<p>search-explore works!</p>
-
 <div class="root">
 
   <mat-icon
@@ -7,25 +5,41 @@
   >arrow_back_ios</mat-icon>
   
 
-    <mat-form-field appearance="fill">
-        <mat-icon>search</mat-icon>
-        <!-- <mat-label>Search</mat-label> -->
+    <mat-form-field class="search-cont" appearance="fill">
+        <mat-label>
+          <mat-icon>search</mat-icon>
+        </mat-label>
         <input 
-        (change)="handleSearch($event)"
+        placeholder="Search Something"
+        (input)="handleSearch($event)"
         autocomplete="off"
         matInput>
       </mat-form-field>
 
-      <mat-selection-list #shoes [multiple]="false">
-        <mat-list-option *ngFor="let result of _explore.searchResults.bands" [value]="result">
+      <div 
+      [ngClass]="loading ? 'active' : 'hidden'"
+      class="loading">
+        <mat-spinner></mat-spinner>
+      </div>
+
+      <mat-selection-list 
+      [ngClass]="loading ? 'hidden' : 'active'"
+      class="search-results"
+      [multiple]="false">
+
+        <mat-list-option
+        (click)="_r.navigateByUrl('/explore/profile/'+result.username)"
+        *ngFor="let result of _explore.searchResults.bands" [value]="result">
           {{result.username}}
-          <div class="test">
+          <div class="type">
             Band
           </div>
         </mat-list-option>
-        <mat-list-option *ngFor="let result of _explore.searchResults.users" [value]="result">
+        <mat-list-option
+        (click)="_r.navigateByUrl('/explore/profile/'+result.username)"
+        *ngFor="let result of _explore.searchResults.users" [value]="result">
           {{result.username}}
-          <div class="test">
+          <div class="type">
             User
           </div>
         </mat-list-option>

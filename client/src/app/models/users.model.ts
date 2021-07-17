@@ -11,7 +11,7 @@ export default interface UsersModel{
     hashedPass?:string,
     profile_img_src?:string,
     cover_img_src?:string,
-    instruments?: InstrumentsModel|string[],
+    instruments?: (InstrumentsModel|string)[],
     followers?: string[],
     following?: string[],
     // bio: String,

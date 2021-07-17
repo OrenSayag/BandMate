@@ -74,9 +74,9 @@ export class ExploreService {
 
   
   public contentTypes:{name:string, img_src:string}[] = [
-    {name:"bands", img_src:""},
-    {name:"users", img_src:""},
-    {name:"recordings", img_src:""},
+    {name:"bands", img_src:"#B74D4D"},
+    {name:"users", img_src:"#1B38FF"},
+    {name:"recordings", img_src:"#6908C8"},
 ]
   public chosenContentType:string = ""
   public allContentTypes:boolean = true

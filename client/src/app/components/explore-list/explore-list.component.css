@@ -1,0 +1,28 @@
+.root{
+    width: 100vw;
+    max-width: 800px;
+    padding: 15px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.back-btn-cont{
+    /* border: 1px solid white; */
+    width: 100%;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    /* border: 1px solid white; */
+    margin-bottom: 150px;
+}
+
+.item{
+    width: 100%;
+}
