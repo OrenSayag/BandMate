@@ -44,4 +44,12 @@ export class ChooseInstrumentsBarComponent implements OnInit {
     // console.log(this.chosenInstruments)
   }
 
+  public determineChosen(instrumentId:string):boolean{
+    if(this.chosenInstruments.some(i=>i===instrumentId)){
+      return true
+    } else {
+      return false
+    }
+  }
+
 }

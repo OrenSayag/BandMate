@@ -1,9 +1,61 @@
 .root {
     background-color: rgb(64,64,64);
     color: white;
-    
+    max-width: 800px;
+    width: 100vw;
 }
 
 input {
     /* margin: 20px; */
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap:20px;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.categories{
+    width: 100%;
+    max-width: 400px;
+}
+
+.categories input{
+    margin: 10px 0;
+}
+
+.categories .ghost{
+    margin: 10px 0;
+}
+
+.rating-stars .clear{
+    position: absolute;
+    left: -30px;
+    display: flex;
+    top: 2px;
+}
+
+.rating-stars{
+    position: relative;
+}
+
+.chosen{
+    color: lightgreen;
+}
+
+.is-private{
+    width: 200px;
+    display: flex;
+    justify-content: space-between;
+    /* border: 1px solid white; */
+}
+
+.glow{
+    box-shadow:
+    0 0 3px 1.5px #fff,  /* inner white */
+    0 0 5px 3px #f0f, /* middle magenta */
+    0 0 7px 4.5px #0ff; /* outer cyan */
 }

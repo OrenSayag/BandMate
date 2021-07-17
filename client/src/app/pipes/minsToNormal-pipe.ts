@@ -11,6 +11,9 @@ export class MinuteSecondsPipe implements PipeTransform {
     if(hours<1){
         return remainder+"m"
     }
+    if(remainder===0){
+      return hours+"H"
+    }
     return hours+"H, "+remainder+"m" 
   }
 }

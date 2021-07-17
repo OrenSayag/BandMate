@@ -118,5 +118,12 @@ export class LogAddFormComponent implements OnInit {
         // console.log("dafuq?")
     }
 
+    public determineCategoryGlow(name:string){
+      if(this.chosenCategories.some(c=>c.name===name)){
+        return true
+      }
+      return false
+    }
+
     
 }

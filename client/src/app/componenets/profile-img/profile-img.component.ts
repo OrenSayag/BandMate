@@ -14,6 +14,10 @@ export class ProfileImgComponent implements OnInit {
   @Input()
   public src:string = ""
 
+  @Input()
+  public size:string = ""
+  
+
   public blob:any
 
   public loading:boolean = true
@@ -58,8 +62,8 @@ export class ProfileImgComponent implements OnInit {
           const picture = document.createElement('img');
           picture.src = url;
           picture.className = 'profile-img';
-          picture.style.width = '50px';
-          picture.style.height = '50px';
+          picture.style.width = this.size ||'50px';
+          picture.style.height = this.size ||'50px';
           picture.style.borderRadius = '50%';
           this.cont.nativeElement.removeChild(
             this.cont.nativeElement.lastChild

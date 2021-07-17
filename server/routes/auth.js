@@ -224,9 +224,9 @@ router.post("/uploadProfilePicture", async (req, res) => {
   await upload(req, res);
     
   console.log("runningn");
-  console.log(req.file.id)
+  // console.log(req.file.id)
   if (req.file == undefined) {
-    return res.send({fail:`You must select a file.`});
+    return res.send({fail:`No profile image uploaded.`});
   }
 
   return res.send({ok:`File ${req.file.id} has been uploaded.`,

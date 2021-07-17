@@ -1,0 +1,55 @@
+.instrument{
+    display: flex;
+    /* border:  1px solid white; */
+    height: 40px;
+    align-items: center;
+    background-color: rgb(80,80,80);
+    margin: 10px 0;
+    border-radius: 3px;
+    padding: 10px 5px;
+}
+
+.chosen{
+    background-color: rgba(156,69, 176, .7);
+}
+
+.img {
+    /* transform: translateY(9px) translateX(10px); */
+    transform: translateY(9px) ;
+}
+.name {
+    /* transform: translateY(9px) translateX(10px); */
+    transform: translateX(-12px) ;
+}
+
+.root{
+    background-color: rgb(70,70,70);
+    padding: 10px 25px;
+    width: 200px;
+    border-radius: 3px;
+    box-sizing: border-box;
+}
+
+.edit-btn{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+    
+}
+
+button {
+    color: rgb(133, 131, 130);
+}
+
+
+.title{
+    margin: 10px 0;   
+}
+.edit-button{
+    padding: 0 !important;
+    font-size: 13px;
+}
+
+/* .chosen{
+    background-color: mediumpurple;
+} */

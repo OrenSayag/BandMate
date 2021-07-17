@@ -4,6 +4,8 @@
 
         <mat-form-field appearance="fill">
             <input 
+            autocomplete="off"
+
             type="number"
             matInput 
             placeholder="Time practiced in minutes"
@@ -16,6 +18,8 @@
     
         <mat-form-field appearance="fill">
             <input 
+            autocomplete="off"
+
             type="any"
              matInput
              placeholder="Title"
@@ -25,17 +29,22 @@
         </mat-form-field>
     
     
-        <mat-form-field class="example-chip-list" appearance="fill">
+        <mat-form-field class="categories" appearance="fill">
+            <div class="ghost"></div>
             <mat-label>Categories</mat-label>
             <mat-chip-list #chipList aria-label="Fruit selection">
                 <mat-chip 
                 (click)="handleClickCategory(category)"
                 *ngFor="let category of _users.currUserOtBand.logCategories" 
-                [ngStyle]="{'background-color': category.color}" >
+                [ngStyle]="{'background-color': category.color}"
+                [ngClass]="determineCategoryGlow(category.name) ? 'glow' : ''"
+                >
                     {{category.name}}
                     <mat-icon matChipRemove (click)="delCategory(category.name)" >cancel</mat-icon>
                 </mat-chip>
-                <input placeholder="New Category" [matChipInputFor]="chipList"
+                <input 
+                    autocomplete="off"
+                placeholder="New Category" [matChipInputFor]="chipList"
                 (matChipInputTokenEnd)="addCategory($event)">
             </mat-chip-list>
             <!-- [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" -->
@@ -50,41 +59,51 @@
     
         <div class="rating-stars">
             <mat-icon
+            class="clear"
             (click)="handleRatingStar(0)"
             >clear</mat-icon>
             <mat-icon
+            [ngClass]="ratingStars>=1 ? 'chosen' : ''"
             (click)="handleRatingStar(1)"
             >star</mat-icon>
             <mat-icon
+            [ngClass]="ratingStars>=2 ? 'chosen' : ''"
             (click)="handleRatingStar(2)"
             >star</mat-icon>
             <mat-icon
+            [ngClass]="ratingStars>=3 ? 'chosen' : ''"
             (click)="handleRatingStar(3)"
             >star</mat-icon>
             <mat-icon
+            [ngClass]="ratingStars>=4 ? 'chosen' : ''"
             (click)="handleRatingStar(4)"
             >star</mat-icon>
             <mat-icon
+            [ngClass]="ratingStars>=5 ? 'chosen' : ''"
             (click)="handleRatingStar(5)"
             >star</mat-icon>
         </div>
     
-        <div class="is-private">
-            <mat-radio-group aria-label="Select an option" formControlName="isPrivate">
+            <mat-radio-group class="is-private" aria-label="Select an option" formControlName="isPrivate">
                 <mat-radio-button checked="true" [value]="false">Public</mat-radio-button>
                 <mat-radio-button [value]="true">Private</mat-radio-button>
             </mat-radio-group>
-        </div>
     
-        <input type="submit" vaule="Post" class="post-btn" (click)="postLog()"
+        <!-- <input type="submit" vaule="Post" class="post-btn" 
+        
+        /> -->
+
+        <button mat-raised-button color="primary"
+        (click)="postLog()"
         [disabled]="!myForm.valid || chosenInstruments.length===0"
-        />
+        >Add Log</button>
+
 
         <!-- <div class="error-div">{{errorDivText}}</div> -->
         <div class="success-div">{{successDivText}}</div>
     </form>        
 
-    <p>{{ratingStars}}</p>
+    <!-- <p>{{ratingStars}}</p> -->
 
 
 </div>

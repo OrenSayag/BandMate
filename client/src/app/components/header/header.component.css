@@ -2,7 +2,8 @@
     height:30px;
     width: 30px;
     margin-right: 30px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+
+    /* box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px; */
 }
 
 .avatar img {
@@ -63,3 +64,4 @@
 mat-icon{
     font-size: 30px;
 }
+

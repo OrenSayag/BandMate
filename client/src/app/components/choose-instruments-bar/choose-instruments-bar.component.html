@@ -1,14 +1,37 @@
 <div class="root">
-    <div *ngFor="let instrument of _users.currUserOtBand.instruments"
+    <!-- <div class="title">
+        Instruments
+    </div> -->
+    <div
+    class="instrument"
+    *ngFor="let instrument of _users.currUserOtBand.instruments"
     (click)="handleClick(instrument._id)"
+    [ngClass]="determineChosen(instrument._id) ? 'chosen' : ''"
     >
-        {{instrument.img_src}}
-        {{instrument.name}}
+        <!-- {{instrument.img_src}} -->
+
+        <div class="img">
+            <app-profile-img
+            size="30px"
+            [src]="instrument.img_src"
+            ></app-profile-img>
+        </div>
+
+        <div class="name">
+
+            {{instrument.name}}
+        </div>
     </div>
 
-    <button
-    mat-raised-button (click)="openDialog()"
-    >Edit Your Instruments</button>
+    <div class="edit-btn">
+        <button
+        class="edit-button"
+        mat-raised-button (click)="openDialog()"
+        >Edit</button>
+    </div>
+
+    
+
 </div>
 
 <!-- <p>{{_users.userInfo | json}}</p> -->

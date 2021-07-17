@@ -2,18 +2,22 @@
 [ngClass]="loading ? 'active' : 'hidden'" [diameter]="50"
 ></mat-spinner> -->
 
-<div class="rootroot">
-
+<div
+class="rootroot"
+>
     <div class="loading"
     
     [ngClass]="loading ? 'active' : 'hidden'"
+    [ngClass]="size ? 'size'+size : ''"
     >
     </div>
+
+    
     
     <div class="root"
     [ngClass]="!loading ? 'active' : 'hidden'"
-    >
     
+    >
     
         <div class="cont" #cont>
             <div></div>

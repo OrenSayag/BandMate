@@ -29,6 +29,8 @@
     font-size: 10px;
 } */
 
+
+
 @keyframes animatedBackground {
     from {
       background-position: 0 0;
@@ -41,4 +43,10 @@
   .rootroot{
       height:50px;
       width:50px;
+    }
+    
+
+  .size30px{
+    height: 30px;
+    width: 30px;
   }

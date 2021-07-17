@@ -12,18 +12,32 @@
     
         <div class="add-content-btn">
             <svg class="right-bell" height="90px" viewBox="0 0 100 100">
-                <path fill="CornFlowerBlue" d="M0,0
+                <path fill="rgb(156,39,176)" d="M0,0
                 100,0
                 C50,20 50,80 0,100 Z" />
               </svg>
             <svg class="left-bell" height="90px" viewBox="0 0 100 100">
-                <path fill="red" d="M0,0
+                <path fill="rgb(156,39,176)" d="M0,0
                 100,0
                 C50,20 50,80 0,100 Z" />
               </svg>
+            <svg class="left-curve" viewBox="0 0 50 10">
+                <path fill="rgb(156,39,176)" d="M0,0
+                100,0
+                C7,6 9,5 0,10 Z" />
+            </svg>
+            <!-- C5,2 5,8 0,9 Z" /> -->
+            <svg class="right-curve" viewBox="0 0 50 10">
+                <path fill="rgb(156,39,176)" d="M0,0
+                100,0
+                C7,6 9,5 0,10 Z"  />
+              </svg>
+              <div class="plus-rect"></div>
             <app-add-content-button (click)="formToggler()" ></app-add-content-button>
         </div>
-        <app-log-add-form *ngIf="formTog"
+        <!-- *ngIf="formTog" -->
+        <app-log-add-form 
+        [ngClass]="formTog ? 'active' : 'hidden'"
         (successfulLog)="formListener($event)"
         ></app-log-add-form>
         <div class="list">
