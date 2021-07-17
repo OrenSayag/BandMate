@@ -544,19 +544,28 @@ router.post("/feed", verifyUser, async (req, res) => {
         (await LogsModel.find({ parentUser: id }).populate({
           path: "parentUser",
           select: "username isBand participants profile_img_src",
-        })) || [],
+        })
+        .populate("instruments") 
+        || [])
+        ,
         
       posts:
         (await PostsModel.find({ parentUser: id }).populate({
           path: "parentUser",
           select: "username isBand participants profile_img_src",
-        })) || [],
+        })
+        .populate("instruments")
+        || [])
+        ,
         
       recordings:
         (await RecordingsModel.find({ parentUser: id }).populate({
           path: "parentUser",
           select: "username isBand participants profile_img_src",
-        })) || [],
+        })
+        .populate("instruments")      
+        || [])
+        ,
         
     };
 
@@ -569,19 +578,25 @@ router.post("/feed", verifyUser, async (req, res) => {
       const logs = await LogsModel.find({ parentUser: band }).populate({
         path: "parentUser",
         select: "username isBand participants profile_img_src",
-      });
+      })
+        .populate("instruments")
+
       
       const posts = await PostsModel.find({ parentUser: band }).populate({
         path: "parentUser",
         select: "username isBand participants profile_img_src",
-      });
+      })
+        .populate("instruments")
+
       
       const recordings = await RecordingsModel.find({
         parentUser: band,
       }).populate({
         path: "parentUser",
         select: "username isBand participants profile_img_src",
-      });
+      })
+        .populate("instruments")
+
       
       bandContent.logs = logs;
       bandContent.posts = posts;
@@ -593,7 +608,9 @@ router.post("/feed", verifyUser, async (req, res) => {
       const logs = await LogsModel.find({ parentUser: participant }).populate({
         path: "parentUser",
         select: "username isBand participants profile_img_src",
-      });
+      })
+        .populate("instruments")
+
       
       const posts = await PostsModel.find({ parentUser: participant }).populate(
         {
@@ -607,7 +624,9 @@ router.post("/feed", verifyUser, async (req, res) => {
       }).populate({
         path: "parentUser",
         select: "username isBand participants profile_img_src",
-      });
+      })
+        .populate("instruments")
+
       
       // participantContent.logs = [];
       // participantContent.posts = [];
@@ -637,21 +656,30 @@ router.post("/feed", verifyUser, async (req, res) => {
       }).populate({
         path: "parentUser",
         select: "username isBand participants profile_img_src",
-      }),
+      })
+        .populate("instruments")
+      
+      ,
       
       posts: await PostsModel.find({
         parentUser: { $in: user.following },
       }).populate({
         path: "parentUser",
         select: "username isBand participants profile_img_src",
-      }),
+      })
+        .populate("instruments")
+      
+      ,
       
       recordings: await RecordingsModel.find({
         parentUser: { $in: user.following },
       }).populate({
         path: "parentUser",
         select: "username isBand participants profile_img_src",
-      }),
+      })
+        .populate("instruments")
+      
+      ,
       
     };
     // everything should be ordered by date desc.

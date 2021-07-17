@@ -4,6 +4,9 @@ const router = require("express").Router();
 const mongoose = require("mongoose")
 const { ObjectId } = mongoose.Schema
 const { privateGuard } = require("../toolFunctions")
+const FsFilesModel = require("../DB/models/fs.files");
+const FsChunksModel = require("../DB/models/fs.chunks");
+
 
 // test
 router.get("/", async (req, res) => {

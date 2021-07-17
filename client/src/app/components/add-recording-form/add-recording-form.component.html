@@ -2,132 +2,123 @@
 
   <form class="form" [formGroup]="myForm">
 
-    <mat-form-field appearance="fill">
-      <input 
-      type="any"
-       matInput
-       placeholder="Title"
-      formControlName="title"
 
-      >
-  </mat-form-field>
 
-    <mat-radio-group aria-label="Select an option" formControlName="audioTrueVideoFalse">
+    <mat-radio-group class=audio-video-radio aria-label="Select an option" formControlName="audioTrueVideoFalse">
       <mat-radio-button [value]="true">Audio</mat-radio-button>
-      <mat-radio-button [value]="false"
-      (click)="openCloseRecorder(true)"
-      >Video</mat-radio-button>
-  </mat-radio-group>
+      <mat-radio-button [value]="false" (click)="openCloseRecorder(true)">Video</mat-radio-button>
+    </mat-radio-group>
 
-    <mat-radio-group aria-label="Select an option" formControlName="isPrivate">
-      <mat-radio-button [value]="false">Public</mat-radio-button>
-      <mat-radio-button [value]="true">Private</mat-radio-button>
-  </mat-radio-group>
+
 
     <div class="media-input-btns">
 
-      <input #fileInput
-      (change)="tempHandleChange()"
-      class="ng-hide" id="input-file-id" multiple type="file"
-      
-      />
-      <span>mp3/mp4</span>
+      <input #fileInput (change)="tempHandleChange()" class="hidden" id="input-file-id" multiple type="file" />
 
-      <button
-      mat-button
-      class="record-btn"
-      (click)="openCloseRecorder()"
-      [ngClass]="myForm.controls.audioTrueVideoFalse.value ? 'active' : 'hidden'"
-      >Record</button>
+
+      <div class="upload">
+        <button mat-button class="record-btn" (click)="clickFileInput()">
+          <mat-icon>file_upload</mat-icon>
+        </button>
+        <span>mp3/mp4</span>
+      </div>
+      <button mat-button class="record-btn" (click)="openCloseRecorder()"
+        [ngClass]="myForm.controls.audioTrueVideoFalse.value ? 'active' : 'hidden'">
+        <mat-icon>mic</mat-icon>
+      </button>
     </div>
 
 
 
-  </form>
 
 
-    <section #soundClips 
-    [ngClass]="myForm.controls.audioTrueVideoFalse.value ? 'active' : 'hidden'"
-    >
+    <section #soundClips class="sound-clips"
+      [ngClass]="myForm.controls.audioTrueVideoFalse.value ? 'active' : 'hidden'">
       <div></div>
     </section>
 
-    <div 
-   
-    class="recorder" [ngClass]="recorderTog ? 'active' : 'hidden'">
-        <section class="main-controls">
-          <div id="buttons">
-            <button
-         
-            #record>{{!recordingState ? 'Start' : 'Stop'}}</button>
-            <!-- <button
+    <div class="recorder" [ngClass]="recorderTog ? 'active' : 'hidden'">
+      <section class="main-controls">
+        <div id="buttons">
+          <button class="canvas-btn" #record>
+            <!-- {{!recordingState ? 'Start' : 'Stop'}} -->
+            <mat-icon [ngClass]="!recordingState ? 'active' : 'hidden'">radio_button_checked</mat-icon>
+            <mat-icon [ngClass]="recordingState ? 'active' : 'hidden'">stop</mat-icon>
+          </button>
+          <!-- <button
             *ngIf="recordingState"
             #stop>Stop</button> -->
-          </div>
-        </section>
+        </div>
+      </section>
 
-        <!-- VISUALISER -->
-        <canvas #canvas></canvas>
-      </div>
+      <!-- VISUALISER -->
+      <canvas #canvas></canvas>
+    </div>
 
-      <div class="error-div"></div>
-      <div class="success-div"></div>
+    <!-- <div class="error-div"></div> -->
 
-      <app-choose-instruments-bar (sendInstrumentArr)="chosenInstrumentsListener($event)"></app-choose-instruments-bar>
-    
-      <mat-form-field class="example-chip-list" appearance="fill">
-        <mat-label>Categories</mat-label>
-        <mat-chip-list #chipList aria-label="Fruit selection">
-            <mat-chip 
-            (click)="handleClickCategory(category)"
-            *ngFor="let category of _users.currUserOtBand.bankCategories" 
-            [ngStyle]="{'background-color': category.color}" >
-                {{category.name}}
-                <mat-icon matChipRemove (click)="delCategory(category.name)" >cancel</mat-icon>
-            </mat-chip>
-            <input placeholder="New Category" [matChipInputFor]="chipList"
-            (matChipInputTokenEnd)="addCategory($event)">
-        </mat-chip-list>
-        <!-- [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" -->
+    <app-choose-instruments-bar 
+    [chosenInstruments]="chosenInstruments"
+    (sendInstrumentArr)="chosenInstrumentsListener($event)"></app-choose-instruments-bar>
+
+    <mat-form-field appearance="fill">
+      <input type="any" matInput placeholder="Title" formControlName="title">
+    </mat-form-field>
+
+    <mat-form-field class="categories" appearance="fill">
+      <mat-label>Categories</mat-label>
+      <div class="ghost"></div>
+
+      <mat-chip-list #chipList aria-label="Fruit selection">
+        <mat-chip (click)="handleClickCategory(category)" [ngClass]="determineCategoryGlow(category.name) ? 'glow' : ''"
+          *ngFor="let category of _users.currUserOtBand.bankCategories"
+          [ngStyle]="{'background-color': category.color}">
+          {{category.name}}
+          <mat-icon matChipRemove (click)="delCategory(category.name)">cancel</mat-icon>
+        </mat-chip>
+        <input placeholder="New Category" [matChipInputFor]="chipList" (matChipInputTokenEnd)="addCategory($event)">
+      </mat-chip-list>
+      <!-- [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur" -->
     </mat-form-field>
 
 
-      <div class="rating-stars">
-          <mat-icon
-          (click)="handleRatingStar(0)"
-          >clear</mat-icon>
-          <mat-icon
-          (click)="handleRatingStar(1)"
-          >star</mat-icon>
-          <mat-icon
-          (click)="handleRatingStar(2)"
-          >star</mat-icon>
-          <mat-icon
-          (click)="handleRatingStar(3)"
-          >star</mat-icon>
-          <mat-icon
-          (click)="handleRatingStar(4)"
-          >star</mat-icon>
-          <mat-icon
-          (click)="handleRatingStar(5)"
-          >star</mat-icon>
-      </div>
+    <div class="rating-stars">
+      <mat-icon (click)="handleRatingStar(0)">clear</mat-icon>
+      <mat-icon (click)="handleRatingStar(1)" [ngClass]="ratingStars>=1 ? 'chosen' : ''">star</mat-icon>
+      <mat-icon (click)="handleRatingStar(2)" [ngClass]="ratingStars>=2 ? 'chosen' : ''">star</mat-icon>
+      <mat-icon (click)="handleRatingStar(3)" [ngClass]="ratingStars>=3 ? 'chosen' : ''">star</mat-icon>
+      <mat-icon (click)="handleRatingStar(4)" [ngClass]="ratingStars>=4 ? 'chosen' : ''">star</mat-icon>
+      <mat-icon (click)="handleRatingStar(5)" [ngClass]="ratingStars>=5 ? 'chosen' : ''">star</mat-icon>
+    </div>
 
-      <button
-      (click)="postRecording()"
-      >Upload</button>
+    <mat-radio-group aria-label="Select an option" class="is-private" formControlName="isPrivate">
+      <mat-radio-button [value]="false">Public</mat-radio-button>
+      <mat-radio-button [value]="true">Private</mat-radio-button>
+    </mat-radio-group>
 
-      <div class="error-div">{{errorDivMessage}}</div>
-      <div class="success-div">{{successDivMessage}}</div>
-      <!-- (click)="uploadFile()" -->
+  </form>
 
-      <!-- {{myForm.value | json}}
+
+  <div class="error-div">{{errorDivMessage}}</div>
+  <div class="success-div">{{successDivMessage}}</div>
+  <!-- <button (click)="postRecording()">Upload</button> -->
+  <div class="submit-btn">
+    <button mat-raised-button color="primary"
+    (click)="postRecording()"
+    [disabled]="!myForm.valid || chosenInstruments.length===0"
+    >Upload</button>
+
+  </div>
+
+  <!-- (click)="uploadFile()" -->
+
+  <!-- {{myForm.value | json}}
       {{recordingSrc | json}}
-      {{ratingStars | json}} -->
-      <!-- {{chosenInstruments.length | json}}  -->
-      <!-- {{chosenCategories.length | json}} -->
-        <!-- {{fileToUpload | json}} -->
+      {{ratingStars | json}}
+  {{chosenInstruments.length | json}} 
+  {{chosenCategories.length | json}}
+  {{fileToUpload | json}} -->
 
-      <!-- {{myForm.valid}} -->
+  <!-- {{myForm.valid}} -->
 
 </div>

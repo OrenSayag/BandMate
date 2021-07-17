@@ -85,6 +85,7 @@ import { FlexModule } from '@angular/flex-layout';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatGridListModule} from '@angular/material/grid-list';
 import { MatDividerModule } from '@angular/material/divider';
+import { TextFieldModule } from '@angular/cdk/text-field';
 
 
 
@@ -187,6 +188,7 @@ export function tokenGetter() {
     MatTabsModule,
     MatGridListModule,
     MatDividerModule,
+    TextFieldModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,

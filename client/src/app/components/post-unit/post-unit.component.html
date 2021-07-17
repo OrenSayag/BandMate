@@ -8,28 +8,31 @@
         <mat-icon>https</mat-icon>
     </div>
 
-    <div class="date">
-        {{post.date | date: 'dd/MM/yyyy HH:mm'}}
+    <div class="date-and-profile_pic">
+        
+        <div class="user-pic">
+            <!-- {{post.parentUser.profile_img_src || 'some_src'}} -->
+            <app-profile-img
+            [src]="post.parentUser.profile_img_src"
+            ></app-profile-img>
+            
+        </div>
+        <div class="text">
+            <div class="username">
+                {{post.parentUser.username}}
+            </div>
+            <div class="date">
+                {{post.date | date: 'dd/MM/yyyy'}}
+            </div>
+
+        </div>
     </div>
-
-    <div class="content-type">
-        {{post.type}}
-    </div>
-
-    <div class="username">
-        {{post.parentUser.username}}
-    </div>
-
-    <div class="profile-img">
-        <!-- {{post.parentUser.profile_img_src || 'some_src'}} -->
-        <app-profile-img
-        [src]="post.parentUser.profile_img_src"
-        ></app-profile-img>
-
-    </div>
-
+    
+    
     <div class="content">
-        {{post.content}}
+        <div>
+            {{post.content}}
+        </div>
     </div>
 
     <div class="media" *ngIf="post.mediaType!=='no media'">
@@ -53,7 +56,7 @@
     </div>
     <app-comment-section [comments]="post.comments" [commentFoo]="addComment" [delCommentFoo]="delComment"
         [contentId]="post._id" *ngIf="commentsTog"></app-comment-section>
-    <mat-icon *ngIf="canISeeAndRateIt()" mat-button [matMenuTriggerFor]="beforeMenu">more_vert</mat-icon>
+    <mat-icon class="user-menu-btn" *ngIf="canISeeAndRateIt()" mat-button [matMenuTriggerFor]="beforeMenu">more_vert</mat-icon>
     <mat-menu #beforeMenu="matMenu" xPosition="before">
         <button (click)="killMe.emit(post._id)" mat-menu-item>Delete</button>
     </mat-menu>

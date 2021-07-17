@@ -144,13 +144,13 @@ export class PostUnitComponent implements AfterViewInit {
             const picture = document.createElement('img');
             picture.className = "media"
             picture.src = this.audioUrl;
-            picture.style.width = "80vw"
+            picture.style.width = "100%"
             this.mediaCont.nativeElement.appendChild(picture);
             console.log('displaying picture');
           } else {
             const audio = document.createElement('video');
             audio.setAttribute('controls', '');
-            audio.style.width = "80vw"
+            audio.style.width = "100%"
             this.mediaCont.nativeElement.appendChild(audio);
             audio.src = this.audioUrl;
 

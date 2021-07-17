@@ -39,6 +39,10 @@ export class AddPostFormComponent implements OnInit {
     isPrivate:[false],
   });
 
+  public clickFileInput(){
+    this.fileInput.nativeElement.click()
+  }
+
   
 
   public handleFileInputChange(): void {

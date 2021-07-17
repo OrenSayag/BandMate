@@ -1,52 +1,93 @@
 <div class="root" *ngIf="!recording.isPrivate || canISeeAndRateIt()">
 
+    
     <div
     *ngIf="displayType"
     class="display-type">
         Recording
     </div>
+    <div class="date-and-profile-pic">
+        <div class="user-pic">
+            <!-- {{recording.parentUser.profile_img_src || "some img src" }} -->
+            <app-profile-img
+            [src]="recording.parentUser.profile_img_src"
+            ></app-profile-img>
+        </div>
+        <div class="text">
+            <div class="username">
+                {{recording.parentUser.username }}
+            </div>
+            <div class="date">
+                {{recording.date |date: 'dd/MM/yyyy'}}
+            </div>
+        </div>
 
-    <div class="user-pic">
-        <!-- {{recording.parentUser.profile_img_src || "some img src" }} -->
-        <app-profile-img
-        [src]="recording.parentUser.profile_img_src"
-        ></app-profile-img>
-        {{recording.parentUser.username }}
     </div>
-    
-    <div class="date">
-        {{recording.date |date: 'dd/MM/yyyy'}}
+
+    <div #mediaCont class="media-cont">
+        
     </div>
+
 
     <div class="title">
         {{recording.title}}
     </div>
 
     <div *ngIf="canISeeAndRateIt()" class="ratingStars">
-        {{ recording.ratingStars }}
 
-    <mat-icon (click)="rateRecording(recording._id, 0)">cancel</mat-icon>
-        <mat-icon [color]="recording.ratingStars>0&&'accent'" (click)="rateRecording(recording._id, 1)">star
-        </mat-icon>
-        <mat-icon [color]="recording.ratingStars>1&&'accent'" (click)="rateRecording(recording._id, 2)">star
-        </mat-icon>
-        <mat-icon [color]="recording.ratingStars>2&&'accent'" (click)="rateRecording(recording._id, 3)">star
-        </mat-icon>
-        <mat-icon [color]="recording.ratingStars>3&&'accent'" (click)="rateRecording(recording._id, 4)">star
-        </mat-icon>
-        <mat-icon [color]
-        ="recording.ratingStars>4&&'accent'" (click)="rateRecording(recording._id, 5)">star
-        </mat-icon> 
-<!--             
-        <mat-icon
-        *ngFor="let star of [].constructor(5-log.ratingStars)"
-        (click)="_logs.rateLog(log._id, 5-star);_users.updateContent()"
-        >star</mat-icon> -->
+        <div>
+            <mat-icon class="clear" (click)="rateRecording(recording._id, 0)">clear</mat-icon>
+                <mat-icon
+                [ngClass]="recording.ratingStars < 1 ? 'empty-star' : ''"
+                [color]="recording.ratingStars>0&&'accent'" (click)="rateRecording(recording._id, 1)">star
+                </mat-icon>
+                <mat-icon
+                [ngClass]="recording.ratingStars < 2 ? 'empty-star' : ''"
+                [color]="recording.ratingStars>1&&'accent'" (click)="rateRecording(recording._id, 2)">star
+                </mat-icon>
+                <mat-icon
+                [ngClass]="recording.ratingStars < 3 ? 'empty-star' : ''"
+                [color]="recording.ratingStars>2&&'accent'" (click)="rateRecording(recording._id, 3)">star
+                </mat-icon>
+                <mat-icon
+                [ngClass]="recording.ratingStars < 4 ? 'empty-star' : ''"
+                [color]="recording.ratingStars>3&&'accent'" (click)="rateRecording(recording._id, 4)">star
+                </mat-icon>
+                <mat-icon
+                [ngClass]="recording.ratingStars < 5 ? 'empty-star' : ''"
+                [color]
+                ="recording.ratingStars>4&&'accent'" (click)="rateRecording(recording._id, 5)">star
+                </mat-icon> 
+        </div>
     </div>
 
-    <div #mediaCont class="media-cont">
-        
+    <div class="instruments">
+        <div class="instrument" *ngFor="let instrument of recording.instruments">
+            <div class="img">
+                <app-profile-img
+                size="30px"
+                [src]="instrument.img_src"
+                ></app-profile-img>
+            </div>
+    
+            <div class="name">
+    
+                {{instrument.name}}
+            </div>
+        </div>
     </div>
+
+    <div class="categories">
+        <div class="category" *ngFor="let category of recording.categories">
+
+            <mat-chip
+            [ngStyle]="{'background-color': category.color}"
+            >
+                {{ category.name }}
+            </mat-chip>
+        </div>
+    </div>
+
 
     <div class="social-bar">
         <!-- <div class="comment"></div>
@@ -66,18 +107,6 @@
         </button>
     </div>
 
-    <div class="categories">
-        <div class="category" *ngFor="let category of recording.categories">
-
-            {{ category.name }}
-        </div>
-    </div>
-
-    <div class="instruments">
-        <div class="instrument" *ngFor="let instrument of recording.instruments">
-            {{ instrument.name }}
-        </div>
-    </div>
 
     <app-comment-section
     [comments]="recording.comments"
@@ -87,13 +116,13 @@
     *ngIf="commentsTog"
     ></app-comment-section>
 
-    <mat-icon *ngIf="canISeeAndRateIt()" mat-button [matMenuTriggerFor]="beforeMenu">more_vert</mat-icon>
+    <mat-icon class="user-menu-btn"  *ngIf="canISeeAndRateIt()" mat-button [matMenuTriggerFor]="beforeMenu">more_vert</mat-icon>
     <mat-menu #beforeMenu="matMenu" xPosition="before">
         <button 
         (click)="killMe.emit(recording._id)"
         mat-menu-item>Delete</button>
     </mat-menu>
  
-    {{recording.instruments |json}}
+    <!-- {{recording.instruments |json}} -->
     <!-- {{recording.categories |json}} -->
 </div>

@@ -13,6 +13,154 @@
 }
  */
 
- .gold{
-     background-color: gold;
- }
+
+ .root{
+    /* border: 1px solid purple; */
+    border-radius: 3px;
+    margin: 30px 0;
+    padding:  15px 0;
+    background-color: rgb(78,78,78);
+    width: 90vw;
+    max-width: 800px;
+    position: relative;
+}
+
+.gold {
+    background-color: gold;
+}
+
+.date-and-profile-pic {
+    display: flex;
+    justify-content: space-between;
+    color: rgb(138, 135, 135);
+    /* border: 1px solid white; */
+    width: 140px;
+    align-items: center;
+    padding-left: 15px;
+}
+
+.user-pic{
+    /* border: 1px solid white; */
+    /* width: 200px; */
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    height: 50px;
+}
+.text .username {
+    
+    color: white;
+}
+
+.media-cont {
+    /* border: 1px solid white; */
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    font-size: 22px;
+    padding: 20px 0;
+    margin-top: 20px;
+}
+
+.time div {
+    box-shadow: 
+    0 0 3px 1.5px #fff,  /* inner white */
+    0 0 5px 3px #f0f, /* middle magenta */
+    0 0 7px 4.5px #0ff; /* outer cyan */
+    ;
+    width: fit-content;
+    padding: 15px;
+    border-radius: 15px;
+}
+
+.instruments{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+}
+
+.instrument{
+    display: flex;
+    /* border:  1px solid white; */
+    height: 40px;
+    align-items: center;
+    /* background-color: rgb(80,80,80); */
+    margin: 3px 0;
+    border-radius: 3px;
+    padding: 10px 15px;
+
+}
+
+.img {
+    /* transform: translateY(9px) translateX(10px); */
+    transform: translateY(9px) ;
+}
+.name {
+    /* transform: translateY(9px) translateX(10px); */
+    transform: translateX(-12px) ;
+}
+
+.categories{
+    padding-left: 15px;
+    margin: 10px 0 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap:5px;
+}
+
+.ratingStars{
+    /* border:1px solid white; */
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+}
+
+.ratingStars div{
+    position: relative;
+    width: fit-content;
+}
+
+.clear{
+    position: absolute;
+    left: -30px;
+    top: 6px;
+    color:lightslategray;
+    font-size: 15px;
+}
+
+.empty-star{
+    color:lightslategray;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 15px 15px 15px;
+}
+
+.title div{
+    /* border: 1px solid white; */
+    padding: 15px;
+    width: 90%;
+    border-radius: 3px;
+    background-color: rgb(98,98,98);
+}
+
+.social-bar{
+    width: 100%;
+    /* border: 1px solid white; */
+    display: flex;
+    justify-content: space-around;
+}
+
+.social-bar button{
+    width: 45%;
+}
+
+.user-menu-btn{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+

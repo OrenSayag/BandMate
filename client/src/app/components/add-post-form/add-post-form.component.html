@@ -1,26 +1,38 @@
 <div class="root">
     <form [formGroup]="myForm">
 
-        <mat-form-field appearance="fill">
-            <input type="any" matInput placeholder="What's new?" formControlName="content">
+        <mat-form-field appearance="fill"
+        class="post-input"
+        >
+            <!-- <input type="any" matInput placeholder="What's new?" formControlName="content"> -->
+
+
+            <textarea matInput
+            formControlName="content"
+            autocomplete="off"
+        cdkTextareaAutosize
+        placeholder="What's new?"
+        #autosize="cdkTextareaAutosize"
+        cdkAutosizeMinRows="1"
+        cdkAutosizeMaxRows="5"></textarea>
+
         </mat-form-field>
 
-        <div class="is-private">
-            <mat-radio-group aria-label="Select an option" formControlName="isPrivate">
+            <mat-radio-group class="is-private" aria-label="Select an option" formControlName="isPrivate">
                 <mat-radio-button checked="true" [value]="false">Public</mat-radio-button>
                 <mat-radio-button [value]="true">Private</mat-radio-button>
             </mat-radio-group>
-        </div>
 
-        <input type="file" #fileInput
+        <input type="file" #fileInput class="hidden"
         (change)="handleFileInputChange()"
         >
 
-        <button class="post-btn"
-        (click)="postPost()"
-        >
-            Post
-        </button>
+        <div class="upload">
+            <button color="primary"  mat-raised-button (click)="clickFileInput()">
+              <mat-icon>file_upload</mat-icon>
+            </button>
+            <span>img/vid</span>
+          </div>
 
         <div class="error-div">
             {{errorDivMessage}}
@@ -29,6 +41,21 @@
         <div class="success-div">
             {{successDivMessage}}
         </div>
+
+        <div class="submit-btn">
+            <button mat-raised-button color="primary"
+            (click)="postPost()"
+            [disabled]="!myForm.valid"
+            >Post</button>
+        
+          </div>
+
+        <!-- <button class="post-btn"
+        (click)="postPost()"
+        >
+            Post
+        </button> -->
+
 
     </form>
 

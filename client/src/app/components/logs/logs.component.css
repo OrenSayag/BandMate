@@ -1,15 +1,11 @@
-.active{
-    display: initial
-}
+
 .spinner-root{
     display: flex;
     justify-content: center;
     padding-top: 200px;
 }
 
-.hidden{
-    display: none
-}
+
 
 .root{
     position: relative;
@@ -98,3 +94,9 @@ app-add-content-button{
     /* display: none; */
 }
 
+.active{
+    display: flexk
+}
+.hidden{
+    display: none
+}

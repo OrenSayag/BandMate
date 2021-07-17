@@ -13,7 +13,9 @@
             >
         </mat-form-field>
     
-        <app-choose-instruments-bar (sendInstrumentArr)="chosenInstrumentsListener($event)"></app-choose-instruments-bar>
+        <app-choose-instruments-bar 
+        [chosenInstruments]="chosenInstruments"
+        (sendInstrumentArr)="chosenInstrumentsListener($event)"></app-choose-instruments-bar>
     
     
         <mat-form-field appearance="fill">

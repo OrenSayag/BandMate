@@ -1,46 +1,65 @@
-<div class="root">
-    <div class="list">
-        <div class="comment" *ngFor="let comment of comments">
-            <div class="profile-pic">
-                <!-- {{comment.userId.profile_img_src || 'somr src'}} -->
-                <app-profile-img
-                [src]="comment.userId.profile_img_src"
-                ></app-profile-img>
-            </div>
-            <div class="username">
-                {{comment.userId.username}}
-            </div>
-            <div class="text">
-                {{comment.text}}
-            </div>
-            <div class="posted-on">
-                {{comment.postedOn | date: 'dd/MM/yyyy'}}
-            </div>
+<div class="rootroot">
 
-            <div class="div">
-                
-                <!-- *ngIf="comment.userId._id == _users.userInfo._id" -->
-                <mat-icon
-                (click)="delComment(comment._id)"
-                >delete</mat-icon>
-                <!-- <p>{{comment | json}}</p> -->
+    <div class="root">
+        <div class="list">
+            <div class="comment" *ngFor="let comment of comments">
+                <div class="profile-pic">
+                    <!-- {{comment.userId.profile_img_src || 'somr src'}} -->
+                    <app-profile-img
+                    size="30px"
+                    [src]="comment.userId.profile_img_src"
+                    ></app-profile-img>
+                </div>
+                <div class="text">
+                    <div class="username">
+                        {{comment.userId.username}}
+                    </div>
+                    <div class="content">
+                        {{comment.text}}
+                    </div>
+                    <div class="bot">
+                        <div class="posted-on">
+                            {{comment.postedOn | date: 'dd/MM/yyyy, HH:mm'}}
+                        </div>
+
+                        <div class="del">
+                            
+                            <!-- *ngIf="comment.userId._id == _users.userInfo._id" -->
+                            <mat-icon
+                            (click)="delComment(comment._id)"
+                            >delete</mat-icon>
+                            <!-- <p>{{comment | json}}</p> -->
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
+    
+    
+        <div class="input">
+            <app-profile-img
+            size="30px"
+            [src]="_users.userInfo.profile_img_src"
+            >
+            </app-profile-img>
+            <mat-form-field 
+            [formGroup]="myForm">
+                
+                <!-- <input autocomplete="off" matInput placeholder="" value="" formControlName="commentInput"> -->
+
+                <textarea matInput
+                formControlName="commentInput"
+                autocomplete="off"
+            cdkTextareaAutosize
+            #autosize="cdkTextareaAutosize"
+            cdkAutosizeMinRows="1"
+            cdkAutosizeMaxRows="5"></textarea>
+            </mat-form-field>
+            <button mat-button color="primary" (click)="postComment()">
+                <mat-icon>send</mat-icon>
+            </button>
+        </div>
+    
     </div>
-
-
-    <div class="input">
-        <app-profile-img [src]="_users.userInfo.profile_img_src"
-        >
-        </app-profile-img>
-        <mat-form-field [formGroup]="myForm">
-
-            <input matInput placeholder="" value="" formControlName="commentInput">
-        </mat-form-field>
-        <button mat-button color="primary" (click)="postComment()">
-            <mat-icon>send</mat-icon>
-        </button>
-    </div>
-
 </div>

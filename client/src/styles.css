@@ -17,3 +17,11 @@ body {
     display: none
 }
 
+.display-type{
+    position: absolute;
+    right: 50px;
+    top: 18px;
+    /* color: rgb(138, 135, 135); */
+    color: lightskyblue;
+
+}

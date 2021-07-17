@@ -26,7 +26,7 @@ export class AddRecordingFormComponent implements AfterViewInit {
  
 
   public recordingState: boolean = false;
-  public recorderTog: boolean = false;
+  public recorderTog: boolean = true;
 
   public recordingSrc: any = '';
   public fileToUpload:any = {};
@@ -259,9 +259,20 @@ export class AddRecordingFormComponent implements AfterViewInit {
 
 
 
+  public clickFileInput():void{
+       this.fileInput.nativeElement.click()
+     }
+
   public handleRatingStar(star:number):void{
        this.ratingStars = star
      }
+
+     public determineCategoryGlow(name:string){
+      if(this.chosenCategories.some(c=>c.name===name)){
+        return true
+      }
+      return false
+    }
 
   public recorder() {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -286,8 +297,8 @@ export class AddRecordingFormComponent implements AfterViewInit {
 
               this.recordingState = true;
 
-              this.record.nativeElement.style.background = 'red';
-              this.record.nativeElement.style.color = 'black';
+              // this.record.nativeElement.style.background = 'red';
+              // this.record.nativeElement.style.color = 'black';
             } else {
               mediaRecorder.stop();
               // console.log(mediaRecorder.state);
@@ -296,8 +307,8 @@ export class AddRecordingFormComponent implements AfterViewInit {
               this.recordingState = false;
               this.recorderTog = false;
 
-              this.record.nativeElement.style.background = '';
-              this.record.nativeElement.style.color = '';
+              // this.record.nativeElement.style.background = '';
+              // this.record.nativeElement.style.color = '';
             }
           };
 
@@ -367,10 +378,12 @@ export class AddRecordingFormComponent implements AfterViewInit {
           const bufferLength = analyser.frequencyBinCount;
           const dataArray = new Uint8Array(bufferLength);
 
+          const width = 300
+
           analyser.getByteTimeDomainData(dataArray);
 
           const canvasCtx = this.canvas.nativeElement.getContext('2d');
-          canvasCtx.clearRect(0, 0, 300, 150);
+          canvasCtx.clearRect(0, 0, width, 150);
 
           const draw = () => {
             const drawVisual = requestAnimationFrame(draw);
@@ -378,11 +391,11 @@ export class AddRecordingFormComponent implements AfterViewInit {
             // canvasCtx.fillStyle = 'rgb(200, 200, 200)';
             canvasCtx.fillStyle =
               'linear-gradient(to right, #0f0c29, #302b63, #24243e);';
-            canvasCtx.fillRect(0, 0, 300, 150);
+            canvasCtx.fillRect(0, 0, width, 150);
             canvasCtx.lineWidth = 2;
             canvasCtx.strokeStyle = 'white';
             canvasCtx.beginPath();
-            let sliceWidth = (300 * 1.0) / bufferLength;
+            let sliceWidth = (width * 1.0) / bufferLength;
             let x = 0;
             for (let i = 0; i < bufferLength; i++) {
               let v = dataArray[i] / 128.0;

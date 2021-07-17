@@ -1,11 +1,4 @@
-.root {
-    background-color: rgb(48, 48 ,48);
-    /* height: 400px; */
-    color: white;
-}
 
-.form {
-}
 
 .record-btn{
     background-color: blueviolet;
@@ -17,4 +10,195 @@
 }
 .hidden{
     display: none;
+}
+.root {
+    background-color: rgb(64,64,64);
+    color: white;
+    max-width: 800px;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input {
+    /* margin: 20px; */
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap:20px;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.categories{
+    width: 100%;
+    max-width: 400px;
+}
+
+.categories input{
+    margin: 10px 0;
+}
+
+.categories .ghost{
+    margin: 10px 0;
+}
+
+.rating-stars .clear{
+    position: absolute;
+    left: -30px;
+    display: flex;
+    top: 2px;
+}
+
+.rating-stars{
+    position: relative;
+}
+
+.chosen{
+    color: lightgreen;
+}
+
+.is-private{
+    width: 200px;
+    display: flex;
+    justify-content: space-between;
+    /* border: 1px solid white; */
+}
+
+.glow{
+    box-shadow:
+    0 0 3px 1.5px #fff,  /* inner white */
+    0 0 5px 3px #f0f, /* middle magenta */
+    0 0 7px 4.5px #0ff; /* outer cyan */
+}
+
+.audio-video-radio{
+    width: 160px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.media-input-btns {
+    display: flex;
+    width: 160px;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.upload {
+    position: relative;
+}
+
+.upload > span {
+    position: absolute;
+    bottom: -25px;
+    left: 3px;
+}
+
+
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap:20px;
+    padding: 15px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.categories{
+    width: 100%;
+    max-width: 400px;
+}
+
+.categories input{
+    margin: 10px 0;
+}
+
+.glow{
+    box-shadow:
+    0 0 3px 1.5px #fff,  /* inner white */
+    0 0 5px 3px #f0f, /* middle magenta */
+    0 0 7px 4.5px #0ff; /* outer cyan */
+}
+
+.recorder{
+    position: relative;
+    width: 100%;
+    /* border: 1px solid white; */
+}
+
+canvas {
+    width: 100%;
+}
+
+.canvas-btn{
+    background-color: transparent;
+    border: none;
+    position: absolute;
+    bottom: 15px;
+    color: red;
+}
+
+.sound-clips {
+    margin-top: 20px;
+}
+
+app-choose-instruments-bar,
+.recorder,
+.error-div,
+.success-div
+{
+    /* border: 1px solid white; */
+}
+
+.categories{
+    width: 100%;
+    max-width: 400px;
+}
+
+.categories input{
+    margin: 10px 0;
+}
+
+.categories .ghost{
+    margin: 10px 0;
+}
+
+.rating-stars .clear{
+    position: absolute;
+    left: -30px;
+    display: flex;
+    top: 2px;
+}
+
+.rating-stars{
+    position: relative;
+}
+
+.chosen{
+    color: lightgreen;
+}
+
+.is-private{
+    width: 200px;
+    display: flex;
+    justify-content: space-between;
+    /* border: 1px solid white; */
+}
+
+.glow{
+    box-shadow:
+    0 0 3px 1.5px #fff,  /* inner white */
+    0 0 5px 3px #f0f, /* middle magenta */
+    0 0 7px 4.5px #0ff; /* outer cyan */
+}
+
+.submit-btn{
+    margin-bottom: 15px;
 }

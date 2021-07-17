@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UsersService } from 'src/app/services/users.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ChooseInstrumentsBarDialogComponent } from '../choose-instruments-bar-dialog/choose-instruments-bar-dialog.component';
@@ -12,7 +12,10 @@ import { InstrumentsService } from 'src/app/services/instruments.service';
 })
 export class ChooseInstrumentsBarComponent implements OnInit {
 
+  
+  @Input()
   public chosenInstruments:string[] = []
+  
 
   @Output()
   public sendInstrumentArr:EventEmitter<string[]> = new EventEmitter()

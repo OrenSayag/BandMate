@@ -161,6 +161,7 @@ public commentToggler():void {
              // **** Use this when printing logs (append children dynamicly after)
              const clipContainer = document.createElement('article');
              const audio = document.createElement('video');
+             audio.style.width = '100%'
              audio.setAttribute('controls', '');
              clipContainer.appendChild(audio);
              this.mediaCont.nativeElement.appendChild(clipContainer);
