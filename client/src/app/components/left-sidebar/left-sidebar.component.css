@@ -3,3 +3,36 @@ img {
     height: 50px;
     border-radius: 50%;
 }
+
+.profile-header{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    padding: 30px;
+
+}
+
+.profile-header > .username {
+    font-size: 25px;
+    font-weight: 100;
+}
+/* 
+.button-list{
+    border-top: 1px solid purple;
+    border-bottom: 1px solid purple;
+} */
+
+.mat-expansion-panel{
+    /* border-top: 1px solid rgb(32, 22, 32);
+    border-bottom: 1px solid rgb(34, 24, 34); */
+}
+
+.band-or-particpant-row {
+    display: flex;
+    /* border: 1px solid white; */
+    gap: 20px;
+    align-items: center;
+    font-size: 15px;
+        margin: 10px 0;
+
+}

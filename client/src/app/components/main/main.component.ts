@@ -11,7 +11,7 @@ export class MainComponent implements AfterViewInit {
 
   @ViewChild('messagesMain') messagesMain:any
 
-  public leftSidebarTog:boolean = false;
+  public leftSidebarTog:boolean = true;
   public messagesMainTog:boolean = false;
   // public ovh:boolean = false;
 

@@ -1,17 +1,16 @@
 <div class="root">
 
     <div class="profile-header"
-    (click)="_r.navigateByUrl('/explore/profile/'+_users.userInfo.username);slideLeftSidebar.emit('close')"
-    >
+        (click)="_r.navigateByUrl('/explore/profile/'+_users.userInfo.username);slideLeftSidebar.emit('close')">
 
         <div class="img-cont">
-            
-            <app-profile-img
-                [src]="_users.userInfo.profile_img_src"
-                >
+
+            <app-profile-img [src]="_users.userInfo.profile_img_src">
             </app-profile-img>
-            {{_users.userInfo.username}}
             <!-- {{_users.userInfo.profile_img_src}} -->
+        </div>
+        <div class="username">
+            {{_users.userInfo.username}}
         </div>
 
     </div>
@@ -22,8 +21,9 @@
             <!-- <mat-list-option>
                 My Bands
             </mat-list-option> -->
-            
-            <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+
+            <mat-expansion-panel class="mat-elevation-z0" (opened)="panelOpenState = true"
+                (closed)="panelOpenState = false">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         <!-- My Bands -->
@@ -33,41 +33,42 @@
                         hello
                     </mat-panel-description> -->
                 </mat-expansion-panel-header>
-                <div
-                
+                <div 
+                class="band-or-particpant-row"
                 *ngFor="let band of _users.userInfo.bands"
-                (click)="_r.navigateByUrl('/explore/profile/'+band.username);slideLeftSidebar.emit('close')"
-                >
-                {{band.username}}
-                <!-- {{band.profile_img_src}} -->
-                <!-- {{_users.userInfo.bands | json}} -->
-                
-                <app-profile-img
-                [src]="band.profile_img_src || ''"
-                >
-            </app-profile-img>
+                    (click)="_r.navigateByUrl('/explore/profile/'+band.username);slideLeftSidebar.emit('close')">
+                    <app-profile-img [src]="band.profile_img_src || ''">
+                    </app-profile-img>
+                        <div class="username">
+                            {{band.username}}
+                        </div>
+
+                    <!-- {{band.profile_img_src}} -->
+                    <!-- {{_users.userInfo.bands | json}} -->
+
 
                 </div>
-                <mat-list-option
-
-                *ngFor="let participants of _users.userInfo.participants"
-                (click)="_r.navigateByUrl('/explore/profile/'+participants.userId.username);slideLeftSidebar.emit('close')"
-                >
-                    {{participants.userId.username}}
+                <div class="band-or-particpant-row"
+                    *ngFor="let participant of _users.userInfo.participants"
+                    (click)="_r.navigateByUrl('/explore/profile/'+participant.userId.username);slideLeftSidebar.emit('close')">
+                    <app-profile-img
+                    [src]="participant.userId.profile_img_src || ''"
+                    ></app-profile-img>
+                    <div class="username">
+                        {{participant.userId.username}}
+                    </div>
                     <!-- {{participants.userId.profile_img_src || 'some_src'}} -->
-                </mat-list-option>
+                </div>
             </mat-expansion-panel>
 
-
+<!-- {{_users.userInfo.participants | json}} -->
             <!-- <mat-list-option
             (click)="_r.navigateByUrl('/metronome')"
             >
                 Metronome
             </mat-list-option> -->
 
-            <mat-list-option
-            (click)="logout()"
-            >
+            <mat-list-option (click)="logout()">
                 Logout
             </mat-list-option>
 

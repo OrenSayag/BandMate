@@ -20,8 +20,13 @@
 
 .main{
         overflow-y:scroll;
+        overflow-x: hidden;
         width: 100vw;
+        display: flex;
+        justify-content: center;
+        /* flex-direction: column-reverse; */
 }
+
 
 .header{
         /* border: 1px solid white; */
@@ -49,11 +54,22 @@
 
 .list{
         height: 100%;
+        overflow-y: scroll;
         display: flex;
         flex-direction: column-reverse;
         gap: 15px;
         padding: 15px;
-        overflow-y: scroll;
+        width: 100vw;
+        max-width: 800px;
+        box-sizing: border-box;
+}
+
+
+.main::-webkit-scrollbar,
+.list::-webkit-scrollbar
+{
+        height: 0;
+        width: 0;
 }
 
 .input-cont{

@@ -1,7 +1,8 @@
 <div class="root">
     <div class="header">
+        <!-- (click)="_r.navigateByUrl('/')" -->
         <mat-icon
-        (click)="_r.navigateByUrl('/')"
+        (click)="_location.back()"
         >arrow_back_ios</mat-icon>
         <!-- <mat-icon>ios_back_arrow</mat-icon> -->
         <div class="contact-info"
@@ -23,12 +24,16 @@
     </div>
     
     
-    <div class="main">
+    <div class="main"
+    #list
+    >
         <mat-divider></mat-divider>
-        <div class="list">
-            <app-message-unit *ngFor="let message of _messages.conversation.messages.reverse()" [message]="message">
-            </app-message-unit>
-        </div>
+            <div class="list"
+           
+            >
+                <app-message-unit *ngFor="let message of _messages.conversation.messages.reverse()" [message]="message">
+                </app-message-unit>
+            </div>
         <mat-divider></mat-divider>
     </div>
     

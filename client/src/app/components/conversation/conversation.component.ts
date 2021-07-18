@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { identifierModuleUrl } from '@angular/compiler';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessagesService } from 'src/app/services/messages.service';
 
@@ -9,9 +9,11 @@ import { MessagesService } from 'src/app/services/messages.service';
   templateUrl: './conversation.component.html',
   styleUrls: ['./conversation.component.css']
 })
-export class ConversationComponent implements OnInit {
+export class ConversationComponent implements OnInit, AfterViewInit {
 
   public content:string = ""
+
+  @ViewChild('list') list:any
 
   constructor(
     public _messages:MessagesService,
@@ -25,6 +27,10 @@ export class ConversationComponent implements OnInit {
       await this._messages.getConversation(parameter.id)
       
     });
+  }
+
+  ngAfterViewInit():void{
+    this.list.nativeElement.scrollTop = this.list.nativeElement.scrollHeight
   }
 
   public async sendMessage():Promise<void>{

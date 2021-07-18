@@ -7,8 +7,12 @@
     <div class="messages-main" [ngClass]="messagesMainTog ? 'open-messages-main' : ''" #messagesMain>
         <app-messages-main (slideMessagaesMain)="slideMessagesMain($event)"></app-messages-main>
     </div>
-    <div class="navbar" [ngClass]="(messagesMainTog || leftSidebarTog) ? 'hidden' : 'active'">
-        <app-nav-bar></app-nav-bar>
+    <div 
+    class="navbar" 
+    >
+        <app-nav-bar
+    
+        ></app-nav-bar>
     </div>
     <router-outlet></router-outlet>
 </div>
