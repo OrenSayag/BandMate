@@ -1,6 +1,6 @@
 .root {
     /* border: 1px solid pink; */
-    width: 100%;
+    width: calc(100vw - 30px);
     padding: 25px;
     box-sizing: border-box;
     display: flex;
@@ -31,7 +31,7 @@
 .instruments{
     /* border: 1px solid white; */
     width: 100px;
-    position: absolute;
+    /* position: absolute; */
     top: 9px;
     right: 70px;
 }   
@@ -43,4 +43,8 @@
 
 .instrument .img {
     transform: translateX(9px) translateY(8px)
+}
+
+.band-or-user{
+    color: rgb(124,181,217)
 }

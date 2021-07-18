@@ -1,0 +1,32 @@
+.root{
+    display: grid;
+    align-items: center;
+    grid-template-columns: 60px auto 60px;
+    /* gap: 30px; */
+    position: relative;
+    min-height: 85px;
+    padding: 15px;
+    box-sizing: border-box;
+    background-color: rgba(143, 103, 141, 0.678);
+    /* border: 1px solid white; */
+    border-radius: 3px;
+    width: 90vw;
+    max-width: 800px;
+    font-size: 13px;
+}
+
+.date{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    color: rgb(211, 211, 211);
+
+}
+
+.username{
+    color:rgb(211, 211, 211)
+}
+
+.status{
+font-style: oblique;
+}

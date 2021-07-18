@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import Recording from 'src/app/models/recordings.model';
 import { BankService } from 'src/app/services/bank.service';
 import { UsersService } from 'src/app/services/users.service';
@@ -47,10 +48,10 @@ export class RecordingUnitComponent implements AfterViewInit {
   
   constructor(
     public _http:HttpClient,
-    public _sanitizer:DomSanitizer,
+    // public _sanitizer:DomSanitizer,
     public _users:UsersService,
     public _bank:BankService,
-
+    public _r:Router,
   ) { }
 
   async ngAfterViewInit(): Promise<void> {
@@ -213,8 +214,8 @@ public commentToggler():void {
          );
      }
    
-     public getSantizeUrl(url: string) {
-       return this._sanitizer.bypassSecurityTrustUrl(url);
-     }
+    //  public getSantizeUrl(url: string) {
+    //    return this._sanitizer.bypassSecurityTrustUrl(url);
+    //  }
 
 }

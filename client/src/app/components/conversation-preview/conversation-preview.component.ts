@@ -35,4 +35,18 @@ export class ConversationPreviewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {}
+
+  public determineStatusColor():string{
+    if(!['approved','rejected','canceled'].includes(this.preview.status)){
+      return ""
+    }
+    const status = this.preview.status
+    if(status==='approved'){
+      return "green"
+    }
+    if(status==='rejected' || status==='canceled'){
+      return "red"
+    }
+    return ''
+  }
 }

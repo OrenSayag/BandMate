@@ -1,5 +1,5 @@
 <div class="root" *ngIf="!recording.isPrivate || canISeeAndRateIt()">
-
+    
     
     <div
     *ngIf="displayType"
@@ -10,11 +10,14 @@
         <div class="user-pic">
             <!-- {{recording.parentUser.profile_img_src || "some img src" }} -->
             <app-profile-img
+            (click)="_r.navigateByUrl('/explore/profile/'+recording.parentUser.username)"
             [src]="recording.parentUser.profile_img_src"
             ></app-profile-img>
         </div>
         <div class="text">
-            <div class="username">
+            <div
+            (click)="_r.navigateByUrl('/explore/profile/'+recording.parentUser.username)"
+            class="username">
                 {{recording.parentUser.username }}
             </div>
             <div class="date">
@@ -78,6 +81,8 @@
     </div>
 
     <div class="categories">
+        <mat-chip-list>
+        
         <div class="category" *ngFor="let category of recording.categories">
 
             <mat-chip
@@ -86,6 +91,7 @@
                 {{ category.name }}
             </mat-chip>
         </div>
+    </mat-chip-list>
     </div>
 
 

@@ -43,6 +43,7 @@
   .rootroot{
       height:50px;
       width:50px;
+      border-radius: 50%;
     }
     
 
@@ -50,3 +51,10 @@
     height: 30px;
     width: 30px;
   }
+
+  .glow{
+    box-shadow:
+    0 0 3px 1.5px #fff,  /* inner white */
+    0 0 5px 3px #f0f, /* middle magenta */
+    0 0 7px 4.5px #0ff; /* outer cyan */
+}

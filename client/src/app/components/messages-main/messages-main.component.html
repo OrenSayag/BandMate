@@ -1,10 +1,10 @@
 <div class="root">
-    <mat-icon
-    (click)="slideMessagaesMain.emit('close');_r.navigateByUrl('/')"
-    >close</mat-icon>
-
+    
     <div class="header">
-        <mat-icon>ios_back_arrow</mat-icon>
+        <mat-icon
+        (click)="slideMessagaesMain.emit('close');_r.navigateByUrl('/')"
+        >arrow_back_ios</mat-icon>
+        <!-- <mat-icon>ios_back_arrow</mat-icon> -->
         <div class="title">
             Messages
         </div>

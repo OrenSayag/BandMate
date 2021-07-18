@@ -14,6 +14,7 @@ export class HeaderComponent implements OnInit {
   @Output()
   public slideMessagaesMain:EventEmitter<string> = new EventEmitter()
 
+
   constructor(
     public _users:UsersService,
     public _r:Router,
@@ -25,8 +26,10 @@ export class HeaderComponent implements OnInit {
   }
 
 
-  public async avatarSwap(bandId?:string, username?:string):Promise<void>{
+  public async avatarSwap(bandId?:string, username?:string, imgSrc?:string):Promise<void>{
     console.log(this._r.url)
+    if(imgSrc){this._users.chosenAvatar = imgSrc}
+    // this.chosenAvatar = username || 'me'
     if(this._r.url==="/feed"){
       // console.log("we're on feed")
       await this._users.getFeed()
@@ -38,6 +41,7 @@ export class HeaderComponent implements OnInit {
       // console.log("we're on log/bank")
       await this._users.getUserInfo({bandId})
     }
+
     // console.log(this._r.url.split("/")[1])
   }
 

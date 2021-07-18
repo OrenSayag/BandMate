@@ -1,3 +1,4 @@
+import GenresModel from "../genres.model";
 import InstrumentsModel from "../instruments.model";
 import LogsModel from "../logs.model";
 import ParticipantsModel from "../participants.model";
@@ -12,6 +13,7 @@ export default interface UserInfoModel{
     lname:string,
     _id:string,
     instruments:InstrumentsModel[],
+    genres:GenresModel[],
     isBand:boolean,
     mail?:string,
     participants:ParticipantsModel[],

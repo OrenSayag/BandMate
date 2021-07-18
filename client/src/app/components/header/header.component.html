@@ -17,19 +17,23 @@
     <div class="bot">
 
         <div class="user-bands-bar">
-            <div class="avatar">
+            <div class="avatar"
+            >
     
-                <app-profile-img [src]="_users.userInfo.profile_img_src" (click)="avatarSwap('',_users.userInfo.username)">
+                <app-profile-img 
+                [ofHeader]="true"
+                [src]="_users.userInfo.profile_img_src" (click)="avatarSwap('',_users.userInfo.username, _users.userInfo.profile_img_src)">
                 </app-profile-img>
             </div>
-    
-            <!-- <div class="avatar" (click)="avatarSwap('',_users.userInfo.username)">
+        <!-- <div class="avatar" (click)="avatarSwap('',_users.userInfo.username)">
         </div> -->
             <div *ngFor="let userOrBand of _users.userInfo.bands" class="avatar"
-                (click)="avatarSwap(userOrBand._id, userOrBand.username)">
-                <!-- (click)="_users.getUserInfo({bandId:userOrBand._id})" -->
-                <app-profile-img 
+                (click)="avatarSwap(userOrBand._id, userOrBand.username, userOrBand.profile_img_src)"
                 
+                >
+                <!-- (click)="_users.getUserInfo({bandId:userOrBand._id})" -->
+                <app-profile-img
+                [ofHeader]="true" 
                 [src]="userOrBand.profile_img_src || ''">
                     <!-- {{userOrBand.username}} -->
                     <!-- {{userOrBand._id}} -->

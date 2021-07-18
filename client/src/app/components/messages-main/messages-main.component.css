@@ -1,0 +1,25 @@
+.header{
+    /* border: 1px solid white; */
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    align-items: center;
+    height: 100px;
+    margin-bottom: 30px;
+    max-width: 800px;
+}
+
+.title{
+    font-size: 30px;
+    font-weight: 100;
+}
+
+.list{
+    /* border: 1px solid white; */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    
+}
+

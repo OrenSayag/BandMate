@@ -1,6 +1,7 @@
-<mat-spinner
-[ngClass]="loading ? 'active' : 'hidden'"
-></mat-spinner>
+<div class="loading" [ngClass]="loading ? 'active' : 'hidden'">
+    <mat-spinner></mat-spinner>
+</div>
+
 
 <div [ngClass]="!loading ? 'active' : 'hidden'" class="root">
 
@@ -21,11 +22,12 @@
             <div class="profile-pic-cont" #profilePicCont>
                 <input type="file" #imgUploadInput class="img-upload-input hidden"
                     (change)="handleProfileFileInputChange()">
-                <mat-icon (click)="profileImgUploadOpen()" class="edit-profile-img"
-                    *ngIf="profileOwner===_users.userInfo.username">edit</mat-icon>
 
                 <!-- {{_explore.profile.profile_img_src || 'some_src'}} -->
-                <div #profilePicRealCont class="profile-pic-real-cont">
+                <div #profilePicRealCont class="profile-pic-real-cont"
+                    (click)="profileOwner===_users.userInfo.username ? profileImgUploadOpen() : ''">
+                    <!-- <mat-icon (click)="profileImgUploadOpen()" class="edit-profile-img"
+                        *ngIf="profileOwner===_users.userInfo.username">edit</mat-icon> -->
                     <img class="profile-img"
                         [src]="'https://www.pngfind.com/pngs/m/610-6104451_image-placeholder-png-user-profile-placeholder-image-png.png'"
                         alt="">
@@ -34,7 +36,7 @@
 
             </div>
 
-            <div class="title">
+            <div class="profile-name">
                 {{_explore.profile.username}}
             </div>
 
@@ -48,37 +50,45 @@
             <button mat-raised-button color="primary" (click)="_users.followToggler(_explore.profile._id)">
                 {{doIFollowYou() ? 'Following' : 'Follow'}}
             </button>
-            <button mat-raised-button 
-            (click)="_r.navigateByUrl('/messages/conversation/'+_explore.profile._id)"
-            color="primary">Message</button>
-            <button 
-            (click)="!joinReqExists() ? sendJoinReq() : ''"
-            *ngIf="!amIInThisBand && !(_users.userInfo.isBand&&_explore.profile.isBand)" 
-            [ngClass]="amIInThisBand ? 'hidden':'active'" mat-raised-button color="primary">
-            {{!joinReqExists() ? 'Request To Join' : 'Pending Join Request'}}
-        </button>
+            <button mat-raised-button (click)="_r.navigateByUrl('/messages/conversation/'+_explore.profile._id)"
+                color="primary">Message</button>
+            <button (click)="!joinReqExists() ? sendJoinReq() : ''"
+                *ngIf="!amIInThisBand && ((!_users.userInfo.isBand&&_explore.profile.isBand)||(_users.userInfo.isBand&&!_explore.profile.isBand))"
+                [ngClass]="amIInThisBand ? 'hidden':'active'" mat-raised-button color="primary">
+                {{!joinReqExists() ? 'Request To Join' : 'Pending Join Request'}}
+            </button>
 
         </div>
+
+<div class="genres">
+    <!-- {{_explore.profile.genres |json}} -->
+    <div 
+    *ngFor="let genre of _explore.profile.genres"
+    [ngStyle]="{'background-color':genre.img_src}"
+    class="genre">
+{{genre.name}}</div>
+</div>
+
         <div class="count-data">
             <div class="logs">
-                Logs
                 {{_explore.profileCountData.logs}}
+                Logs
             </div>
             <div class="recordings">
-                Recordings
                 {{_explore.profileCountData.recordings}}
+                Recordings
             </div>
             <div class="posts">
-                Posts
                 {{_explore.profileCountData.posts}}
+                Posts
             </div>
             <div class="followers">
-                Followers
                 {{_explore.profileCountData.followers}}
+                Followers
             </div>
             <div class="following">
-                Following
                 {{_explore.profileCountData.following}}
+                Following
             </div>
         </div>
 
@@ -88,7 +98,7 @@
     <div class="bands-or-participants">
 
         <div class="title">
-            <h4>{{_explore.profile.isBand ? 'Participants' : 'Bands'}}</h4>
+            {{_explore.profile.isBand ? 'Participants' : 'Bands'}}
         </div>
 
         <div *ngIf="(_explore.profile.isBand && _explore.profile.participants.length===0) ||
@@ -99,15 +109,35 @@
 
         <mat-selection-list [multiple]="false" class="list">
 
-            <mat-list-option *ngFor="let band of _explore.profile.bands">
-                {{band.username}}
-                {{band.profile_img_src}}
+            <mat-list-option  *ngFor="let band of _explore.profile.bands"
+            (click)="_r.navigateByUrl('/explore/profile/'+band.username)"
+            >
+                <div class="bands-or-participants-unit">
+
+                    <app-profile-img [src]="band.profile_img_src || ''"></app-profile-img>
+                    <div class="name">
+                        {{band.username}}
+                    </div>
+                    <!-- <div class="role">
+                        {{}}
+                    </div> -->
+                </div>
             </mat-list-option>
 
-            <mat-list-option *ngFor="let participant of _explore.profile.participants">
-                {{participant.userId.username}}
-                {{participant.userId.profile_img_src}}
+            <mat-list-option
+                *ngFor="let participant of _explore.profile.participants"
+                (click)="_r.navigateByUrl('/explore/profile/'+participant.userId.username)"
+                >
+                <div class="bands-or-participants-unit">
 
+                    <app-profile-img [src]="participant.userId.profile_img_src || ''"></app-profile-img>
+                    <div class="name">
+                        {{participant.userId.username}}
+                    </div>
+                    <!-- <div class="role">
+                        {{}}
+                    </div> -->
+                </div>
             </mat-list-option>
         </mat-selection-list>
 
@@ -117,48 +147,36 @@
 
         <div class="toggle-btns">
 
-            <button 
-            (click)="filterContent('all')"
-            mat-raised-button class="all" color="primary">All</button>
-            <button 
-            (click)="filterContent('logs')"
-            mat-raised-button class="logs" color="primary">Logs</button>
-            <button 
-            (click)="filterContent('recordings')"
-            mat-raised-button class="recordings" color="primary">Recordings</button>
-            <button 
-            (click)="filterContent('posts')"
-            mat-raised-button class="posts" color="primary">Posts</button>
-
+            <button
+            [ngClass]="contentFilter === 'all' ? 'chosen' : ''"
+            (click)="filterContent('all')" mat-raised-button class="all" color="primary">All</button>
+            <button
+            [ngClass]="contentFilter === 'logs' ? 'chosen' : ''"
+            (click)="filterContent('logs')" mat-raised-button class="logs" color="primary">Logs</button>
+            <button
+            [ngClass]="contentFilter === 'recordings' ? 'chosen' : ''"
+            (click)="filterContent('recordings')" mat-raised-button class="recordings"
+                color="primary">Recordings</button>
+            <button
+            [ngClass]="contentFilter === 'posts' ? 'chosen' : ''"
+            (click)="filterContent('posts')" mat-raised-button class="posts" color="primary">Posts</button>
 
         </div>
 
-        <div 
-        *ngIf="contentFilter==='all'"
-        class="list">
+        <div *ngIf="contentFilter==='all'" class="list">
 
-            <div class="content-unit"
-            *ngFor="let content of _explore.profileContentMixed"
-            >
+            <div class="content-unit" *ngFor="let content of _explore.profileContentMixed">
 
-                <app-log-item
-                
-                (killMe)="killContent($event)"
-                [displayType]="true" *ngIf="content.type==='log'" [log]="content | castLog">
+                <app-log-item (killMe)="killContent($event)" [displayType]="true" *ngIf="content.type==='log'"
+                    [log]="content | castLog">
                 </app-log-item>
 
-                <app-recording-unit
-                
-                (killMe)="killContent($event)"
-                [displayType]="true" *ngIf="content.type==='recording'"
-                    [recording]="content | castRecording">
+                <app-recording-unit (killMe)="killContent($event)" [displayType]="true"
+                    *ngIf="content.type==='recording'" [recording]="content | castRecording">
                 </app-recording-unit>
 
-                <app-post-unit
-                
-                (killMe)="killContent($event)"
-                [displayType]="true" *ngIf="content.type==='post'" [post]="content | castPost"
-                    (killMe)="killContent($event)">
+                <app-post-unit (killMe)="killContent($event)" [displayType]="true" *ngIf="content.type==='post'"
+                    [post]="content | castPost" (killMe)="killContent($event)">
                 </app-post-unit>
 
 
@@ -166,17 +184,12 @@
 
         </div>
 
-        <div 
-        *ngIf="contentFilter==='logs'"
-        class="list">
+        <div *ngIf="contentFilter==='logs'" class="list">
 
-            <div class="content-unit"
-            *ngFor="let content of _explore.profileContentLogs"
-            >
+            <div class="content-unit" *ngFor="let content of _explore.profileContentLogs">
 
-                <app-log-item
-                (killMe)="killContent($event)"
-                [displayType]="true" *ngIf="content.type==='log'" [log]="content | castLog">
+                <app-log-item (killMe)="killContent($event)" [displayType]="true" *ngIf="content.type==='log'"
+                    [log]="content | castLog">
                 </app-log-item>
 
                 <!-- <app-recording-unit [displayType]="true" *ngIf="content.type==='recording'"
@@ -192,23 +205,18 @@
 
         </div>
 
-        <div 
-        *ngIf="contentFilter==='recordings'"
-        class="list">
+        <div *ngIf="contentFilter==='recordings'" class="list">
 
-            <div class="content-unit"
-            *ngFor="let content of _explore.profileContentRecordings"
-            >
+            <div class="content-unit" *ngFor="let content of _explore.profileContentRecordings">
 
                 <!-- <app-log-item [displayType]="true" *ngIf="content.type==='log'" [log]="content | castLog">
                 </app-log-item> -->
 
                 <app-recording-unit [displayType]="true" *ngIf="content.type==='recording'"
-                    [recording]="content | castRecording"
-                    (killMe)="killContent($event)">
+                    [recording]="content | castRecording" (killMe)="killContent($event)">
                     >
                 </app-recording-unit>
-<!-- 
+                <!-- 
                 <app-post-unit [displayType]="true" *ngIf="content.type==='post'" [post]="content | castPost"
                     (killMe)="killContent($event)">
                 </app-post-unit> -->
@@ -218,13 +226,9 @@
 
         </div>
 
-        <div 
-        *ngIf="contentFilter==='posts'"
-        class="list">
+        <div *ngIf="contentFilter==='posts'" class="list">
 
-            <div class="content-unit"
-            *ngFor="let content of _explore.profileContentPosts"
-            >
+            <div class="content-unit" *ngFor="let content of _explore.profileContentPosts">
 
                 <!-- <app-log-item [displayType]="true" *ngIf="content.type==='log'" [log]="content | castLog">
                 </app-log-item>

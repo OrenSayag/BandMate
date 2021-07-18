@@ -42,7 +42,9 @@ router.get("/info/:username", async (req, res) => {
       .populate({
         path: "bands",
         select: "_id username profile_img_src ",
-      });
+      })
+      .populate("genres")
+      ;
     const publicUserInfo = {
       profile_img_src: user[0].profile_img_src,
       username: user[0].username,
@@ -57,6 +59,7 @@ router.get("/info/:username", async (req, res) => {
       participants: user[0].participants,
       _id: user[0]._id,
       bands: user[0].bands,
+      genres: user[0].genres,
     };
     const profileOwnerId = user[0]._id;
     const numOfLogs = await LogsModel.count({ parentUser: profileOwnerId });
@@ -749,6 +752,8 @@ router.put("/follow/:toFollowId", verifyUser, async (req, res) => {
           following: toFollowId,
         },
       });
+      toFollowUser.followers = toFollowUser.followers.filter(f=>f!=id)
+      await toFollowUser.save()
     } else {
       // console.log("pull")
       await UsersModel.findByIdAndUpdate(id, {
@@ -756,6 +761,8 @@ router.put("/follow/:toFollowId", verifyUser, async (req, res) => {
           following: toFollowId,
         },
       });
+      toFollowUser.followers.push(id)
+      await toFollowUser.save()
     }
     const proof = await UsersModel.findById(id);
     const dataPack = {
@@ -888,6 +895,7 @@ router.get("/profile/content/:username", async (req, res) => {
       .populate({
         path:"comments.userId"
       })
+      .populate("instruments")
       // .populate("parentUser.participants")
       .sort({"date":"desc"})
       ,
@@ -909,6 +917,7 @@ router.get("/profile/content/:username", async (req, res) => {
       .populate({
         path:"comments.userId"
       })
+      .populate("instruments")
       .sort({"date":"desc"})
       ,
       posts: await PostsModel.find({
@@ -929,6 +938,7 @@ router.get("/profile/content/:username", async (req, res) => {
       .populate({
         path:"comments.userId"
       })
+      .populate("instruments")
       .sort({"date":"desc"})
       ,
     };

@@ -22,8 +22,10 @@ export class UsersService {
 
   public associatedUsers: {} = {};
 
+  
+  
   // public
-
+  
   public userInfo: UserInfoModel = {
     bands: [],
     fname: '',
@@ -40,8 +42,11 @@ export class UsersService {
     userFeed: [],
     following: [],
     followers: [],
-    joinReqsWithUsers: []
+    joinReqsWithUsers: [],
+    genres: [],
   };
+
+  public chosenAvatar:string = "";
 
   public currUserOtBand: {
     _id: string;
@@ -134,6 +139,7 @@ export class UsersService {
       .toPromise();
     if (res.ok) {
       this.userInfo = res.ok;
+      this.chosenAvatar = this.userInfo.profile_img_src
       // console.log(this.userInfo)
     }
   }
@@ -154,11 +160,11 @@ export class UsersService {
         this.userInfo.following = this.userInfo.following.filter(f=>f._id!==toFollowId)
         // this._explore.profile.followers = this._explore.profile.followers
         // .filter(f=>f!==this.userInfo._id)
-        this._explore.profileCountData.following -= 1
+        this._explore.profileCountData.followers -= 1
       } else {
         
         this.userInfo.following.push(res.dataPack)
-        this._explore.profileCountData.following += 1
+        this._explore.profileCountData.followers += 1
         // this._explore.profile.following
         // .push(this.userInfo._id)
       }

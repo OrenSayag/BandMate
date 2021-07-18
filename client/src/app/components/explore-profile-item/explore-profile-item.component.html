@@ -1,7 +1,13 @@
 <div class="root"
 (click)="_r.navigateByUrl('/explore/profile/'+userOrBand.username)"
 >
-    
+    <div class="band-or-user">
+        {{
+            userOrBand.isBand ?
+            'Band'
+            : 'User'
+        }}
+    </div>
 
     <div class="username"
     >
@@ -16,9 +22,9 @@
     </div>
 
     <div class="follows">
-        <div class="following">
+        <!-- <div class="following">
             {{userOrBand.following?.length}} Following
-        </div>
+        </div> -->
         <div class="followers">
              {{userOrBand.followers?.length}} Followers
         </div>

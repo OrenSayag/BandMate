@@ -26,7 +26,7 @@ export class AddRecordingFormComponent implements AfterViewInit {
  
 
   public recordingState: boolean = false;
-  public recorderTog: boolean = true;
+  public recorderTog: boolean = false;
 
   public recordingSrc: any = '';
   public fileToUpload:any = {};

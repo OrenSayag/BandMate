@@ -4,14 +4,16 @@
 
 <div
 class="rootroot"
+[ngClass]="(_users.chosenAvatar===src)&&ofHeader ? 'glow' : ''"
 >
-    <div class="loading"
-    
-    [ngClass]="loading ? 'active' : 'hidden'"
-    [ngClass]="size ? 'size'+size : ''"
-    >
-    </div>
+<div class="loading"
 
+[ngClass]="loading ? 'active' : 'hidden'"
+[ngClass]="size ? 'size'+size : ''"
+>
+</div>
+
+<!-- {{_users.chosenAvatar | json}} -->
     
     
     <div class="root"

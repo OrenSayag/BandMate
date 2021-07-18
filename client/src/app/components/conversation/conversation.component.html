@@ -1,44 +1,43 @@
 <div class="root">
     <div class="header">
         <mat-icon
-        (click)="_location.back()"
-        >ios_arrow_back</mat-icon>
-
-        <div class="contact-info">
+        (click)="_r.navigateByUrl('/')"
+        >arrow_back_ios</mat-icon>
+        <!-- <mat-icon>ios_back_arrow</mat-icon> -->
+        <div class="contact-info"
+        (click)="_r.navigateByUrl('/explore/profile/'+_messages.conversation.username)"
+        >
             <div class="img">
                 <app-profile-img
-                [src]="_messages.conversation.profile_img_src"
-                ></app-profile-img>
+                [src]="_messages.conversation.profile_img_src"                
+                >
+                </app-profile-img>
             </div>
             <div class="username">
                 {{_messages.conversation.username}}
             </div>
         </div>
-
-        <!-- <p>{{_messages.conversation | json}}</p> -->
-
-        <div class="group-info"
-        *ngIf="_messages.conversation.groupConversation"
-        >
-            <mat-icon>info</mat-icon>
-        </div>
-    </div>
-
-    <div class="main">
-        <app-message-unit
-        *ngFor="let message of _messages.conversation.messages"
-        [message]="message"
-        ></app-message-unit>
+        <!-- <mat-icon
+        (click)="_r.navigateByUrl('/messages/newGroup')"
+        >group_add</mat-icon> -->
     </div>
     
-    <div class="input">
-        <mat-form-field>
-            <input 
-            [(ngModel)]="content"
-            type="text" matInput autocomplete="off" />
-        </mat-form-field>
-        <mat-icon
-        (click)="sendMessage()"
-        >send</mat-icon>
+    
+    <div class="main">
+        <mat-divider></mat-divider>
+        <div class="list">
+            <app-message-unit *ngFor="let message of _messages.conversation.messages.reverse()" [message]="message">
+            </app-message-unit>
+        </div>
+        <mat-divider></mat-divider>
+    </div>
+    
+    <div class="input-cont">
+        <div class="input">
+            <mat-form-field>
+                <input [(ngModel)]="content" type="text" matInput autocomplete="off" />
+            </mat-form-field>
+            <mat-icon (click)="sendMessage()">send</mat-icon>
+        </div>
     </div>
 </div>

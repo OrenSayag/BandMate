@@ -1,0 +1,94 @@
+.root-normal,
+.root-joinReq{
+    /* border: 1px solid white; */
+    display: flex;
+}
+
+.left{
+    justify-content: flex-start;
+}
+.right{
+    justify-content: flex-end;
+}
+.right > .message {
+
+    background-color: rgba(53, 85, 105, 0.76);
+
+}
+.message{
+    /* border: 2px solid pink; */
+    width: fit-content;
+    max-width: 50vw;
+    padding: 15px;
+    border-radius: 3px;
+    background-color: rgba(88, 69, 126, 0.719);
+    position: relative;
+    /* min-height: 35px; */
+    /* padding-bottom: 25px; */
+}
+
+.root-joinReq{
+    justify-content: center;
+    align-items: center;
+    /* border: 1px solid white; */
+}
+
+.message-joinReq{
+    position: relative;
+    /* border: 1px solid pink; */
+    background-color: rgb(38,38,38);
+    padding: 20px;
+    /* padding-bottom: 25px; */
+    border-radius: 3px;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap:20px;
+    align-items: center;
+
+    /* min-height: 35px; */
+}
+
+.message-joinReq > .content {
+    display: flex;
+    justify-content: center;
+    padding: 15px;
+    text-align: center;
+}
+
+
+.date{
+    /* position: absolute; */
+    /* bottom: 5px; */
+    margin-top: 10px;
+    font-size: 13px;
+    color: rgb(138, 135, 135);
+    
+}
+
+.gray-out{
+    color: rgb(138, 135, 135);
+
+}
+
+.reciever{
+    display: flex;
+    gap: 30px;
+    /* border: 1px solid pink; */
+}
+
+.glow{
+    box-shadow:
+    0 0 3px 1.5px #fff,  /* inner white */
+    0 0 5px 3px #f0f, /* middle magenta */
+    0 0 7px 4.5px #0ff; /* outer cyan */
+}
+
+.approved {
+    color: lightgreen
+}
+
+.rejected,
+.canceled{
+    color: rgb(216, 58, 58);
+}

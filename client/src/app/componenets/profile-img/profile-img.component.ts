@@ -16,7 +16,10 @@ export class ProfileImgComponent implements OnInit {
 
   @Input()
   public size:string = ""
-  
+
+  @Input()
+  public ofHeader:boolean = false
+
 
   public blob:any
 

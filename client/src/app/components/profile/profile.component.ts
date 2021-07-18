@@ -79,7 +79,7 @@ export class ProfileComponent implements OnInit {
       })
       this.loading = false;
     });
-    console.log(this.profileOwner);
+    // console.log(this.profileOwner);
     
   }
 
@@ -194,6 +194,7 @@ export class ProfileComponent implements OnInit {
           picture.className = 'profile-img';
           picture.style.width = '100%';
           picture.style.height = '100%';
+          picture.style.objectFit = 'cover';
           // picture.style.zIndex="-50"
           // picture.style.borderRadius="50%"
 
@@ -233,9 +234,12 @@ export class ProfileComponent implements OnInit {
           const picture = document.createElement('img');
           picture.src = url;
           picture.className = 'profile-img';
-          picture.style.width = '50px';
-          picture.style.height = '50px';
+          picture.style.width = '50vw';
+          picture.style.height = '50vw';
+          picture.style.maxWidth = '300px';
+          picture.style.maxHeight = '300px';
           picture.style.borderRadius = '50%';
+          picture.style.objectFit = 'cover';
           this.profilePicRealCont.nativeElement.removeChild(
             this.profilePicRealCont.nativeElement.lastChild
           );

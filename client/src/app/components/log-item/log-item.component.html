@@ -1,6 +1,7 @@
 <div *ngIf="!log.isPrivate || canISeeAndRateIt() " class="root">
 
     
+    
     <div class="date-and-profile_pic">
         <div class="user-pic">
             <!-- {{log.parentUser.profile_img_src || "some img src" }} -->
@@ -88,6 +89,8 @@
         </div>
     </div>
     <div class="categories">
+        <mat-chip-list>
+        
         <div class="category" *ngFor="let category of log.categories">
             <mat-chip
             [ngStyle]="{'background-color': category.color}"
@@ -95,6 +98,8 @@
                 {{ category.name }}
             </mat-chip>
         </div>
+
+    </mat-chip-list>
     </div>
 
 

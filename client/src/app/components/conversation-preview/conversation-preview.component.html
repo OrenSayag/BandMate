@@ -14,23 +14,27 @@
         "></app-profile-img>
     </div>
 
-    <div class="username">
-        {{
-        preview.from._id===_users.userInfo._id ?
-        preview.to.username :
-        preview.from.username
-        }}
+    <div class="text">
+        <div class="username">
+            {{
+            preview.from._id===_users.userInfo._id ?
+            preview.to.username :
+            preview.from.username
+            }}
+        </div>
+    
+        <div class="content">
+            {{preview.content.substring(0,70)}}
+            <div
+            *ngIf="['approved','rejected','canceled'].includes(preview.status)"
+            [ngStyle]="{'color':determineStatusColor()}"
+            class="status">
+                {{preview.status}}
+            </div>
+        </div>
     </div>
 
-    <div class="content">
-        {{preview.content}}
-    </div>
 
-    <div
-    *ngIf="['approved','rejected','canceled'].includes(preview.status)"
-    class="status">
-        {{preview.status}}
-    </div>
 
     <div class="date">
         {{preview.date |date: 'dd/MM'}}
