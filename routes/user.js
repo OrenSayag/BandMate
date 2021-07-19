@@ -476,7 +476,9 @@ router.post("/personalInfo", verifyUser, async (req, res) => {
         .populate({
           path: "comments.userId",
           select: "username profile_img_src",
-        }),
+        })
+        .sort({date:-1})
+        ,
       recordings: await RecordingsModel.find({
         $or: [{ parentUser: { $in: [user._id] } }, { users: user._id }],
       })
@@ -488,7 +490,9 @@ router.post("/personalInfo", verifyUser, async (req, res) => {
         .populate({
           path: "comments.userId",
           select: "username profile_img_src",
-        }),
+        })
+        .sort({date:-1})
+        ,
       // posts: await PostsModel.find({ parentUser: id }),
       posts: await PostsModel.find({ parentUser: { $in: [user._id] } })
         .populate("instruments")
@@ -499,7 +503,9 @@ router.post("/personalInfo", verifyUser, async (req, res) => {
         .populate({
           path: "comments.userId",
           select: "username profile_img_src",
-        }),
+        })
+        .sort({date:-1})
+        ,
     };
 
     return res
@@ -700,7 +706,7 @@ router.post("/feed", verifyUser, async (req, res) => {
       participantContent.posts,
       participantContent.recordings
     );
-    hugeFeed.sort((a, b) => a.date - b.date);
+    hugeFeed.sort((a, b) => new Date(b.date) - new Date(a.date));
     // console.log(hugeFeed[hugeFeed.length-3])
 
     let organizedFeed = {
