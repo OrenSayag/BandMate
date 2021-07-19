@@ -29,7 +29,7 @@ export class LeftSidebarComponent implements OnInit {
   onDocumentClick(event: MouseEvent) {
     // console.log(event)
       if(event.clientX>325){
-        console.log("clicked outside")
+        // console.log("clicked outside")
         this.slideLeftSidebar.emit("close")
       }
   }

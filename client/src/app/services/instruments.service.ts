@@ -21,6 +21,7 @@ export class InstrumentsService {
   public async getInstruments() {
     const res: any = await this._http
       .get('http://localhost:666/api/instruments', {
+      // .get('/api/instruments', {
         headers: { 'content-type': 'application/json' },
       })
       .toPromise();
@@ -31,6 +32,7 @@ export class InstrumentsService {
   public async getCurrUserBandInstruments(body:apiUserGetInfo) {
     const res: any = await this._http
       .post('http://localhost:666/api/user/instruments', body ,{
+      // .post('/api/user/instruments', body ,{
         headers: { 'content-type': 'application/json', 
           authorization:localStorage.token
       },
@@ -43,6 +45,7 @@ export class InstrumentsService {
   public async addToUserInstruments(instrumentId:string, body:apiUserGetInfo):Promise<boolean> {
     const res: any = await this._http
       .post('http://localhost:666/api/user/instruments/'+instrumentId, body ,{
+      // .post('/api/user/instruments/'+instrumentId, body ,{
         headers: { 'content-type': 'application/json', 
           authorization:localStorage.token
       },
@@ -64,6 +67,7 @@ export class InstrumentsService {
   public async deleteFromUserInstruments(instrumentId:string,body:apiUserGetInfo):Promise<boolean> {
     const res: any = await this._http
       .post('http://localhost:666/api/user/instruments/delete/'+instrumentId, body ,{
+      // .post('/api/user/instruments/delete/'+instrumentId, body ,{
         headers: { 'content-type': 'application/json', 
           authorization:localStorage.token
       },

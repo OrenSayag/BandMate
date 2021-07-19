@@ -15,10 +15,7 @@ import { LogAddFormComponent } from './components/log-add-form/log-add-form.comp
 import { LogItemComponent } from './components/log-item/log-item.component';
 import { SocialBarComponent } from './components/social-bar/social-bar.component';
 import { NavBarComponent } from './components/nav-bar/nav-bar.component';
-import { NavBarBtnComponent } from './components/nav-bar-btn/nav-bar-btn.component';
-import { NavbarAddBtnComponent } from './components/navbar-add-btn/navbar-add-btn.component';
 import { HeaderComponent } from './components/header/header.component';
-import { BurgerMenuComponent } from './components/burger-menu/burger-menu.component';
 import { ProfileBarComponent } from './components/profile-bar/profile-bar.component';
 import { GenreFormBarComponent } from './components/genre-form-bar/genre-form-bar.component';
 import { ExploreComponent } from './components/explore/explore.component';
@@ -42,7 +39,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MainComponent } from './components/main/main.component';
 import { AddContentButtonComponent } from './components/add-content-button/add-content-button.component';
-import { LogListComponent } from './components/log-list/log-list.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ChooseInstrumentsBarComponent } from './components/choose-instruments-bar/choose-instruments-bar.component';
@@ -74,8 +70,6 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ProfileImgComponent } from './componenets/profile-img/profile-img.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { MessagesMainComponent } from './components/messages-main/messages-main.component';
-import { MessagesRouterComponent } from './components/messages-router/messages-router.component';
-import { MgroupInfoComponent } from './components/mgroup-info/mgroup-info.component';
 import { GroupInfoComponent } from './components/group-info/group-info.component';
 import { NewGroupComponent } from './components/new-group/new-group.component';
 import { ConversationPreviewComponent } from './components/conversation-preview/conversation-preview.component';
@@ -87,6 +81,7 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import { MatDividerModule } from '@angular/material/divider';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import { CastToInstrumentPipe } from './pipes/cast-to-instrument.pipe';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 
 
@@ -114,10 +109,7 @@ export function tokenGetter() {
     LogItemComponent,
     SocialBarComponent,
     NavBarComponent,
-    NavBarBtnComponent,
-    NavbarAddBtnComponent,
     HeaderComponent,
-    BurgerMenuComponent,
     ProfileBarComponent,
     GenreFormBarComponent,
     ExploreComponent,
@@ -133,7 +125,6 @@ export function tokenGetter() {
     ConversationComponent,
     MainComponent,
     AddContentButtonComponent,
-    LogListComponent,
     ChooseInstrumentsBarComponent,
     ChooseInstrumentsBarDialogComponent,
     MinuteSecondsPipe,
@@ -156,8 +147,6 @@ export function tokenGetter() {
     ProfileComponent,
     ProfileImgComponent,
     MessagesMainComponent,
-    MessagesRouterComponent,
-    MgroupInfoComponent,
     GroupInfoComponent,
     NewGroupComponent,
     ConversationPreviewComponent,
@@ -191,6 +180,7 @@ export function tokenGetter() {
     MatGridListModule,
     MatDividerModule,
     TextFieldModule,
+    MatProgressBarModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,

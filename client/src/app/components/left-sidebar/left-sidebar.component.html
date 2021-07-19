@@ -5,7 +5,9 @@
 
         <div class="img-cont">
 
-            <app-profile-img [src]="_users.userInfo.profile_img_src">
+            <app-profile-img 
+            [timeout]="true"
+            [src]="_users.userInfo.profile_img_src">
             </app-profile-img>
             <!-- {{_users.userInfo.profile_img_src}} -->
         </div>
@@ -37,7 +39,9 @@
                 class="band-or-particpant-row"
                 *ngFor="let band of _users.userInfo.bands"
                     (click)="_r.navigateByUrl('/explore/profile/'+band.username);slideLeftSidebar.emit('close')">
-                    <app-profile-img [src]="band.profile_img_src || ''">
+                    <app-profile-img 
+                    
+                    [src]="band.profile_img_src || ''">
                     </app-profile-img>
                         <div class="username">
                             {{band.username}}

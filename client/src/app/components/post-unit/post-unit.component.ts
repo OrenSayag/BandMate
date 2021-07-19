@@ -86,7 +86,7 @@ export class PostUnitComponent implements AfterViewInit {
 
   public async addComment(id: string, text: string): Promise<string> {
     const newCommentId = await this._posts.postCommentPost(id, text);
-    console.log(newCommentId)
+    // console.log(newCommentId)
     return newCommentId as string
     //  await this._users.updateContent()
   }
@@ -116,6 +116,7 @@ export class PostUnitComponent implements AfterViewInit {
   public async streamVideo(fileId: string) {
     this._http
       .get('http://localhost:666/api/bank/streamVideo/' + fileId, {
+      // .get('/api/bank/streamVideo/' + fileId, {
         headers: {
           authorization: localStorage.token,
           'Access-Control-Allow-Origin': '*',
@@ -146,7 +147,7 @@ export class PostUnitComponent implements AfterViewInit {
             picture.src = this.audioUrl;
             picture.style.width = "100%"
             this.mediaCont.nativeElement.appendChild(picture);
-            console.log('displaying picture');
+            // console.log('displaying picture');
           } else {
             const audio = document.createElement('video');
             audio.setAttribute('controls', '');

@@ -16,10 +16,10 @@
 .left-side-bar{
     position: absolute;
     top: 0;
-    left: -87vw;
+    left: -325px;
     background-color: rgb(68,68,68);
     height: 100vh;
-    width: 87vw;
+    width: 325px;
     box-sizing: border-box;
     transition: transform 250ms;
     z-index: 15;
@@ -45,13 +45,14 @@
 
 .open-left-side-bar{
     /* left: 0; */
-    transform: translateX(87vw);
+    transform: translateX(325px);
 
 }
 
 .open-messages-main{
     /* left: 0; */
-    transform: translateX(-100vw);
+    transform: translateX(-100vw
+    );
     /* display: flex; */
 }
 

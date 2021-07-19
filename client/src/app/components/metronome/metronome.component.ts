@@ -37,9 +37,9 @@ export class MetronomeComponent implements OnInit {
       this.scheduler();
     } else {
       await this.audioContext.close();
-      console.log(this.nextNoteTime);
-      console.log(this.audioContext.currentTime);
-      console.log(this.scheduleAheadTime);
+      // console.log(this.nextNoteTime);
+      // console.log(this.audioContext.currentTime);
+      // console.log(this.scheduleAheadTime);
       this.nextNoteTime = 0;
     }
   }
@@ -89,17 +89,17 @@ export class MetronomeComponent implements OnInit {
   public tempo: number = 100;
 
   scheduler() {
-    console.log('scheduler running');
-    // while there are notes that will need to play before the next interval, schedule them and advance the pointer.
-    console.log(this.nextNoteTime);
-    console.log(this.audioContext.currentTime);
-    console.log(this.scheduleAheadTime);
+    // console.log('scheduler running');
+    // // while there are notes that will need to play before the next interval, schedule them and advance the pointer.
+    // console.log(this.nextNoteTime);
+    // console.log(this.audioContext.currentTime);
+    // console.log(this.scheduleAheadTime);
     while (
       this.nextNoteTime <
       this.audioContext.currentTime + this.scheduleAheadTime
     ) {
       this.scheduleNote(this.currentQuarterNote, this.nextNoteTime);
-      console.log('while is happening');
+      // console.log('while is happening');
 
       // Advance current note and time by a quarter note (crotchet if you're posh)
       this.nextNoteTime += 60.0 / this.tempo; // Add beat length to last beat time

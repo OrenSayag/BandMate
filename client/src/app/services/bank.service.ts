@@ -29,6 +29,7 @@ export class BankService {
     const res: any = await this._http
       .post(
         'http://localhost:666/api/bank',
+        // '/api/bank',
         {
           bandId,
           isPrivate,
@@ -50,10 +51,10 @@ export class BankService {
       .toPromise();
 
     if (res.ok) {
-      console.log('succesfully added recording');
+      // console.log('succesfully added recording');
       return true
     } else {
-      console.log('failed to add recording');
+      // console.log('failed to add recording');
       return false
     }
   }
@@ -62,6 +63,7 @@ export class BankService {
     id:string
   ):Promise<Recording|boolean>{
     const res:any = await this._http.get('http://localhost:666/api/bank/'+id, {
+    // const res:any = await this._http.get('/api/bank/'+id, {
       headers:{
         "content-type":"application/json",
         authorization:localStorage.token
@@ -69,10 +71,10 @@ export class BankService {
     }).toPromise().catch(err=>console.log(err))
 
     if(res.ok){
-      console.log("succefuly fetched recording")
+      // console.log("succefuly fetched recording")
       return res.recording
     }
-    console.log("coudln't fetch recording")
+    // console.log("coudln't fetch recording")
     return false
   }
 
@@ -83,6 +85,7 @@ export class BankService {
     const res: any = await this._http
       .put(
         'http://localhost:666/api/bank/rate/'+id,
+        // '/api/bank/rate/'+id,
         {
           stars
         },
@@ -96,10 +99,10 @@ export class BankService {
       .toPromise();
 
     if (res.ok) {
-      console.log('succesfully rated recording');
+      // console.log('succesfully rated recording');
       return true
     } else {
-      console.log('failed to rate recording');
+      // console.log('failed to rate recording');
       return false
     }
   }
@@ -108,6 +111,7 @@ export class BankService {
     const res: any = await this._http
       .put(
         'http://localhost:666/api/bank/like/'+id,
+        // '/api/bank/like/'+id,
         {
           
         },
@@ -121,10 +125,10 @@ export class BankService {
       .toPromise();
 
     if (res.ok) {
-      console.log('succesfully un/liked recording');
+      // console.log('succesfully un/liked recording');
       return true
     } else {
-      console.log('failed to un/like recording');
+      // console.log('failed to un/like recording');
       return false
     }
   }
@@ -133,6 +137,7 @@ export class BankService {
     const res: any = await this._http
       .post(
         'http://localhost:666/api/bank/comment/'+id,
+        // '/api/bank/comment/'+id,
         {
           text
         },
@@ -146,10 +151,10 @@ export class BankService {
       .toPromise();
 
     if (res.ok) {
-      console.log('succesfully commented recording');
+      // console.log('succesfully commented recording');
       return res.id
     } else {
-      console.log('failed to comment recording');
+      // console.log('failed to comment recording');
       return false
     }
   }
@@ -158,6 +163,7 @@ export class BankService {
     const res: any = await this._http
       .delete(
         'http://localhost:666/api/bank/comment/'+recordingId+'/'+commentId,
+        // '/api/bank/comment/'+recordingId+'/'+commentId,
         {
           headers: {
             'content-type': 'application/json',
@@ -168,10 +174,10 @@ export class BankService {
       .toPromise();
 
     if (res.ok) {
-      console.log('succesfully deleted comment from recording');
+      // console.log('succesfully deleted comment from recording');
       return true
     } else {
-      console.log('failed to delete comment recording');
+      // console.log('failed to delete comment recording');
       return false
     }
   }
@@ -180,6 +186,7 @@ export class BankService {
     const res: any = await this._http
       .delete(
         'http://localhost:666/api/bank/'+recordingId,
+        // '/api/bank/'+recordingId,
         {
           headers: {
             'content-type': 'application/json',
@@ -190,16 +197,17 @@ export class BankService {
       .toPromise();
 
     if (res.ok) {
-      console.log('succesfully deleted recording');
+      // console.log('succesfully deleted recording');
       return true
     } else {
-      console.log('failed to delete recording');
+      // console.log('failed to delete recording');
       return false
     }
   }
   
   public async addBankCategory(newCategory:{name:string,color:string}, bandId:string):Promise<boolean>{
     const res:any = await this._http.post("http://localhost:666/api/user/bankCategories"
+    // const res:any = await this._http.post("/api/user/bankCategories"
     ,{newCategory, bandId},{
       headers: {
         authorization: localStorage.token
@@ -207,7 +215,7 @@ export class BankService {
     }).toPromise()
 
     if(res.ok){
-      console.log("added a new bank category")
+      // console.log("added a new bank category")
       // this._users.getUserInfo({bandId: this._users.currUserOtBand._id})
       return true
     }
@@ -217,6 +225,7 @@ export class BankService {
   public async delBankCategory(catName:string, bandId:string):Promise<boolean>{
     // console.log(bandId)
     const res:any = await this._http.post("http://localhost:666/api/user/bankCategories/"+catName
+    // const res:any = await this._http.post("/api/user/bankCategories/"+catName
     ,{bandId},{
       headers: {
         authorization: localStorage.token,
@@ -225,7 +234,7 @@ export class BankService {
     }).toPromise()
 
     if(res.ok){
-      console.log("removed this bank category")
+      // console.log("removed this bank category")
       // this._users.getUserInfo({bandId: this._users.currUserOtBand._id})
       return true
     }

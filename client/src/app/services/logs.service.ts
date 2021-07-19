@@ -25,6 +25,7 @@ export class LogsService {
     const res: any = await this._http
       .post(
         'http://localhost:666/api/logs/',
+        // '/api/logs/',
         {
           timeInMins,
           instruments,
@@ -46,7 +47,7 @@ export class LogsService {
 
     // console.log(logs)
     if (res.ok) {
-      console.log('posted log successfully');
+      // console.log('posted log successfully');
       this._users.getUserInfo({ bandId: this._users.currUserOtBand._id });
       return true;
     }
@@ -57,6 +58,7 @@ export class LogsService {
     const res: any = await this._http
       .put(
         'http://localhost:666/api/logs/' + id,
+        // '/api/logs/' + id,
         {},
         {
           headers: {
@@ -69,10 +71,10 @@ export class LogsService {
 
     // console.log(logs)
     if (res.ok) {
-      console.log('un/liked log succesfuly');
+      // console.log('un/liked log succesfuly');
       return true;
     } else {
-      console.log('failed to like/unlike log');
+      // console.log('failed to like/unlike log');
       return false;
     }
   }
@@ -81,6 +83,7 @@ export class LogsService {
     const res: any = await this._http
       .post(
         'http://localhost:666/api/logs/comment/' + id,
+        // '/api/logs/comment/' + id,
         { text },
         {
           headers: {
@@ -92,10 +95,10 @@ export class LogsService {
 
     // console.log(logs)
     if (res.ok) {
-      console.log('commented log succesfuly');
+      // console.log('commented log succesfuly');
       return res.id;
     } else {
-      console.log('failed to comment log');
+      // console.log('failed to comment log');
       return false;
     }
   }
@@ -104,6 +107,7 @@ export class LogsService {
     const res: any = await this._http
       .delete(
         'http://localhost:666/api/logs/comment/' + logId + '/' + commentId,
+        // '/api/logs/comment/' + logId + '/' + commentId,
         {
           headers: {
             authorization: localStorage.token,
@@ -115,10 +119,10 @@ export class LogsService {
 
     // console.log(logs)
     if (res.ok) {
-      console.log('comment of log deleted succesfuly');
+      // console.log('comment of log deleted succesfuly');
       return true;
     } else {
-      console.log('failed to deleted log comment');
+      // console.log('failed to deleted log comment');
       return false;
     }
   }
@@ -127,6 +131,7 @@ export class LogsService {
     const res: any = await this._http
       .put(
         'http://localhost:666/api/logs/rate/' + logId,
+        // '/api/logs/rate/' + logId,
         { newRating },
         {
           headers: {
@@ -138,10 +143,10 @@ export class LogsService {
 
     // console.log(logs)
     if (res.ok) {
-      console.log('rated log successfully');
+      // console.log('rated log successfully');
       return true;
     } else {
-      console.log('failed to rate log');
+      // console.log('failed to rate log');
       return false;
     }
   }
@@ -149,6 +154,7 @@ export class LogsService {
   public async deleteLog(logId: string): Promise<boolean> {
     const res: any = await this._http
       .delete('http://localhost:666/api/logs/' + logId, {
+      // .delete('/api/logs/' + logId, {
         headers: {
           authorization: localStorage.token,
         },
@@ -157,11 +163,11 @@ export class LogsService {
 
     // console.log(logs)
     if (res.ok) {
-      console.log('deleted log successfully');
+      // console.log('deleted log successfully');
       return true;
       // this._users.updateContent()
     } else {
-      console.log('failed to delete this log');
+      // console.log('failed to delete this log');
       return false;
     }
   }
@@ -173,6 +179,7 @@ export class LogsService {
     const res: any = await this._http
       .post(
         'http://localhost:666/api/user/logCategories',
+        // '/api/user/logCategories',
         { newCategory, bandId },
         {
           headers: {
@@ -183,11 +190,11 @@ export class LogsService {
       .toPromise();
 
     if (res.ok) {
-      console.log('added a new log category');
+      // console.log('added a new log category');
       // this._users.getUserInfo({bandId: this._users.currUserOtBand._id})
       return true;
     }
-    console.log('failed to add a category');
+    // console.log('failed to add a category');
     return false;
   }
 
@@ -199,6 +206,7 @@ export class LogsService {
     const res: any = await this._http
       .post(
         'http://localhost:666/api/user/logCategories/' + catName,
+        // '/api/user/logCategories/' + catName,
         { bandId },
         {
           headers: {
@@ -210,11 +218,11 @@ export class LogsService {
       .toPromise();
 
     if (res.ok) {
-      console.log('removed this log category');
+      // console.log('removed this log category');
       return true;
       // this._users.getUserInfo({bandId: this._users.currUserOtBand._id})
     }
-    console.log('failed to remove this log category');
+    // console.log('failed to remove this log category');
     return true;
   }
 }

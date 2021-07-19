@@ -114,7 +114,7 @@ public commentToggler():void {
   public async addComment(id:string, text:string):Promise<{ok:string,id:string}|boolean>{
     const res:any = await this._bank.postCommentRecording(id, text)
     if(res){
-      console.log(res)
+      // console.log(res)
       return res
     } else {
       return false
@@ -137,6 +137,7 @@ public commentToggler():void {
      public async streamVideo(fileId: string) {
        this._http
          .get('http://localhost:666/api/bank/streamVideo/' + fileId, {
+        //  .get('/api/bank/streamVideo/' + fileId, {
            headers: {
              authorization: localStorage.token,
              'Access-Control-Allow-Origin': '*',
@@ -165,6 +166,8 @@ public commentToggler():void {
              audio.style.width = '100%'
              audio.setAttribute('controls', '');
              clipContainer.appendChild(audio);
+             // del progress bar
+             this.mediaCont.nativeElement.removeChild(this.mediaCont.nativeElement.lastChild);
              this.mediaCont.nativeElement.appendChild(clipContainer);
              audio.src = this.audioUrl;
            },
@@ -178,6 +181,7 @@ public commentToggler():void {
      public async streamAudio(fileId: string) {
        this._http
          .get('http://localhost:666/api/bank/streamAudio/' + fileId, {
+        //  .get('/api/bank/streamAudio/' + fileId, {
            headers: {
              authorization: localStorage.token,
              'Access-Control-Allow-Origin': '*',
@@ -205,6 +209,7 @@ public commentToggler():void {
              const audio = document.createElement('audio');
              audio.setAttribute('controls', '');
              clipContainer.appendChild(audio);
+             this.mediaCont.nativeElement.removeChild(this.mediaCont.nativeElement.lastChild);
              this.mediaCont.nativeElement.appendChild(clipContainer);
              audio.src = this.audioUrl;
            },

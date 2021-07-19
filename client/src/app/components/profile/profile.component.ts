@@ -111,6 +111,7 @@ export class ProfileComponent implements OnInit {
     file.set('file', this.fileToUpload);
     const res: any = await this._http
       .post('http://localhost:666/api/bank/uploadFile', file, {
+      // .post('/api/bank/uploadFile', file, {
         headers: { authorization: localStorage.token },
       })
       .toPromise()
@@ -153,6 +154,7 @@ export class ProfileComponent implements OnInit {
         : { cover_img_src: this.fileSrc })
     const res: any = await this._http
       .post('http://localhost:666/api/user/updateProfileImg', body, {
+      // .post('/api/user/updateProfileImg', body, {
         headers: {
           authorization: localStorage.token,
         },
@@ -173,6 +175,7 @@ export class ProfileComponent implements OnInit {
     // console.log(fileId)
     this._http
       .get('http://localhost:666/api/bank/streamVideo/' + fileId, {
+      // .get('/api/bank/streamVideo/' + fileId, {
         headers: {
           authorization: localStorage.token,
           'Access-Control-Allow-Origin': '*',
@@ -215,6 +218,7 @@ export class ProfileComponent implements OnInit {
     // console.log(fileId)
     this._http
       .get('http://localhost:666/api/bank/streamVideo/' + fileId, {
+      // .get('/api/bank/streamVideo/' + fileId, {
         headers: {
           authorization: localStorage.token,
           'Access-Control-Allow-Origin': '*',

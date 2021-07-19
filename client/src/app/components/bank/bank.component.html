@@ -39,7 +39,7 @@
     ></app-add-recording-form>
     <div class="list">
         <app-recording-unit
-        *ngFor="let recording of _users.mainContent.recordings.reverse()"
+        *ngFor="let recording of _users.mainContent.recordings"
         [recording]="recording"
         (killMe)="killRecording($event)"
         ></app-recording-unit>

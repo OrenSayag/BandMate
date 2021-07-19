@@ -27,7 +27,7 @@ export class HeaderComponent implements OnInit {
 
 
   public async avatarSwap(bandId?:string, username?:string, imgSrc?:string):Promise<void>{
-    console.log(this._r.url)
+    // console.log(this._r.url)
     if(imgSrc){this._users.chosenAvatar = imgSrc}
     // this.chosenAvatar = username || 'me'
     if(this._r.url==="/feed"){

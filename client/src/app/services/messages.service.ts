@@ -57,6 +57,7 @@ export class MessagesService {
     const res: any = await this._http
       .post(
         'http://localhost:666/api/messages/',
+        // '/api/messages/',
         {
           to,
           content,
@@ -70,7 +71,7 @@ export class MessagesService {
       )
       .toPromise();
     if (res.ok) {
-      console.log(res.ok);
+      // console.log(res.ok);
       this.conversation.messages.push({
         content,
         _id: "",
@@ -94,77 +95,81 @@ export class MessagesService {
       }
       return true;
     }
-    console.log(res.fail);
+    // console.log(res.fail);
     return false;
   }
 
   public async delMessage(id: string): Promise<boolean> {
     const res: any = await this._http
       .delete('http://localhost:666/api/messages/' + id, {
+      // .delete('/api/messages/' + id, {
         headers: {
           authorization: localStorage.token,
         },
       })
       .toPromise();
     if (res.ok) {
-      console.log(res.ok);
+      // console.log(res.ok);
       return true;
     }
-    console.log(res.fail);
+    // console.log(res.fail);
     return false;
   }
 
   public async getConversation(withId: string): Promise<boolean> {
     const res: any = await this._http
       .post('http://localhost:666/api/messages/conversation/' + withId, {} ,{
+      // .post('/api/messages/conversation/' + withId, {} ,{
         headers: {
           authorization: localStorage.token,
         },
       })
       .toPromise();
     if (res.ok) {
-      console.log(res.ok);
+      // console.log(res.ok);
       this.conversation = res.conversation;
-      console.log('Conversation: ', res.conversation);
+      // console.log('Conversation: ', res.conversation);
       return true;
     }
-    console.log(res.fail);
+    // console.log(res.fail);
     return false;
   }
 
   public async getPreview(): Promise<boolean> {
     const res: any = await this._http
       .get('http://localhost:666/api/messages/preview', {
+      // .get('/api/messages/preview', {
         headers: {
           authorization: localStorage.token,
         },
       })
       .toPromise();
     if (res.ok) {
-      console.log(res.ok);
+      // console.log(res.ok);
       this.preview = res.preview;
-      console.log('Preview: ', res.preview);
+      // console.log('Preview: ', res.preview);
       return true;
     }
-    console.log(res.fail);
+    // console.log(res.fail);
     return false;
   }
 
   public async getGroupInfo(groupId: string): Promise<boolean> {
     const res: any = await this._http
       .get('http://localhost:666/api/messages//group/info/' + groupId, {
+      // .get('/api/messages//group/info/' + groupId, {
         headers: {
           authorization: localStorage.token,
         },
       })
       .toPromise();
     if (res.ok) {
-      console.log(res.ok);
+      // console.log(res.ok);
       this.groupInfo = res.groupInfo;
-      console.log('groupInfo: ', res.groupInfo);
+      // console.log('groupInfo: ', res.groupInfo);
       return true;
     }
-    console.log(res.fail);
+    // console.log(res.fail);
     return false;
   }
 
@@ -175,6 +180,7 @@ export class MessagesService {
     const res: any = await this._http
       .put(
         'http://localhost:666/api/messages/replyJoinRequest/' + messageId,
+        // '/api/messages/replyJoinRequest/' + messageId,
         {
           answer,
         },
@@ -186,7 +192,7 @@ export class MessagesService {
       )
       .toPromise();
     if (res.ok) {
-      console.log(res.ok);
+      // console.log(res.ok);
       const message = this.conversation.messages.find(m=>m._id===messageId)
       if(message){
         if(answer==="approve"){
@@ -201,7 +207,7 @@ export class MessagesService {
       }
       return true;
     }
-    console.log(res.fail);
+    // console.log(res.fail);
     return false;
   }
 
@@ -209,6 +215,7 @@ export class MessagesService {
     const res: any = await this._http
       .post(
         'http://localhost:666/api/messages/group',
+        // '/api/messages/group',
         {
           userIds,
           name,
@@ -221,27 +228,28 @@ export class MessagesService {
       )
       .toPromise();
     if (res.ok) {
-      console.log(res.ok);
-      console.log(res)
+      // console.log(res.ok);
+      // console.log(res)
       return res.groupId;
     }
-    console.log(res.fail);
+    // console.log(res.fail);
     return false;
   }
 
   public async deleteGroup(groupId: string): Promise<boolean> {
     const res: any = await this._http
       .delete('http://localhost:666/api/messages/group/' + groupId, {
+      // .delete('/api/messages/group/' + groupId, {
         headers: {
           authorization: localStorage.token,
         },
       })
       .toPromise();
     if (res.ok) {
-      console.log(res.ok);
+      // console.log(res.ok);
       return true;
     }
-    console.log(res.fail);
+    // console.log(res.fail);
     return false;
   }
 
@@ -252,6 +260,7 @@ export class MessagesService {
     const res: any = await this._http
       .put(
         'http://localhost:666/api/messages/group/admin/' + toBeAdminned,
+        // '/api/messages/group/admin/' + toBeAdminned,
         {
           groupId,
         },
@@ -263,10 +272,10 @@ export class MessagesService {
       )
       .toPromise();
     if (res.ok) {
-      console.log(res.ok);
+      // console.log(res.ok);
       return true;
     }
-    console.log(res.fail);
+    // console.log(res.fail);
     return false;
   }
 
@@ -274,6 +283,7 @@ export class MessagesService {
     const res: any = await this._http
       .post(
         'http://localhost:666/api/messages/group/admin/removeSelf',
+        // '/api/messages/group/admin/removeSelf',
         {
           groupId,
         },
@@ -285,10 +295,10 @@ export class MessagesService {
       )
       .toPromise();
     if (res.ok) {
-      console.log(res.ok);
+      // console.log(res.ok);
       return true;
     }
-    console.log(res.fail);
+    // console.log(res.fail);
     return false;
   }
 
@@ -296,6 +306,7 @@ export class MessagesService {
     const res: any = await this._http
       .post(
         'http://localhost:666/api/messages/group/leave',
+        // '/api/messages/group/leave',
         {
           groupId,
         },
@@ -307,10 +318,10 @@ export class MessagesService {
       )
       .toPromise();
     if (res.ok) {
-      console.log(res.ok);
+      // console.log(res.ok);
       return true;
     }
-    console.log(res.fail);
+    // console.log(res.fail);
     return false;
   }
 
@@ -318,6 +329,7 @@ export class MessagesService {
     const res: any = await this._http
       .post(
         'http://localhost:666/api/messages/group/addMember/' + toBeAdded,
+        // '/api/messages/group/addMember/' + toBeAdded,
         {
           groupId,
         },
@@ -329,10 +341,10 @@ export class MessagesService {
       )
       .toPromise();
     if (res.ok) {
-      console.log(res.ok);
+      // console.log(res.ok);
       return true;
     }
-    console.log(res.fail);
+    // console.log(res.fail);
     return false;
   }
 }

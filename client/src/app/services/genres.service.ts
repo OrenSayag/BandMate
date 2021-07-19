@@ -23,6 +23,7 @@ export class GenresService {
 
   public async getGenres(){
     const res:any = await this._http.get("http://localhost:666/api/genres", {headers:
+    // const res:any = await this._http.get("/api/genres", {headers:
   {"content-type":"application/json"}}).toPromise()
 
   this.genresCatalog = res.genres
@@ -30,6 +31,6 @@ export class GenresService {
 
   public addItem(item:string, array:string[]){
     array.push(item)
-    console.log(array)
+    // console.log(array)
   }
 }

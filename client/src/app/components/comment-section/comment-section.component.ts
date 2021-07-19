@@ -40,15 +40,15 @@ export class CommentSectionComponent implements OnInit {
   })
 
   ngOnInit(): void {
-    console.log(this.comments)
+    // console.log(this.comments)
   }
 
   public async postComment():Promise<void>{
-    console.log("posting comment")
+    // console.log("posting comment")
     const res = await this.commentFoo(this.contentId, this.myForm.controls.commentInput.value)
-    console.log(res)
+    // console.log(res)
       if(res){
-        console.log(res)
+        // console.log(res)
         this.comments.push({
           userId: {
             userId: this._users.userInfo._id,

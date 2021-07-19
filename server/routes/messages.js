@@ -196,7 +196,10 @@ router.get("/preview", async (req, res) => {
     }).populate({
       path:"from",
       select: "username profile_img_src"
-    });
+    })
+    // .limit(1)
+    // .sort({date:-1})
+    ;
 
     // // console.log(conversation)
 
@@ -247,7 +250,7 @@ router.get("/preview", async (req, res) => {
 
     // }
 
-    const preview = []
+    let preview = []
     for (let contact in conversations) {
       // if (Object.hasOwnProperty.call(object, contact)) {
       //   const element = object[contact];
@@ -257,7 +260,7 @@ router.get("/preview", async (req, res) => {
       preview.push(conversations[contact])
     }
 
-
+    // preview = preview.reverse()
     
 
     return res.status(200).send({ preview, ok:"successfully fetched conversations preview" });

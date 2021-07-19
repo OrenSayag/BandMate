@@ -47,7 +47,7 @@ export class AddPostFormComponent implements OnInit {
 
   public handleFileInputChange(): void {
     this.fileToUpload = this.fileInput.nativeElement.files[0]
-    console.log(this.fileToUpload.name)
+    // console.log(this.fileToUpload.name)
   }
 
   public async uploadFile() {
@@ -64,6 +64,7 @@ export class AddPostFormComponent implements OnInit {
     file.set('file', mediaBlob);
     const res:any = await this._http
       .post('http://localhost:666/api/bank/uploadFile', file, {
+      // .post('/api/bank/uploadFile', file, {
         headers: { authorization: localStorage.token },
       })
       .toPromise()

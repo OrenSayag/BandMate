@@ -18,6 +18,6 @@ export class AppComponent {
   }
 
   public handleClick(e:any):void{
-    console.log(e)
+    // console.log(e)
   }
 }

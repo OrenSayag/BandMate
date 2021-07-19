@@ -5,7 +5,10 @@ const jwt = require('jsonwebtoken')
 const app = express()
 const cors = require('cors')
 const port = process.env.PORT || 666
-
+const https = require('https')
+const fs = require('fs');
+// const privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
+// const certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
 
 
 
@@ -35,28 +38,25 @@ app.use(express.json())
 //  888`88b.    888      888  888       8       888       888    "         `"Y88b 
 //  888  `88b.  `88b    d88'  `88.    .8'       888       888       o oo     .d8P 
 // o888o  o888o  `Y8bood8P'     `YbodP'        o888o     o888ooooood8 8""88888P'                                           
-app.get('/', function (req, res) {
-    res.send('Hello World')
-})
+
+
+//define static folder
+app.use("/", express.static(__dirname + "/dist/client"))
+
 app.use('/api', require('./routes/api'))
 
+app.get("/*", (req, res)=>{
+  // res.sendFile(path.join(__dirname, 'build', 'index.html'))
+  res.sendFile(__dirname + '/dist/client/index.html')
+})
 
-
-// app.use('/profile', verifyUser ,require('./routes/profile'))
-// app.use('/controlPanel', verifyAdmin, require('./routes/controlPanel'))
-// app.use('/inbox', require('./routes/inbox'))
-// app.use('/explore', require('./routes/explore'))
-// app.use('/location', verifyUser ,require('./routes/location'))
-// app.use('/vacation', verifyUser ,require('./routes/vacation'))
-// app.use('/club', verifyUser ,require('./routes/club'))
-// app.use('/pay', verifyUser ,require('./routes/pay'))
-// app.use('/blog' ,require('./routes/blog'))
-// app.get('/newToken', verifyUser, (req, res)=>{
-//     const userInfo = req.userInfo
-//     res.status(200).send({userInfo})
-// })
- 
-app.listen(port, (err)=>{
+https.createServer({
+  // key: fs.readFileSync('server.key'),
+  // cert: fs.readFileSync('server.cert')
+  key: fs.readFileSync('c:/Users/user/.ssh/server.key'),
+  cert: fs.readFileSync('c:/Users/user/.ssh/server.crt')
+}, app)
+.listen(port, (err)=>{
     if(err){console.log(err)}
     console.log(`Server is running on ${port}`)
 })

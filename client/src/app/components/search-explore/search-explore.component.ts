@@ -24,7 +24,7 @@ export class SearchExploreComponent implements OnInit {
 
 
   public async handleSearch(event:any){
-    console.log("running")
+    // console.log("running")
     this.loading = true
     await new Promise((resolve, reject)=>{
       setTimeout(() => {

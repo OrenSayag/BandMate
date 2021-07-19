@@ -38,8 +38,8 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     this._genres.getGenres();
     this._instruments.getInstruments();
-    console.log(this._genres.genresCatalog);
-    console.log(this._instruments.instrumentsCatalog);
+    // console.log(this._genres.genresCatalog);
+    // console.log(this._instruments.instrumentsCatalog);
   }
 
   public async register() {
@@ -49,7 +49,7 @@ export class RegisterComponent implements OnInit {
       this.myForm.controls.repeatPassword.errors ||
       this.myForm.controls.mail.errors
     ) {
-      console.log('running');
+      // console.log('running');
       this.errorMessage = 'Missing Some Info';
       return;
     }
@@ -85,16 +85,17 @@ export class RegisterComponent implements OnInit {
 
     const file = new FormData();
     file.set('file', this.fileToUpload);
-    console.log(file);
+    // console.log(file);
 
     const response: any = await this._http
       .post('http://localhost:666/api/auth/uploadProfilePicture', file)
+      // .post('/api/auth/uploadProfilePicture', file)
       .toPromise()
       .catch((err) => (this.fileSrc = ''));
-    console.log(response);
+    // console.log(response);
     this.fileSrc = response.fileId;
 
-    console.log(this.fileSrc);
+    // console.log(this.fileSrc);
 
     const res = await this._auth.register(
       this.myForm.controls.isBand.value,
@@ -140,7 +141,7 @@ export class RegisterComponent implements OnInit {
     reader.readAsDataURL(this.fileToUpload);
     // reader.readAsDataURL()
 
-    console.log(this.fileToUpload.name);
+    // console.log(this.fileToUpload.name);
     // this.uploadFile()
   }
 
@@ -169,16 +170,17 @@ export class RegisterComponent implements OnInit {
 
     const file = new FormData();
     file.set('file', this.fileToUpload);
-    console.log(file);
+    // console.log(file);
     const res: any = await this._http
       .post('http://localhost:666/api/auth/uploadProfilePicture', file, {
+      // .post('/api/auth/uploadProfilePicture', file, {
         headers: { authorization: localStorage.token },
       })
       .toPromise()
       .catch((err) => (this.fileSrc = ''));
-    console.log(res);
+    // console.log(res);
     this.fileSrc = res.fileId;
-    console.log('running uploadProfileImg');
+    // console.log('running uploadProfileImg');
     // resolve()
   }
 
@@ -222,21 +224,21 @@ export class RegisterComponent implements OnInit {
   public handleInstrumentChange(id: string) {
     if (this.chosenInstruments.some((i) => i === id)) {
       this.chosenInstruments = this.chosenInstruments.filter((i) => i !== id);
-      console.log(this.chosenInstruments);
+      // console.log(this.chosenInstruments);
       return;
     }
     this.chosenInstruments.push(id);
-    console.log(this.chosenInstruments);
+    // console.log(this.chosenInstruments);
   }
 
   public handleGenreChange(id: string) {
     if (this.chosenGenres.some((i) => i === id)) {
       this.chosenGenres = this.chosenGenres.filter((i) => i !== id);
-      console.log(this.chosenGenres);
+      // console.log(this.chosenGenres);
       return;
     }
     this.chosenGenres.push(id);
-    console.log(this.chosenGenres);
+    // console.log(this.chosenGenres);
   }
 
   public clickTab(event: any) {

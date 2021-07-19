@@ -20,6 +20,9 @@ export class ProfileImgComponent implements OnInit {
   @Input()
   public ofHeader:boolean = false
 
+  @Input()
+  public timeout:boolean = false
+
 
   public blob:any
 
@@ -32,12 +35,14 @@ export class ProfileImgComponent implements OnInit {
 
   async ngOnInit() {
     // await this._users.getTokenHolderInfo()
-    await new Promise((resolve, reject)=>{
-      setTimeout(() => {
-        resolve("")
-      }, 400)
-      
-    })
+    if(this.timeout){
+      await new Promise((resolve, reject)=>{
+        setTimeout(() => {
+          resolve("")
+        }, 400)
+        
+      })
+    }
     await this.streamProfileImg(this.src || '60e6b8c1056bb06118c223b2')
     this.loading=false
   }
@@ -46,6 +51,7 @@ export class ProfileImgComponent implements OnInit {
     // console.log(fileId)
     this._http
       .get('http://localhost:666/api/bank/streamVideo/' + fileId, {
+      // .get('/api/bank/streamVideo/' + fileId, {
         headers: {
           authorization: localStorage.token,
           'Access-Control-Allow-Origin': '*',
@@ -68,6 +74,8 @@ export class ProfileImgComponent implements OnInit {
           picture.style.width = this.size ||'50px';
           picture.style.height = this.size ||'50px';
           picture.style.borderRadius = '50%';
+          picture.style.objectFit = 'cover';
+
           this.cont.nativeElement.removeChild(
             this.cont.nativeElement.lastChild
           );

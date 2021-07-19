@@ -39,7 +39,7 @@ export class NewGroupComponent implements OnInit {
   }
 
   public async createGroup():Promise<void>{
-    console.log("running")
+    // console.log("running")
     if(!this.groupName){
       this.errorDivMessage = "Missing Group's Name"
       return

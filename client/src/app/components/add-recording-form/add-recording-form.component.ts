@@ -225,6 +225,7 @@ export class AddRecordingFormComponent implements AfterViewInit {
     file.set('file', mediaBlob);
     const res:any = await this._http
       .post('http://localhost:666/api/bank/uploadFile', file, {
+      // .post('/api/bank/uploadFile', file, {
         headers: { authorization: localStorage.token },
       })
       .toPromise()
@@ -243,6 +244,7 @@ export class AddRecordingFormComponent implements AfterViewInit {
     file.set('file', this.recordingSrc);
     const res:any = await   this._http
       .post('http://localhost:666/api/bank/uploadFile', file, {
+      // .post('/api/bank/uploadFile', file, {
         headers: { authorization: localStorage.token },
       })
       .toPromise()

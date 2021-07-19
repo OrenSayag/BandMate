@@ -18,6 +18,7 @@ export class AuthService {
      mail:string, password:string, instruments:string[], genres:string[], profile_img_src?:string){
        try {
          const res:any = await this._http.post("http://localhost:666/api/auth/register", {
+        //  const res:any = await this._http.post("/api/auth/register", {
            isBand, fname, lname, userName, mail, password, instruments, genres, profile_img_src
          }, {
            headers: {"content-type":"application/json"}
@@ -38,6 +39,7 @@ export class AuthService {
   public async login(mailOrUsername:string, password:string){
        try {
          const res:any = await this._http.post("http://localhost:666/api/auth/login", {
+        //  const res:any = await this._http.post("/api/auth/login", {
            mailOrUsername, password
          }, {
            headers: {"content-type":"application/json"}

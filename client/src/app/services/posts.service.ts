@@ -23,6 +23,7 @@ export class PostsService {
     const res: any = await this._http
       .post(
         'http://localhost:666/api/posts',
+        // '/api/posts',
         {
           bandId,
           isPrivate,
@@ -40,7 +41,7 @@ export class PostsService {
       .toPromise();
 
     if (res.ok) {
-      console.log('succesfully added post');
+      // console.log('succesfully added post');
       this._users.userInfo.userFeed.push({
         fileSrc,
         content,
@@ -60,7 +61,7 @@ export class PostsService {
       })
       return true
     } else {
-      console.log('failed to add post');
+      // console.log('failed to add post');
       return false
     }
   }
@@ -87,6 +88,7 @@ export class PostsService {
     const res: any = await this._http
       .put(
         'http://localhost:666/api/posts/like/'+id,
+        // '/api/posts/like/'+id,
         {
           
         },
@@ -100,10 +102,10 @@ export class PostsService {
       .toPromise();
 
     if (res.ok) {
-      console.log('succesfully un/liked recording');
+      // console.log('succesfully un/liked recording');
       return true
     } else {
-      console.log('failed to un/like recording');
+      // console.log('failed to un/like recording');
       return false
     }
   }
@@ -112,6 +114,7 @@ export class PostsService {
     const res: any = await this._http
       .post(
         'http://localhost:666/api/posts/comment/'+id,
+        // '/api/posts/comment/'+id,
         {
           text
         },
@@ -125,10 +128,10 @@ export class PostsService {
       .toPromise();
 
     if (res.ok) {
-      console.log('succesfully commented post');
+      // console.log('succesfully commented post');
       return res.id
     } else {
-      console.log('failed to comment post');
+      // console.log('failed to comment post');
       return false
     }
   }
@@ -137,6 +140,7 @@ export class PostsService {
     const res: any = await this._http
       .delete(
         'http://localhost:666/api/posts/comment/'+postId+'/'+commentId,
+        // '/api/posts/comment/'+postId+'/'+commentId,
         {
           headers: {
             'content-type': 'application/json',
@@ -147,10 +151,10 @@ export class PostsService {
       .toPromise();
 
     if (res.ok) {
-      console.log('succesfully deleted comment from post');
+      // console.log('succesfully deleted comment from post');
       return true
     } else {
-      console.log('failed to delete comment post');
+      // console.log('failed to delete comment post');
       return false
     }
   }
@@ -159,6 +163,7 @@ export class PostsService {
     const res: any = await this._http
       .delete(
         'http://localhost:666/api/posts/'+postId,
+        // '/api/posts/'+postId,
         {
           headers: {
             'content-type': 'application/json',
@@ -169,10 +174,10 @@ export class PostsService {
       .toPromise();
 
     if (res.ok) {
-      console.log('succesfully deleted post');
+      // console.log('succesfully deleted post');
       return true
     } else {
-      console.log('failed to delete post');
+      // console.log('failed to delete post');
       return false
     }
   }
