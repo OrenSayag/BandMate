@@ -57,8 +57,8 @@ app.get("/*", (req, res)=>{
 https.createServer({
   // key: fs.readFileSync('server.key'),
   // cert: fs.readFileSync('server.cert')
-  key: fs.readFileSync('c:/Users/user/.ssh/server.key'),
-  cert: fs.readFileSync('c:/Users/user/.ssh/server.crt')
+  key: fs.readFileSync('./ssh/server.key'),
+  cert: fs.readFileSync('./ssh/server.crt')
 }, app)
 .listen(port, (err)=>{
     if(err){console.log(err)}
