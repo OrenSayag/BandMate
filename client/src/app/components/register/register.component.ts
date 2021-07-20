@@ -88,8 +88,8 @@ export class RegisterComponent implements OnInit {
     // console.log(file);
 
     const response: any = await this._http
-      .post('http://localhost:666/api/auth/uploadProfilePicture', file)
-      // .post('/api/auth/uploadProfilePicture', file)
+      // .post('http://localhost:666/api/auth/uploadProfilePicture', file)
+      .post('/api/auth/uploadProfilePicture', file)
       .toPromise()
       .catch((err) => (this.fileSrc = ''));
     // console.log(response);
@@ -172,8 +172,8 @@ export class RegisterComponent implements OnInit {
     file.set('file', this.fileToUpload);
     // console.log(file);
     const res: any = await this._http
-      .post('http://localhost:666/api/auth/uploadProfilePicture', file, {
-      // .post('/api/auth/uploadProfilePicture', file, {
+      // .post('http://localhost:666/api/auth/uploadProfilePicture', file, {
+      .post('/api/auth/uploadProfilePicture', file, {
         headers: { authorization: localStorage.token },
       })
       .toPromise()

@@ -24,8 +24,8 @@ export class LogsService {
   ): Promise<boolean> {
     const res: any = await this._http
       .post(
-        'http://localhost:666/api/logs/',
-        // '/api/logs/',
+        // 'http://localhost:666/api/logs/',
+        '/api/logs/',
         {
           timeInMins,
           instruments,
@@ -57,8 +57,8 @@ export class LogsService {
   public async likeLog(id: string): Promise<boolean> {
     const res: any = await this._http
       .put(
-        'http://localhost:666/api/logs/' + id,
-        // '/api/logs/' + id,
+        // 'http://localhost:666/api/logs/' + id,
+        '/api/logs/' + id,
         {},
         {
           headers: {
@@ -82,8 +82,8 @@ export class LogsService {
   public async commentLog(id: string, text: string):Promise<boolean|string> {
     const res: any = await this._http
       .post(
-        'http://localhost:666/api/logs/comment/' + id,
-        // '/api/logs/comment/' + id,
+        // 'http://localhost:666/api/logs/comment/' + id,
+        '/api/logs/comment/' + id,
         { text },
         {
           headers: {
@@ -106,8 +106,8 @@ export class LogsService {
   public async delCommentFromLog(logId: string, commentId: string) {
     const res: any = await this._http
       .delete(
-        'http://localhost:666/api/logs/comment/' + logId + '/' + commentId,
-        // '/api/logs/comment/' + logId + '/' + commentId,
+        // 'http://localhost:666/api/logs/comment/' + logId + '/' + commentId,
+        '/api/logs/comment/' + logId + '/' + commentId,
         {
           headers: {
             authorization: localStorage.token,
@@ -130,8 +130,8 @@ export class LogsService {
   public async rateLog(logId: string, newRating: number): Promise<boolean> {
     const res: any = await this._http
       .put(
-        'http://localhost:666/api/logs/rate/' + logId,
-        // '/api/logs/rate/' + logId,
+        // 'http://localhost:666/api/logs/rate/' + logId,
+        '/api/logs/rate/' + logId,
         { newRating },
         {
           headers: {
@@ -153,8 +153,8 @@ export class LogsService {
 
   public async deleteLog(logId: string): Promise<boolean> {
     const res: any = await this._http
-      .delete('http://localhost:666/api/logs/' + logId, {
-      // .delete('/api/logs/' + logId, {
+      // .delete('http://localhost:666/api/logs/' + logId, {
+      .delete('/api/logs/' + logId, {
         headers: {
           authorization: localStorage.token,
         },
@@ -178,8 +178,8 @@ export class LogsService {
   ): Promise<boolean> {
     const res: any = await this._http
       .post(
-        'http://localhost:666/api/user/logCategories',
-        // '/api/user/logCategories',
+        // 'http://localhost:666/api/user/logCategories',
+        '/api/user/logCategories',
         { newCategory, bandId },
         {
           headers: {
@@ -205,8 +205,8 @@ export class LogsService {
     // console.log(bandId)
     const res: any = await this._http
       .post(
-        'http://localhost:666/api/user/logCategories/' + catName,
-        // '/api/user/logCategories/' + catName,
+        // 'http://localhost:666/api/user/logCategories/' + catName,
+        '/api/user/logCategories/' + catName,
         { bandId },
         {
           headers: {

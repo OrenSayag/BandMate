@@ -22,8 +22,8 @@ export class PostsService {
   ): Promise<boolean> {
     const res: any = await this._http
       .post(
-        'http://localhost:666/api/posts',
-        // '/api/posts',
+        // 'http://localhost:666/api/posts',
+        '/api/posts',
         {
           bandId,
           isPrivate,
@@ -66,29 +66,11 @@ export class PostsService {
     }
   }
 
-  // public async getSingleRecording(
-  //   id:string
-  // ):Promise<Recording|boolean>{
-  //   const res:any = await this._http.get('http://localhost:666/api/bank/'+id, {
-  //     headers:{
-  //       "content-type":"application/json",
-  //       authorization:localStorage.token
-  //     }
-  //   }).toPromise().catch(err=>console.log(err))
-
-  //   if(res.ok){
-  //     console.log("succefuly fetched recording")
-  //     return res.recording
-  //   }
-  //   console.log("coudln't fetch recording")
-  //   return false
-  // }
-
   public async likePost(id:string): Promise<boolean> {
     const res: any = await this._http
       .put(
-        'http://localhost:666/api/posts/like/'+id,
-        // '/api/posts/like/'+id,
+        // 'http://localhost:666/api/posts/like/'+id,
+        '/api/posts/like/'+id,
         {
           
         },
@@ -113,8 +95,8 @@ export class PostsService {
   public async postCommentPost(id:string, text:string): Promise<boolean|string> {
     const res: any = await this._http
       .post(
-        'http://localhost:666/api/posts/comment/'+id,
-        // '/api/posts/comment/'+id,
+        // 'http://localhost:666/api/posts/comment/'+id,
+        '/api/posts/comment/'+id,
         {
           text
         },
@@ -139,8 +121,8 @@ export class PostsService {
   public async delCommentPost(postId:string,commentId:string): Promise<boolean> {
     const res: any = await this._http
       .delete(
-        'http://localhost:666/api/posts/comment/'+postId+'/'+commentId,
-        // '/api/posts/comment/'+postId+'/'+commentId,
+        // 'http://localhost:666/api/posts/comment/'+postId+'/'+commentId,
+        '/api/posts/comment/'+postId+'/'+commentId,
         {
           headers: {
             'content-type': 'application/json',
@@ -162,8 +144,8 @@ export class PostsService {
   public async delPost(postId:string): Promise<boolean> {
     const res: any = await this._http
       .delete(
-        'http://localhost:666/api/posts/'+postId,
-        // '/api/posts/'+postId,
+        // 'http://localhost:666/api/posts/'+postId,
+        '/api/posts/'+postId,
         {
           headers: {
             'content-type': 'application/json',

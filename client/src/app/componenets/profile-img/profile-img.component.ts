@@ -50,8 +50,8 @@ export class ProfileImgComponent implements OnInit {
   public async streamProfileImg(fileId: string) {
     // console.log(fileId)
     this._http
-      .get('http://localhost:666/api/bank/streamVideo/' + fileId, {
-      // .get('/api/bank/streamVideo/' + fileId, {
+      // .get('http://localhost:666/api/bank/streamVideo/' + fileId, {
+      .get('/api/bank/streamVideo/' + fileId, {
         headers: {
           authorization: localStorage.token,
           'Access-Control-Allow-Origin': '*',

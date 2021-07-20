@@ -31,6 +31,16 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  public async loginGuest(){
+    const res = await this._auth.login('guest',
+      'Guest')
+    if(res.ok){
+      this.errorMessage = "Succesfuly logged in! Enjoy BandMate"
+    } else { 
+      this.errorMessage = res.failAndDisplay
+    }
+  }
+
   public loginForm = this._fb.group({
     mailOrUsername: ["", [Validators.required]],
     password: ["", [Validators.required]],

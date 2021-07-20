@@ -56,8 +56,8 @@ export class MessagesService {
   ): Promise<boolean> {
     const res: any = await this._http
       .post(
-        'http://localhost:666/api/messages/',
-        // '/api/messages/',
+        // 'http://localhost:666/api/messages/',
+        '/api/messages/',
         {
           to,
           content,
@@ -101,8 +101,8 @@ export class MessagesService {
 
   public async delMessage(id: string): Promise<boolean> {
     const res: any = await this._http
-      .delete('http://localhost:666/api/messages/' + id, {
-      // .delete('/api/messages/' + id, {
+      // .delete('http://localhost:666/api/messages/' + id, {
+      .delete('/api/messages/' + id, {
         headers: {
           authorization: localStorage.token,
         },
@@ -118,8 +118,8 @@ export class MessagesService {
 
   public async getConversation(withId: string): Promise<boolean> {
     const res: any = await this._http
-      .post('http://localhost:666/api/messages/conversation/' + withId, {} ,{
-      // .post('/api/messages/conversation/' + withId, {} ,{
+      // .post('http://localhost:666/api/messages/conversation/' + withId, {} ,{
+      .post('/api/messages/conversation/' + withId, {} ,{
         headers: {
           authorization: localStorage.token,
         },
@@ -137,8 +137,8 @@ export class MessagesService {
 
   public async getPreview(): Promise<boolean> {
     const res: any = await this._http
-      .get('http://localhost:666/api/messages/preview', {
-      // .get('/api/messages/preview', {
+      // .get('http://localhost:666/api/messages/preview', {
+      .get('/api/messages/preview', {
         headers: {
           authorization: localStorage.token,
         },
@@ -156,8 +156,8 @@ export class MessagesService {
 
   public async getGroupInfo(groupId: string): Promise<boolean> {
     const res: any = await this._http
-      .get('http://localhost:666/api/messages//group/info/' + groupId, {
-      // .get('/api/messages//group/info/' + groupId, {
+      // .get('http://localhost:666/api/messages//group/info/' + groupId, {
+      .get('/api/messages//group/info/' + groupId, {
         headers: {
           authorization: localStorage.token,
         },
@@ -179,8 +179,8 @@ export class MessagesService {
   ): Promise<boolean> {
     const res: any = await this._http
       .put(
-        'http://localhost:666/api/messages/replyJoinRequest/' + messageId,
-        // '/api/messages/replyJoinRequest/' + messageId,
+        // 'http://localhost:666/api/messages/replyJoinRequest/' + messageId,
+        '/api/messages/replyJoinRequest/' + messageId,
         {
           answer,
         },
@@ -214,8 +214,8 @@ export class MessagesService {
   public async createGroup(userIds: string[], name: string): Promise<boolean> {
     const res: any = await this._http
       .post(
-        'http://localhost:666/api/messages/group',
-        // '/api/messages/group',
+        // 'http://localhost:666/api/messages/group',
+        '/api/messages/group',
         {
           userIds,
           name,
@@ -238,8 +238,8 @@ export class MessagesService {
 
   public async deleteGroup(groupId: string): Promise<boolean> {
     const res: any = await this._http
-      .delete('http://localhost:666/api/messages/group/' + groupId, {
-      // .delete('/api/messages/group/' + groupId, {
+      // .delete('http://localhost:666/api/messages/group/' + groupId, {
+      .delete('/api/messages/group/' + groupId, {
         headers: {
           authorization: localStorage.token,
         },
@@ -259,8 +259,8 @@ export class MessagesService {
   ): Promise<boolean> {
     const res: any = await this._http
       .put(
-        'http://localhost:666/api/messages/group/admin/' + toBeAdminned,
-        // '/api/messages/group/admin/' + toBeAdminned,
+        // 'http://localhost:666/api/messages/group/admin/' + toBeAdminned,
+        '/api/messages/group/admin/' + toBeAdminned,
         {
           groupId,
         },
@@ -282,8 +282,8 @@ export class MessagesService {
   public async removeAdmin(groupId: string): Promise<boolean> {
     const res: any = await this._http
       .post(
-        'http://localhost:666/api/messages/group/admin/removeSelf',
-        // '/api/messages/group/admin/removeSelf',
+        // 'http://localhost:666/api/messages/group/admin/removeSelf',
+        '/api/messages/group/admin/removeSelf',
         {
           groupId,
         },
@@ -305,8 +305,8 @@ export class MessagesService {
   public async leaveGroup(groupId: string): Promise<boolean> {
     const res: any = await this._http
       .post(
-        'http://localhost:666/api/messages/group/leave',
-        // '/api/messages/group/leave',
+        // 'http://localhost:666/api/messages/group/leave',
+        '/api/messages/group/leave',
         {
           groupId,
         },
@@ -328,8 +328,8 @@ export class MessagesService {
   public async addMember(groupId: string, toBeAdded: string): Promise<boolean> {
     const res: any = await this._http
       .post(
-        'http://localhost:666/api/messages/group/addMember/' + toBeAdded,
-        // '/api/messages/group/addMember/' + toBeAdded,
+        // 'http://localhost:666/api/messages/group/addMember/' + toBeAdded,
+        '/api/messages/group/addMember/' + toBeAdded,
         {
           groupId,
         },

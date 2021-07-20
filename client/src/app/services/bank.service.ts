@@ -28,8 +28,8 @@ export class BankService {
   ): Promise<boolean> {
     const res: any = await this._http
       .post(
-        'http://localhost:666/api/bank',
-        // '/api/bank',
+        // 'http://localhost:666/api/bank',
+        '/api/bank',
         {
           bandId,
           isPrivate,
@@ -62,8 +62,8 @@ export class BankService {
   public async getSingleRecording(
     id:string
   ):Promise<Recording|boolean>{
-    const res:any = await this._http.get('http://localhost:666/api/bank/'+id, {
-    // const res:any = await this._http.get('/api/bank/'+id, {
+    // const res:any = await this._http.get('http://localhost:666/api/bank/'+id, {
+    const res:any = await this._http.get('/api/bank/'+id, {
       headers:{
         "content-type":"application/json",
         authorization:localStorage.token
@@ -84,8 +84,8 @@ export class BankService {
   ): Promise<boolean> {
     const res: any = await this._http
       .put(
-        'http://localhost:666/api/bank/rate/'+id,
-        // '/api/bank/rate/'+id,
+        // 'http://localhost:666/api/bank/rate/'+id,
+        '/api/bank/rate/'+id,
         {
           stars
         },
@@ -110,8 +110,8 @@ export class BankService {
   public async likeRecording(id:string): Promise<boolean> {
     const res: any = await this._http
       .put(
-        'http://localhost:666/api/bank/like/'+id,
-        // '/api/bank/like/'+id,
+        // 'http://localhost:666/api/bank/like/'+id,
+        '/api/bank/like/'+id,
         {
           
         },
@@ -136,8 +136,8 @@ export class BankService {
   public async postCommentRecording(id:string, text:string): Promise<CommentsModel|boolean> {
     const res: any = await this._http
       .post(
-        'http://localhost:666/api/bank/comment/'+id,
-        // '/api/bank/comment/'+id,
+        // 'http://localhost:666/api/bank/comment/'+id,
+        '/api/bank/comment/'+id,
         {
           text
         },
@@ -162,8 +162,8 @@ export class BankService {
   public async delCommentRecording(recordingId:string,commentId:string): Promise<boolean> {
     const res: any = await this._http
       .delete(
-        'http://localhost:666/api/bank/comment/'+recordingId+'/'+commentId,
-        // '/api/bank/comment/'+recordingId+'/'+commentId,
+        // 'http://localhost:666/api/bank/comment/'+recordingId+'/'+commentId,
+        '/api/bank/comment/'+recordingId+'/'+commentId,
         {
           headers: {
             'content-type': 'application/json',
@@ -185,8 +185,8 @@ export class BankService {
   public async delRecording(recordingId:string): Promise<boolean> {
     const res: any = await this._http
       .delete(
-        'http://localhost:666/api/bank/'+recordingId,
-        // '/api/bank/'+recordingId,
+        // 'http://localhost:666/api/bank/'+recordingId,
+        '/api/bank/'+recordingId,
         {
           headers: {
             'content-type': 'application/json',
@@ -206,8 +206,8 @@ export class BankService {
   }
   
   public async addBankCategory(newCategory:{name:string,color:string}, bandId:string):Promise<boolean>{
-    const res:any = await this._http.post("http://localhost:666/api/user/bankCategories"
-    // const res:any = await this._http.post("/api/user/bankCategories"
+    // const res:any = await this._http.post("http://localhost:666/api/user/bankCategories"
+    const res:any = await this._http.post("/api/user/bankCategories"
     ,{newCategory, bandId},{
       headers: {
         authorization: localStorage.token
@@ -224,8 +224,8 @@ export class BankService {
 
   public async delBankCategory(catName:string, bandId:string):Promise<boolean>{
     // console.log(bandId)
-    const res:any = await this._http.post("http://localhost:666/api/user/bankCategories/"+catName
-    // const res:any = await this._http.post("/api/user/bankCategories/"+catName
+    // const res:any = await this._http.post("http://localhost:666/api/user/bankCategories/"+catName
+    const res:any = await this._http.post("/api/user/bankCategories/"+catName
     ,{bandId},{
       headers: {
         authorization: localStorage.token,

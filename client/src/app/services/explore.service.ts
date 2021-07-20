@@ -88,8 +88,8 @@ export class ExploreService {
   ) { }
 
     public async getProfile(username:string):Promise<void>{
-      const res:any = await this._http.get('http://localhost:666/api/user/info/'+username).toPromise()
-      // const res:any = await this._http.get('/api/user/info/'+username).toPromise()
+      // const res:any = await this._http.get('http://localhost:666/api/user/info/'+username).toPromise()
+      const res:any = await this._http.get('/api/user/info/'+username).toPromise()
       if(res.ok){
         this.profile = res.publicUserInfo
         this.profileCountData = res.profileCountData
@@ -99,8 +99,8 @@ export class ExploreService {
     }
 
     public async getProfileContent(username:string):Promise<boolean>{
-      const res:any = await this._http.get("http://localhost:666/api/user/profile/content/"+username).toPromise()
-      // const res:any = await this._http.get("/api/user/profile/content/"+username).toPromise()
+      // const res:any = await this._http.get("http://localhost:666/api/user/profile/content/"+username).toPromise()
+      const res:any = await this._http.get("/api/user/profile/content/"+username).toPromise()
       if(res.ok){
         this.profileContentMixed = res.profileContentMixed
         this.profileContentLogs = res.profileContent.logs
@@ -113,8 +113,8 @@ export class ExploreService {
     }
 
     public async killContent(id:string):Promise<boolean>{
-      const res:any = await this._http.delete("http://localhost:666/api/explore/killContent/"+id,
-      // const res:any = await this._http.delete("/api/explore/killContent/"+id,
+      // const res:any = await this._http.delete("http://localhost:666/api/explore/killContent/"+id,
+      const res:any = await this._http.delete("/api/explore/killContent/"+id,
       {
         headers: {
           authorization: localStorage.token
@@ -131,8 +131,8 @@ export class ExploreService {
 
 
     public async searchExplore(value:string):Promise<void>{
-      await this._http.get('http://localhost:666/api/explore/search/'+value)
-      // await this._http.get('/api/explore/search/'+value)
+      // await this._http.get('http://localhost:666/api/explore/search/'+value)
+      await this._http.get('/api/explore/search/'+value)
         .subscribe(
           (response:any)=>{
             this.searchResults = response
@@ -151,8 +151,8 @@ export class ExploreService {
       if(this.allGenres){
         this.chosenGenre = "all"
       }
-      await this._http.post('http://localhost:666/api/explore/',
-      // await this._http.post('/api/explore/',
+      // await this._http.post('http://localhost:666/api/explore/',
+      await this._http.post('/api/explore/',
       {
         contentType:this.chosenContentType,
         genreId: this.chosenGenre

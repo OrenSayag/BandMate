@@ -69,8 +69,8 @@ export class UsersService {
 
   public async getUserInfo(body: apiUserGetInfo) {
     const res: any = await this._http
-      .post('http://localhost:666/api/user/personalInfo', body, {
-      // .post('/api/user/personalInfo', body, {
+      // .post('http://localhost:666/api/user/personalInfo', body, {
+      .post('/api/user/personalInfo', body, {
         headers: {
           'content-type': 'application/json',
           authorization: localStorage.token,
@@ -98,8 +98,8 @@ export class UsersService {
 
   public async getFeed() {
     const res: any = await this._http
-      .post('http://localhost:666/api/user/feed', {
-      // .post('/api/user/feed', {
+      // .post('http://localhost:666/api/user/feed', {
+      .post('/api/user/feed', {
         bandId:this.currUserOtBand._id
       } ,{
         headers: {
@@ -133,8 +133,8 @@ export class UsersService {
       return
     }
     const res: any = await this._http
-      .get('http://localhost:666/api/user/tokenHolderInfo', {
-      // .get('/api/user/tokenHolderInfo', {
+      // .get('http://localhost:666/api/user/tokenHolderInfo', {
+      .get('/api/user/tokenHolderInfo', {
         headers: {
           'content-type': 'application/json',
           authorization: localStorage.token,
@@ -149,8 +149,8 @@ export class UsersService {
   }
 
   public async followToggler(toFollowId:string):Promise<boolean>{
-    const res:any = await this._http.put('http://localhost:666/api/user/follow/'+toFollowId,
-    // const res:any = await this._http.put('/api/user/follow/'+toFollowId,
+    // const res:any = await this._http.put('http://localhost:666/api/user/follow/'+toFollowId,
+    const res:any = await this._http.put('/api/user/follow/'+toFollowId,
     {},
     {
       headers: {

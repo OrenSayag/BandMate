@@ -63,8 +63,8 @@ export class AddPostFormComponent implements OnInit {
     const file = new FormData();
     file.set('file', mediaBlob);
     const res:any = await this._http
-      .post('http://localhost:666/api/bank/uploadFile', file, {
-      // .post('/api/bank/uploadFile', file, {
+      // .post('http://localhost:666/api/bank/uploadFile', file, {
+      .post('/api/bank/uploadFile', file, {
         headers: { authorization: localStorage.token },
       })
       .toPromise()

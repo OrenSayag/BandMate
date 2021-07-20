@@ -110,8 +110,8 @@ export class ProfileComponent implements OnInit {
     const file = new FormData();
     file.set('file', this.fileToUpload);
     const res: any = await this._http
-      .post('http://localhost:666/api/bank/uploadFile', file, {
-      // .post('/api/bank/uploadFile', file, {
+      // .post('http://localhost:666/api/bank/uploadFile', file, {
+      .post('/api/bank/uploadFile', file, {
         headers: { authorization: localStorage.token },
       })
       .toPromise()
@@ -153,8 +153,8 @@ export class ProfileComponent implements OnInit {
         ? { profile_img_src: this.fileSrc }
         : { cover_img_src: this.fileSrc })
     const res: any = await this._http
-      .post('http://localhost:666/api/user/updateProfileImg', body, {
-      // .post('/api/user/updateProfileImg', body, {
+      // .post('http://localhost:666/api/user/updateProfileImg', body, {
+      .post('/api/user/updateProfileImg', body, {
         headers: {
           authorization: localStorage.token,
         },
@@ -174,8 +174,8 @@ export class ProfileComponent implements OnInit {
   public async streamCoverImg(fileId: string) {
     // console.log(fileId)
     this._http
-      .get('http://localhost:666/api/bank/streamVideo/' + fileId, {
-      // .get('/api/bank/streamVideo/' + fileId, {
+      // .get('http://localhost:666/api/bank/streamVideo/' + fileId, {
+      .get('/api/bank/streamVideo/' + fileId, {
         headers: {
           authorization: localStorage.token,
           'Access-Control-Allow-Origin': '*',
@@ -217,8 +217,8 @@ export class ProfileComponent implements OnInit {
   public async streamProfileImg(fileId: string) {
     // console.log(fileId)
     this._http
-      .get('http://localhost:666/api/bank/streamVideo/' + fileId, {
-      // .get('/api/bank/streamVideo/' + fileId, {
+      // .get('http://localhost:666/api/bank/streamVideo/' + fileId, {
+      .get('/api/bank/streamVideo/' + fileId, {
         headers: {
           authorization: localStorage.token,
           'Access-Control-Allow-Origin': '*',

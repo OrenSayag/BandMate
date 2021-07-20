@@ -136,8 +136,8 @@ public commentToggler():void {
      // move to recording unit
      public async streamVideo(fileId: string) {
        this._http
-         .get('http://localhost:666/api/bank/streamVideo/' + fileId, {
-        //  .get('/api/bank/streamVideo/' + fileId, {
+        //  .get('http://localhost:666/api/bank/streamVideo/' + fileId, {
+         .get('/api/bank/streamVideo/' + fileId, {
            headers: {
              authorization: localStorage.token,
              'Access-Control-Allow-Origin': '*',
@@ -180,8 +180,8 @@ public commentToggler():void {
      // move to recording unit
      public async streamAudio(fileId: string) {
        this._http
-         .get('http://localhost:666/api/bank/streamAudio/' + fileId, {
-        //  .get('/api/bank/streamAudio/' + fileId, {
+        //  .get('http://localhost:666/api/bank/streamAudio/' + fileId, {
+         .get('/api/bank/streamAudio/' + fileId, {
            headers: {
              authorization: localStorage.token,
              'Access-Control-Allow-Origin': '*',
