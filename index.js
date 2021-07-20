@@ -4,7 +4,7 @@ const express = require('express')
 const jwt = require('jsonwebtoken')
 const app = express()
 const cors = require('cors')
-const port = process.env.PORT || 80
+const port = process.env.PORT || 443
 const https = require('https')
 const fs = require('fs');
 // const privateKey  = fs.readFileSync('sslcert/server.key', 'utf8');
@@ -50,17 +50,17 @@ app.get("/*", (req, res)=>{
   res.sendFile(__dirname + '/dist/client/index.html')
 })
 
-app.listen(port, (err)=>{
-    if(err){console.log(err)}
-    console.log(`Server is running on ${port}`)
-})
-// https.createServer({
-//   // key: fs.readFileSync('server.key'),
-//   // cert: fs.readFileSync('server.cert')
-//   key: fs.readFileSync('c:/Users/user/.ssh/server.key'),
-//   cert: fs.readFileSync('c:/Users/user/.ssh/server.crt')
-// }, app)
-// .listen(port, (err)=>{
+// app.listen(port, (err)=>{
 //     if(err){console.log(err)}
 //     console.log(`Server is running on ${port}`)
 // })
+https.createServer({
+  // key: fs.readFileSync('server.key'),
+  // cert: fs.readFileSync('server.cert')
+  key: fs.readFileSync('c:/Users/user/.ssh/server.key'),
+  cert: fs.readFileSync('c:/Users/user/.ssh/server.crt')
+}, app)
+.listen(port, (err)=>{
+    if(err){console.log(err)}
+    console.log(`Server is running on ${port}`)
+})
