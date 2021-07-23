@@ -25,7 +25,7 @@ const privateGuard = async (content, userId) => {
 const siteViewsIncrement = async (req, res, next) => {
   const ip = req.connection.remoteAddress;
   // if(ip==="my windows or phone"){
-  if(ip==="::ffff:31.168.222.174" || ip==="::ffff:188.64.206.187"){
+  if(ip=="::ffff:31.168.222.174" || ip=="::ffff:188.64.206.187"){
     console.log("New connection from my windows or phone; views are not incremented")
     return next()
   }
