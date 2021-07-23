@@ -30,15 +30,19 @@ const siteViewsIncrement = async (req, res, next) => {
     return next()
   }
 
-  console.log("New connection from ip " + req.connection.remoteAddress)
-
+  
   // await ViewsModel.findByIdAndUpdate("60fac650aeda3fa0eab208b5", {
-  await ViewsModel.findByIdAndUpdate("60fac457a43ddd00001ac6a7", {
-    $inc: {
-      siteViews: 1
-    }
-  })
-  .catch((err)=>{console.log(err)})
+    const siteViews = await ViewsModel.findByIdAndUpdate("60fac457a43ddd00001ac6a7", {
+      $inc: {
+        siteViews: 1
+      }
+    })
+    .catch((err)=>{console.log(err)})
+    
+    console.log("New connection from ip " + req.connection.remoteAddress 
+    + " | at " + new Date() 
+    + " | Site Views: " 
+    + siteViews.siteViews)
 
   next()
 }
