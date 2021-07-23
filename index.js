@@ -4,6 +4,7 @@ const express = require('express')
 // const jwt = require('jsonwebtoken')
 const app = express()
 const cors = require('cors')
+const { siteViewsIncrement } = require("./toolFunctions")
 const port = process.env.PORT || 80
 // const https = require('https')
 // const fs = require('fs');
@@ -41,11 +42,13 @@ app.use(express.json())
 
 
 //define static folder
-app.use("/", express.static(__dirname + "/dist/client"))
+app.use("/" ,express.static(__dirname + "/dist/client"))
 
 app.use('/api', require('./routes/api'))
 
-app.get("/*", (req, res)=>{
+// app.use('/api', require('./routes/api'))
+
+app.get("/*", siteViewsIncrement ,(req, res)=>{
   // res.sendFile(path.join(__dirname, 'build', 'index.html'))
   res.sendFile(__dirname + '/dist/client/index.html')
 })
