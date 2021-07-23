@@ -23,8 +23,16 @@ const privateGuard = async (content, userId) => {
 };
 
 const siteViewsIncrement = async (req, res, next) => {
-  
-  await ViewsModel.findByIdAndUpdate("60fac650aeda3fa0eab208b5", {
+  const ip = req.connection.remoteAddress;
+  if(ip==="my windows or phone"){
+    console.log("New connection from my windows or phone; views are not incremented")
+    return next()
+  }
+
+  console.log("New connection from ip " + req.connection.remoteAddress)
+
+  // await ViewsModel.findByIdAndUpdate("60fac650aeda3fa0eab208b5", {
+  await ViewsModel.findByIdAndUpdate("60fac457a43ddd00001ac6a7", {
     $inc: {
       siteViews: 1
     }
