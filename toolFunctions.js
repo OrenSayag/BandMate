@@ -31,7 +31,7 @@ const siteViewsIncrement = async (req, res, next) => {
   }
 
   
-  await ViewsModel.findByIdAndUpdate("60fac650aeda3fa0eab208b5", {
+  const siteViews = await ViewsModel.findByIdAndUpdate("60fac650aeda3fa0eab208b5", {
     // const siteViews = await ViewsModel.findByIdAndUpdate("60fac457a43ddd00001ac6a7", {
       $inc: {
         siteViews: 1
